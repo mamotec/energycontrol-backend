@@ -12,7 +12,7 @@
 	<artifactId>energycontrol-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>energycontrol-backend</name>
-	<description>Backend of the MaMoTec Engery control ecosystem.</description>
+	<description>Backend of the MaMoTec Energy control ecosystem.</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
@@ -26,6 +26,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.0.0</version>
 		</dependency>
 	</dependencies>
 
