@@ -2,20 +2,25 @@ package com.mamotec.energycontrolbackend.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
-@RequiredArgsConstructor
+@AllArgsConstructor
 @NoArgsConstructor(force = true)
+@Builder
 @Table(name = "mamotec_user")
-public class User extends BaseEntity {
+public class User extends BaseEntity implements UserDetails {
 
 	// region Fields
 
@@ -39,6 +44,36 @@ public class User extends BaseEntity {
 	@NonNull
 	private String password;
 
+	@Enumerated(EnumType.ORDINAL)
+	private Role role;
+
+	// endregion
+
+	// region Overwrite Methods
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return List.of(new SimpleGrantedAuthority(role.name()));
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
 	// endregion
 
 }

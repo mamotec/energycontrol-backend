@@ -10,6 +10,7 @@ CREATE TABLE mamotec_user
     email      VARCHAR(255) NOT NULL,
     username   VARCHAR(255) NOT NULL,
     password   VARCHAR(255) NOT NULL,
+    role       integer,
     CONSTRAINT user_pk PRIMARY KEY (id),
     CONSTRAINT user_email_unique UNIQUE (email),
     CONSTRAINT user_username_unique UNIQUE (username)
