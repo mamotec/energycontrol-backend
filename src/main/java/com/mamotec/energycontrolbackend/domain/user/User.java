@@ -1,10 +1,7 @@
-package com.mamotec.energycontrolbackend.domain;
+package com.mamotec.energycontrolbackend.domain.user;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
+import com.mamotec.energycontrolbackend.domain.BaseEntity;
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

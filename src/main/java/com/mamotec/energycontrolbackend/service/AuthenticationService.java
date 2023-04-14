@@ -1,8 +1,8 @@
 package com.mamotec.energycontrolbackend.service;
 
 import com.mamotec.energycontrolbackend.config.JwtService;
-import com.mamotec.energycontrolbackend.domain.Role;
-import com.mamotec.energycontrolbackend.domain.User;
+import com.mamotec.energycontrolbackend.domain.user.Role;
+import com.mamotec.energycontrolbackend.domain.user.User;
 import com.mamotec.energycontrolbackend.domain.auth.AuthenticationRequest;
 import com.mamotec.energycontrolbackend.domain.auth.AuthenticationResponse;
 import com.mamotec.energycontrolbackend.domain.auth.RegisterRequest;
@@ -12,9 +12,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 @Service
 @RequiredArgsConstructor
+@Validated
 public class AuthenticationService {
 
     private final UserRepository userRepository;
