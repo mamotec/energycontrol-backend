@@ -9,6 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.mamotec</groupId>
+	<packaging>jar</packaging>
 	<artifactId>energycontrol-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>energycontrol-backend</name>
@@ -117,6 +118,8 @@
 				</configuration>
 			</plugin>
 		</plugins>
+
+		<finalName>energycontrol-backend</finalName>
 	</build>
 
 </project>

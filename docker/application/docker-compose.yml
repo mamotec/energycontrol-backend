@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  app:
+    image: energycontrol-backend:latest
+    container_name: backend-app
+    restart: always
+    ports:
+      - '8080:8080'
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/energycontrol
+      - SPRING_FLYWAY_URL=jdbc:postgresql://database:5432/energycontrol
+    depends_on:
+      - database
+    networks:
+      - backend-network
+
+  database:
+    image: postgres:latest
+    container_name: backend-db
+    restart: always
+    environment:
+      - POSTGRES_USER=energycontrol
+      - POSTGRES_PASSWORD=Start1234*
+      - POSTGRES_DATABASE=energycontrol
+    networks:
+      - backend-network
+
+networks:
+  backend-network:
