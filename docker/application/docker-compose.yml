@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   app:
-    image: mamotec/energycontrol-backend:latest
+    image: mamotec/energycontrol-backend:v0.0.1
     container_name: backend-app
     restart: always
     ports:
