@@ -1,4 +1,4 @@
-package com.mamotec.energycontrolbackend.domain.device;
+package com.mamotec.energycontrolbackend.domain.device.dao;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class InterfaceResponse {
-    private DeviceCategory deviceCategory;
+public class InterfaceConfigRequest {
+
+    private String deviceClass;
+    private String interfaceType;
 }
