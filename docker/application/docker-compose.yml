@@ -1,29 +1,24 @@
 version: '3.8'
 services:
   frontend-app:
-    image: mamotec/energycontrol-frontend:v0.0.1
+    image: mamotec/energycontrol-frontend
     container_name: frontend-app
     restart: always
     ports:
-      - '3000:80'
-    depends_on:
+      - '4200:80'
+    links:
       - backend-app
-    networks:
-      - energycontrol-network
 
   backend-app:
-    image: mamotec/energycontrol-backend:v0.0.2
+    image: mamotec/energycontrol-backend
     container_name: backend-app
     restart: always
     ports:
       - '8080:8080'
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/energycontrol
-      - SPRING_FLYWAY_URL=jdbc:postgresql://database:5432/energycontrol
-    depends_on:
+      - DB_SERVER=database
+    links:
       - database
-    networks:
-      - energycontrol-network
 
   database:
     image: postgres:latest
@@ -33,8 +28,3 @@ services:
       - POSTGRES_USER=energycontrol
       - POSTGRES_PASSWORD=Start1234*
       - POSTGRES_DATABASE=energycontrol
-    networks:
-      - energycontrol-network
-
-networks:
-  energycontrol-network:
