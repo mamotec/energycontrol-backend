@@ -157,6 +157,49 @@
 				</configuration>
 			</plugin>
 
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<id>curl-command</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>curl</executable>
+							<arguments>
+								<argument>http://localhost:8080/v3/api-docs</argument>
+								<argument>--output</argument>
+								<argument>./api/swagger.json</argument>
+							</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>openapi-generator-command</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>npx</executable>
+							<arguments>
+								<argument>openapi-generator-cli</argument>
+								<argument>generate</argument>
+								<argument>-i</argument>
+								<argument>./api/swagger.json</argument>
+								<argument>-g</argument>
+								<argument>typescript-angular</argument>
+								<argument>-o</argument>
+								<argument>./api</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 
 		</plugins>
 
