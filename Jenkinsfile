@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_CREDENTIALS = credentials('your-docker-hub-credentials-id')
+        DOCKER_CREDENTIALS = credentials('docker-hub-credentials')
         DOCKER_IMAGE_NAME = 'mamotec/energycontrol-backend'
     }
 
