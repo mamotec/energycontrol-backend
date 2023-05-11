@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        maven 'Maven 3.9.1'
+    }
+
     environment {
         DOCKER_CREDENTIALS = credentials('docker-hub-credentials')
         DOCKER_IMAGE_NAME = 'mamotec/energycontrol-backend'
