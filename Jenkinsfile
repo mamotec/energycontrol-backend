@@ -3,6 +3,7 @@ pipeline {
 
     tools {
         jdk 'jdk-17'
+        maven 'M3'
     }
 
     environment {
@@ -20,8 +21,7 @@ pipeline {
         stage('Build Spring Boot App') {
             steps {
                 script {
-                    def maven = tool 'M3'
-                    sh "${maven}/bin/mvn clean install -D skipTests"
+                    sh "mvn clean install -D skipTests"
                 }
             }
         }
