@@ -35,7 +35,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    def app = docker.build("${DOCKER_IMAGE_NAME}:latest", "-f ./docker/backend-application/Dockerfile .")
+                    sh "docker build -f ./docker/backend-application/Dockerfile -t ${DOCKER_IMAGE_NAME}:latest ."
                 }
             }
         }
