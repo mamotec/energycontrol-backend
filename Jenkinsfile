@@ -6,7 +6,8 @@ pipeline {
     }
 
     environment {
-        DOCKER_CREDENTIALS = credentials('docker-hub-credentials')
+        DOCKER_USERNAME = "mamotec"
+        DOCKER_PASSWORD = "MaMoTec00001!"
         DOCKER_IMAGE_NAME = 'mamotec/energycontrol-backend'
     }
 
@@ -45,10 +46,11 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', "${DOCKER_CREDENTIALS}") {
-                        def app = docker.image("${DOCKER_IMAGE_NAME}:latest")
-                        app.push()
-                    }
+
+                    sh "docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD""
+
+                    sh "docker push ${DOCKER_IMAGE_NAME}:latest"
+
                 }
             }
         }
