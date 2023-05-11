@@ -16,7 +16,9 @@ pipeline {
         stage('Build Spring Boot App') {
             steps {
                 script {
-                    sh "mvn clean install -D skipTests"
+                    withMaven(maven: 'mvn') {
+                        sh "mvn clean install -D skipTests"
+                    }
                 }
             }
         }
