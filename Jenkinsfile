@@ -1,12 +1,23 @@
 pipeline {
     agent any
 
+    tools {
+        maven "MAVEN"
+    }
+
     environment {
         DOCKER_CREDENTIALS = credentials('docker-hub-credentials')
         DOCKER_IMAGE_NAME = 'mamotec/energycontrol-backend'
     }
 
     stages {
+         stage('Initialize'){
+                steps{
+                    echo "PATH = ${M2_HOME}/bin:${PATH}"
+                    echo "M2_HOME = /opt/maven"
+                }
+            }
+
         stage('Checkout') {
             steps {
                 checkout scm
