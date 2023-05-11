@@ -35,7 +35,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh "docker build -f ./docker/backend-application/Dockerfile -t ${DOCKER_IMAGE_NAME}:latest ."
+                    docker.build("${DOCKER_IMAGE_NAME}:latest", './docker/backend-application/Dockerfile')
                 }
             }
         }
