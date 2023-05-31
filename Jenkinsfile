@@ -6,8 +6,6 @@ pipeline {
     }
 
     environment {
-        DOCKER_USERNAME = "mamotec"
-        DOCKER_PASSWORD = "MaMoTec00001!"
         DOCKER_IMAGE_NAME = 'mamotec/energycontrol-backend'
     }
 
@@ -54,5 +52,11 @@ pipeline {
                 }
             }
         }
+
+       stage('Docker: Delete Image') {
+              steps {
+                sh "docker image rm ${DOCKER_IMAGE_NAME}:latest"
+              }
+       }
     }
 }
