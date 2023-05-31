@@ -1,0 +1,43 @@
+pipeline {
+    agent any
+
+    tools {
+        maven "MAVEN"
+    }
+
+    environment {
+        DOCKER_IMAGE_NAME = 'mamotec/energycontrol-backend'
+    }
+
+    stages {
+         stage('Initialize'){
+                steps{
+                    echo "PATH = ${M2_HOME}/bin:${PATH}"
+                    echo "M2_HOME = /opt/maven"
+                }
+            }
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build Spring Boot App') {
+            steps {
+                script {
+                    sh "mvn clean install -D skipTests"
+                }
+            }
+        }
+
+        stage('Start Application') {
+            steps {
+                script {
+                    sh "mvn spring-boot:run"
+                }
+            }
+        }
+
+    }
+}
