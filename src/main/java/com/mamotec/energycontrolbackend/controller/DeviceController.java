@@ -4,6 +4,7 @@ import com.mamotec.energycontrolbackend.domain.device.dao.InterfaceConfigRequest
 import com.mamotec.energycontrolbackend.domain.device.dao.InterfaceConfigResponse;
 import com.mamotec.energycontrolbackend.mapper.InterfaceConfigMapper;
 import com.mamotec.energycontrolbackend.service.device.InterfaceConfigService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/device")
 @RequiredArgsConstructor
 @Slf4j
+@SecurityRequirement(name = "basicAuth")
 public class DeviceController {
 
     private final InterfaceConfigService interfaceConfigService;
