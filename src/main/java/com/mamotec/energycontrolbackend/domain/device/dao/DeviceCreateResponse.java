@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class InterfaceConfigResponse {
+public class DeviceCreateResponse {
 
-    private Long id;
-    private String deviceClass;
-    private String interfaceType;
+    private Integer unitId;
 }

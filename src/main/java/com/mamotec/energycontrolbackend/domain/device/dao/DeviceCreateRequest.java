@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class InterfaceConfigRequest {
+public class DeviceCreateRequest {
 
-    private String deviceClass;
+    private Integer unitId;
 }
