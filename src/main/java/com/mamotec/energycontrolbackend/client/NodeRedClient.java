@@ -28,7 +28,7 @@ public class NodeRedClient {
 
     public Object fetchDeviceData(@NotNull final long deviceId) {
         log.info("Fetching device {} data... using node-red url: {}", deviceId, nodeRedUrl);
-        isServiceAvailable();
+        isServiceAvailable(true);
 
         HttpClient httpClient = HttpClients.createDefault();
 
@@ -51,7 +51,7 @@ public class NodeRedClient {
         return null;
     }
 
-    public boolean isServiceAvailable() {
+    public boolean isServiceAvailable(boolean withException) {
         HttpClient httpClient = HttpClients.createDefault();
 
         HttpGet req = new HttpGet(nodeRedUrl);
@@ -71,9 +71,11 @@ public class NodeRedClient {
             return true;
 
         } catch (IOException e) {
-            throw new ExternalServiceNotAvailableException("NodeRED service not available.");
+            if (withException) {
+                throw new ExternalServiceNotAvailableException("NodeRED service not available.");
+            }
+            return false;
         }
-
 
     }
 }

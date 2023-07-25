@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/device")
 @RequiredArgsConstructor
 @Slf4j
-@SecurityRequirement(name = "basicAuth")
+@SecurityRequirement(name = "bearerAuth")
 public class DeviceController {
 
     private final DeviceService deviceService;
@@ -25,5 +25,11 @@ public class DeviceController {
     public ResponseEntity<DeviceCreateResponse> createDevice(@RequestBody DeviceCreateRequest request) {
         log.info("POST /device/interface is being called.");
         return ResponseEntity.ok(deviceService.create(interfaceConfigMapper.map(request)));
+    }
+
+    @GetMapping("/service")
+    public ResponseEntity<Boolean> isServiceAvailable() {
+        log.info("GET /device/service is being called.");
+        return ResponseEntity.ok(deviceService.isServiceAvailable());
     }
 }
