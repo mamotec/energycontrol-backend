@@ -19,12 +19,12 @@ public class DeviceController {
 
     private final DeviceService deviceService;
 
-    private final DeviceMapper interfaceConfigMapper;
+    private final DeviceMapper deviceMapper;
 
     @PostMapping()
     public ResponseEntity<DeviceCreateResponse> createDevice(@RequestBody DeviceCreateRequest request) {
         log.info("POST /device/interface is being called.");
-        return ResponseEntity.ok(deviceService.create(interfaceConfigMapper.map(request)));
+        return ResponseEntity.ok(deviceService.create(deviceMapper.map(request)));
     }
 
     @GetMapping("/service")
