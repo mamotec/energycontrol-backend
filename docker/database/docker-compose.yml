@@ -1,12 +1,8 @@
 version: '3.8'
 services:
-  database:
-    image: postgres:latest
-    container_name: energycontrol
+  node-red:
+    image: nodered/node-red
+    container_name: node-red
     restart: always
-    environment:
-      - POSTGRES_USER=energycontrol
-      - POSTGRES_PASSWORD=Start1234*
-      - POSTGRES_DATABASE=energycontrol
     ports:
-      - '5432:5432'
+      - '1880:1880'
