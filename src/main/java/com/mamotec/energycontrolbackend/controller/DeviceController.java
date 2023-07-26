@@ -32,4 +32,11 @@ public class DeviceController {
         log.info("GET /device/service is being called.");
         return ResponseEntity.ok(deviceService.isServiceAvailable());
     }
+
+    @GetMapping("/scan")
+    public ResponseEntity<Void> deviceScan() {
+        log.info("GET /device/scan is being called.");
+        deviceService.deviceScan();
+        return ResponseEntity.ok().build();
+    }
 }
