@@ -21,6 +21,7 @@ import java.io.IOException;
 public class NodeRedClient {
 
     private static final String DEVICE_DATA_URL = "/device/%d/data";
+    private static final String DEVICE_CHECK_URL = "/device/%d/check";
 
     @Value("${node-red.url}")
     private String nodeRedUrl;
@@ -75,6 +76,32 @@ public class NodeRedClient {
                 throw new ExternalServiceNotAvailableException("NodeRED service not available.");
             }
             return false;
+        }
+    }
+
+    /**
+     * Should check if there is a device with the given id.
+     */
+    public void checkDevice(final long deviceId) {
+        log.info("Search for device {} ... using node-red url: {}", deviceId, nodeRedUrl);
+
+        isServiceAvailable(true);
+
+        HttpClient httpClient = HttpClients.createDefault();
+
+        HttpGet req = new HttpGet(nodeRedUrl + String.format(DEVICE_CHECK_URL, deviceId));
+
+        try {
+            HttpResponse res = httpClient.execute(req);
+
+            int statusCode = res.getStatusLine()
+                    .getStatusCode();
+            HttpEntity entity = res.getEntity();
+            String responseBody = EntityUtils.toString(entity);
+
+        } catch (IOException e) {
+            log.error("Error while fetching device data from node-red.");
+            e.printStackTrace();
         }
 
     }
