@@ -29,12 +29,13 @@ public class DeviceService implements CrudOperations<Device> {
         return mapper.map(save(device));
     }
 
+    public Boolean isServiceAvailable() {
+        return nodeRedClient.isServiceAvailable(false);
+    }
+
     @Override
     public Optional<JpaRepository<Device, Integer>> getRepository() {
         return Optional.of(repository);
     }
 
-    public Boolean isServiceAvailable() {
-        return nodeRedClient.isServiceAvailable(false);
-    }
 }

@@ -21,9 +21,9 @@ public class DeviceController {
 
     private final DeviceMapper deviceMapper;
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<DeviceCreateResponse> createDevice(@RequestBody DeviceCreateRequest request) {
-        log.info("POST /device/interface is being called.");
+        log.info("POST /device is being called.");
         return ResponseEntity.ok(deviceService.create(deviceMapper.map(request)));
     }
 

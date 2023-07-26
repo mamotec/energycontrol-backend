@@ -17,9 +17,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class AuthenticationControllerTest extends BaseControllerTest {
 
-    @MockBean
-    private AuthenticationService authService;
-
     @Test
     public void shouldRegisterUser() throws Exception {
         // given
