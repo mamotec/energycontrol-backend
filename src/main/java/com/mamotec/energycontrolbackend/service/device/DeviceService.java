@@ -28,7 +28,7 @@ public class DeviceService implements CrudOperations<Device> {
     private final NodeRedClient nodeRedClient;
 
     @Value("${modbus.type}")
-    private final String modbusType;
+    private String modbusType;
 
     public DeviceCreateResponse create(Device device) {
         return mapper.map(save(device));
