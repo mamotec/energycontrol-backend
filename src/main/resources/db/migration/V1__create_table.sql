@@ -20,8 +20,8 @@ CREATE TABLE mamotec_user
 CREATE TABLE interface_config
 (
     id              SERIAL PRIMARY KEY,
-    device_class TEXT,
-    interface_type  TEXT,
+    protocol_id bigint,
+    type        TEXT,
     created_at      TIMESTAMP NOT NULL,
     updated_at      TIMESTAMP
 );
