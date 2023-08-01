@@ -13,7 +13,9 @@ mapping:
       - 672
       - 673
     unit: KW
+    fc: READ_HOLDING_REGISTERS
   powerReduction:
     register:
       - 40
     unit: PERCENT
+    fc: WRITE_SINGLE_REGISTER

@@ -2,12 +2,17 @@ package com.mamotec.energycontrolbackend.cron;
 
 import com.mamotec.energycontrolbackend.client.NodeRedClient;
 import com.mamotec.energycontrolbackend.domain.device.Device;
-import com.mamotec.energycontrolbackend.repository.DeviceRepository;
+import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
+import com.mamotec.energycontrolbackend.domain.interfaceconfig.dao.Interface;
+import com.mamotec.energycontrolbackend.service.device.DeviceService;
+import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceConfigService;
+import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.List;
 
 @Component
@@ -15,21 +20,25 @@ import java.util.List;
 @Slf4j
 public class DeviceScheduler {
 
-    private final DeviceRepository deviceRepository;
-
+    private final InterfaceConfigService interfaceConfigService;
+    private final InterfaceService interfaceService;
+    private final DeviceService deviceService;
     private final NodeRedClient nodeRedClient;
 
     @Scheduled(cron = "*/30 * * * * *")
-    public void fetchDeviceData() {
-        List<Device> devices = deviceRepository.findAll();
-        log.info("Found {} devices in repository.", devices.size());
+    public void fetchDeviceData() throws IOException, InterruptedException {
+        List<InterfaceConfig> configs = interfaceConfigService.findAll();
+        log.info("Found {} interfaces in repository.", configs.size());
 
-        for (Device device : devices) {
-            Object data = nodeRedClient.fetchDeviceData(device.getId());
+        for (InterfaceConfig config : configs) {
+            Interface i = interfaceService.getInterfaceByProtocolId(config.getProtocolID());
+
+            List<Device> devices = deviceService.getDevicesForInterfaceConfig(config.getId());
+            log.info("Found {} devices for interface {}.", devices.size(), config.getType());
+            for (Device d: devices) {
+                Object data = nodeRedClient.fetchDeviceData(i, d.getUnitId());
+            }
         }
-
-        // TODO: Write device Data to Repository
-
 
     }
 }

@@ -1,8 +1,6 @@
 package com.mamotec.energycontrolbackend.service.interfaceconfig;
 
-import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.dao.Interface;
-import com.mamotec.energycontrolbackend.service.CrudOperations;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +17,7 @@ public class InterfaceService {
 
     private final InterfaceReader reader;
 
-    public Interface getInterfaceById(String interfaceId) {
+    public Interface readInterface(String interfaceId) {
         return reader.readInterface(interfaceId);
     }
 
@@ -35,12 +33,23 @@ public class InterfaceService {
         List<Interface> interfaces = new ArrayList<>();
 
         for (URL resourceFile : resourceFiles) {
-            Interface i = getInterfaceById(resourceFile.getFile());
+            Interface i = readInterface(resourceFile.getFile());
             interfaces.add(i);
         }
 
         return interfaces;
 
+    }
+
+    public Interface getInterfaceByProtocolId(long protocolId) {
+        List<Interface> interfaces = getAllInterfaces();
+        for (Interface i : interfaces) {
+            if (i.getMetaData()
+                    .getProtocolId() == protocolId) {
+                return i;
+            }
+        }
+        return null;
     }
 
 

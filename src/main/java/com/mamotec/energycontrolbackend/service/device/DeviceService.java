@@ -3,32 +3,36 @@ package com.mamotec.energycontrolbackend.service.device;
 import com.mamotec.energycontrolbackend.client.NodeRedClient;
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateResponse;
-import com.mamotec.energycontrolbackend.domain.modbus.ModbusType;
+import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
+import com.mamotec.energycontrolbackend.domain.interfaceconfig.dao.Interface;
 import com.mamotec.energycontrolbackend.mapper.DeviceMapper;
 import com.mamotec.energycontrolbackend.repository.DeviceRepository;
 import com.mamotec.energycontrolbackend.service.CrudOperations;
+import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceConfigService;
+import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
-import static com.mamotec.energycontrolbackend.domain.modbus.ModbusType.RTU;
-import static com.mamotec.energycontrolbackend.domain.modbus.ModbusType.TCP;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class DeviceService implements CrudOperations<Device> {
 
     private final DeviceRepository repository;
 
+    private final InterfaceConfigService interfaceConfigService;
+
+    private final InterfaceService interfaceService;
+
     private final DeviceMapper mapper;
 
     private final NodeRedClient nodeRedClient;
-
-    @Value("${modbus.type}")
-    private String modbusType;
 
     public DeviceCreateResponse create(Device device) {
         return mapper.map(save(device));
@@ -38,19 +42,26 @@ public class DeviceService implements CrudOperations<Device> {
         return nodeRedClient.isServiceAvailable(false);
     }
 
-    public void deviceScan() {
-        ModbusType type = ModbusType.valueOf(modbusType);
+    public List<Device> getDevicesForInterfaceConfig(long interfaceConfigId) {
+        return repository.findByInterfaceConfigId(interfaceConfigId);
+    }
 
-        if (type.equals(TCP)) {
-            scan(TCP.getMaxNumberOfSlaves());
-        } else if (type.equals(RTU)) {
-            scan(RTU.getMaxNumberOfSlaves());
+    public void deviceScan() {
+        List<InterfaceConfig> interfaces = interfaceConfigService.findAll();
+
+        for (InterfaceConfig interfaceConfig : interfaces) {
+            log.info("Scanning interface {}...", interfaceConfig.getType());
+            scan(interfaceConfig);
+            log.info("Scanning interface {}... done", interfaceConfig.getType());
         }
     }
 
-    private void scan(long maxNumberOfSlaves) {
-        for (int slaveAddress = 1; slaveAddress <= maxNumberOfSlaves; slaveAddress++) {
-            nodeRedClient.checkDevice(slaveAddress);
+    private void scan(InterfaceConfig config) {
+        Interface anInterface = interfaceService.readInterface(String.valueOf(config.getProtocolID()));
+
+        for (int slaveAddress = 1; slaveAddress <= config.getType()
+                .getMaxDevices(); slaveAddress++) {
+            nodeRedClient.checkDevice(slaveAddress, anInterface);
         }
     }
 

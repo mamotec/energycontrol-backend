@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,6 +19,10 @@ public class InterfaceConfigService implements CrudOperations<InterfaceConfig> {
     @Override
     public Optional<JpaRepository<InterfaceConfig, Integer>> getRepository() {
         return Optional.of(repository);
+    }
+
+    public List<InterfaceConfig> findAll() {
+        return repository.findAll();
     }
 
 

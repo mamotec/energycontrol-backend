@@ -13,4 +13,7 @@ public class RegisterMapping {
 
     @Enumerated(EnumType.STRING)
     private Unit unit;
+
+    @Enumerated(EnumType.STRING)
+    private FunctionCode fc;
 }

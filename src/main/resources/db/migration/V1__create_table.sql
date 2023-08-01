@@ -33,8 +33,10 @@ CREATE TABLE device
     description         TEXT,
     serial_number       TEXT,
     unit_id             INTEGER,
+    interface_config_id INTEGER,
     created_at          TIMESTAMP NOT NULL,
-    updated_at          TIMESTAMP
+    updated_at          TIMESTAMP,
+    CONSTRAINT fk_interface_config FOREIGN KEY (interface_config_id) REFERENCES interface_config (id)
 );
 
 CREATE TABLE device_data
