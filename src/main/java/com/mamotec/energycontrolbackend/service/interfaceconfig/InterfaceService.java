@@ -1,6 +1,8 @@
 package com.mamotec.energycontrolbackend.service.interfaceconfig;
 
+import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.dao.Interface;
+import com.mamotec.energycontrolbackend.service.CrudOperations;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
