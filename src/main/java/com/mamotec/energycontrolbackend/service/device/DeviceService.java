@@ -57,7 +57,7 @@ public class DeviceService implements CrudOperations<Device> {
     }
 
     private void scan(InterfaceConfig config) {
-        Interface anInterface = interfaceService.readInterface(String.valueOf(config.getProtocolID()));
+        Interface anInterface = interfaceService.getInterfaceByProtocolId(config.getProtocolID());
 
         for (int slaveAddress = 1; slaveAddress <= config.getType()
                 .getMaxDevices(); slaveAddress++) {

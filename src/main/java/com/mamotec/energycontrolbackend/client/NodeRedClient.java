@@ -6,16 +6,14 @@ import com.mamotec.energycontrolbackend.exception.ExternalServiceNotAvailableExc
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.Map;
 
 @Component
@@ -25,7 +23,9 @@ public class NodeRedClient {
 
     private static final String DEVICE_URL = "/device/%d";
 
-    private final java.net.http.HttpClient httpClient = java.net.http.HttpClient.newHttpClient();
+    private final java.net.http.HttpClient httpClient = java.net.http.HttpClient.newBuilder()
+            .version(HttpClient.Version.HTTP_1_1)
+            .build();
 
     private final ObjectMapper objectMapper;
 
@@ -48,10 +48,14 @@ public class NodeRedClient {
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                 .build();
 
-
         try {
-            java.net.http.HttpResponse<String> response = httpClient.send(request,
+            HttpResponse<String> response = httpClient.send(request,
                     java.net.http.HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() != 200) {
+                log.error("Error while fetching device data from node-red. Status code: {}", response.statusCode());
+                throw new ExternalServiceNotAvailableException("NodeRED service not available.");
+            }
 
             return response.body();
         } catch (IOException e) {
@@ -63,16 +67,15 @@ public class NodeRedClient {
     }
 
     public boolean isServiceAvailable(boolean withException) {
-        HttpClient httpClient = HttpClients.createDefault();
-
-        HttpGet req = new HttpGet(nodeRedUrl);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(nodeRedUrl))
+                .GET()
+                .build();
 
         try {
-            HttpResponse res = httpClient.execute(req);
+            HttpResponse<String> res = httpClient.send(request, java.net.http.HttpResponse.BodyHandlers.ofString());
 
-
-            int statusCode = res.getStatusLine()
-                    .getStatusCode();
+            int statusCode = res.statusCode();
 
             if (statusCode != 200) {
                 log.error("NodeRED status not 200. Status code: {}", statusCode);
@@ -81,9 +84,9 @@ public class NodeRedClient {
             log.info("NodeRED service available. Status code: {}", statusCode);
             return true;
 
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             if (withException) {
-                throw new ExternalServiceNotAvailableException("NodeRED service not available.");
+                throw new ExternalServiceNotAvailableException("NodeRED service not available.", e);
             }
             return false;
         }
@@ -96,5 +99,11 @@ public class NodeRedClient {
         log.info("Search for device {} ... using node-red url: {}", deviceId, nodeRedUrl);
 
         isServiceAvailable(true);
+
+        try {
+            fetchDeviceData(anInterface, deviceId);
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
