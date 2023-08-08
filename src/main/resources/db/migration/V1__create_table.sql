@@ -19,11 +19,12 @@ CREATE TABLE mamotec_user
 
 CREATE TABLE interface_config
 (
-    id              SERIAL PRIMARY KEY,
+    id          SERIAL PRIMARY KEY,
     protocol_id bigint,
     type        TEXT,
-    created_at      TIMESTAMP NOT NULL,
-    updated_at      TIMESTAMP
+    port        TEXT,
+    created_at  TIMESTAMP NOT NULL,
+    updated_at  TIMESTAMP
 );
 
 CREATE TABLE device
@@ -41,12 +42,12 @@ CREATE TABLE device
 
 CREATE TABLE device_data
 (
-    id              SERIAL PRIMARY KEY,
-    device_id       INTEGER,
-    power_generated NUMERIC(10, 2),
-    voltage         NUMERIC(10, 2),
-    current         NUMERIC(10, 2),
-    created_at      TIMESTAMP NOT NULL,
-    updated_at      TIMESTAMP,
+    id         SERIAL PRIMARY KEY,
+    device_id  INTEGER,
+    type       TEXT,
+    value      TEXT,
+    unit       TEXT,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP,
     CONSTRAINT fk_device FOREIGN KEY (device_id) REFERENCES device (id)
 );

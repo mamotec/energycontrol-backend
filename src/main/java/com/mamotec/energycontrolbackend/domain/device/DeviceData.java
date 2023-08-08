@@ -1,9 +1,11 @@
 package com.mamotec.energycontrolbackend.domain.device;
 
 import com.mamotec.energycontrolbackend.domain.BaseEntity;
+import com.mamotec.energycontrolbackend.domain.interfaceconfig.dao.Unit;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 
 @EqualsAndHashCode(callSuper = true)
@@ -22,12 +24,15 @@ public class DeviceData extends BaseEntity {
     @JoinColumn(name = "device_id", nullable = false)
     private Device device;
 
-    @Column(name = "power_generated")
-    private BigDecimal powerGenerated;
+    private String value;
 
-    private BigDecimal voltage;
+    @Enumerated(EnumType.STRING)
+    private Unit unit;
 
-    private BigDecimal current;
+    /**
+     * The type of the value. (power, voltage, current, etc.
+     */
+    private String type;
 
     // endregion
 

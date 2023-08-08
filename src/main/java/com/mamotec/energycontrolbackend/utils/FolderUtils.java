@@ -8,7 +8,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
 public class FolderUtils {
 
     public static List<URL> getResourcesInFolder(String folderPath) throws IOException {

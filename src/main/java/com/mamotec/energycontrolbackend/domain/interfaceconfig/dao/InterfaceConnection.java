@@ -12,4 +12,6 @@ public class InterfaceConnection {
     private Parity parity;
     private int dataBits;
     private int stopBits;
+    private String host;
+    private int port;
 }

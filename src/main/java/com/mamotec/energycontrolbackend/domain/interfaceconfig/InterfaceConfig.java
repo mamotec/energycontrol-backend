@@ -23,4 +23,6 @@ public class InterfaceConfig extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private InterfaceType type;
 
+    private String port;
+
 }

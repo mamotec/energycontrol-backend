@@ -39,7 +39,7 @@ public class DeviceService implements CrudOperations<Device> {
     }
 
     public Boolean isServiceAvailable() {
-        return nodeRedClient.isServiceAvailable(false);
+        return nodeRedClient.isNodeRedAvailable(false);
     }
 
     public List<Device> getDevicesForInterfaceConfig(long interfaceConfigId) {
@@ -61,7 +61,7 @@ public class DeviceService implements CrudOperations<Device> {
 
         for (int slaveAddress = 1; slaveAddress <= config.getType()
                 .getMaxDevices(); slaveAddress++) {
-            nodeRedClient.checkDevice(slaveAddress, anInterface);
+            nodeRedClient.checkDevice(slaveAddress, config, anInterface);
         }
     }
 

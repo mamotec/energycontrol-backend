@@ -1,9 +1,11 @@
 package com.mamotec.energycontrolbackend.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mamotec.energycontrolbackend.domain.device.Device;
+import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.dao.Interface;
 import com.mamotec.energycontrolbackend.exception.ExternalServiceNotAvailableException;
-import jakarta.validation.constraints.NotNull;
+import com.mamotec.energycontrolbackend.service.device.DeviceDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,13 +17,14 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Map;
+import java.util.function.Consumer;
 
 @Component
 @Slf4j
 @RequiredArgsConstructor
 public class NodeRedClient {
 
-    private static final String DEVICE_URL = "/device/%d";
+    private static final String DEVICE_URL = "/device";
 
     private final java.net.http.HttpClient httpClient = java.net.http.HttpClient.newBuilder()
             .version(HttpClient.Version.HTTP_1_1)
@@ -33,18 +36,20 @@ public class NodeRedClient {
     private String nodeRedUrl;
 
 
-    public Object fetchDeviceData(Interface i, @NotNull final long unitId) throws IOException, InterruptedException {
-        log.info("Fetching device {} data... using node-red url: {}", unitId, nodeRedUrl);
-        isServiceAvailable(true);
+    public String fetchDeviceData(Interface i, InterfaceConfig config, final Device device, Consumer<Map<String, String>> mapping) throws IOException, InterruptedException {
+        log.info("Fetching device {} data... using node-red url: {}", device.getUnitId(), nodeRedUrl);
+        isNodeRedAvailable(true);
 
-        Map<String, String> values = DeviceRequestBodyBuilder.buildSerialPost(i, unitId);
-        DeviceRequestBodyBuilder.buildPostWithMapping(i.getMapping()
-                .getPower(), values);
+        Map<String, String> values = new java.util.HashMap<>();
+        //values = mapping.accept(values);
+        DeviceRequestBodyBuilder.buildConnectionPost(i, config, device.getUnitId(), values);
+
 
         String requestBody = objectMapper.writeValueAsString(values);
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(nodeRedUrl + String.format(DEVICE_URL, unitId)))
+                .timeout(java.time.Duration.ofSeconds(5))
+                .uri(URI.create(nodeRedUrl + String.format(DEVICE_URL, device.getUnitId())))
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                 .build();
 
@@ -58,6 +63,7 @@ public class NodeRedClient {
             }
 
             return response.body();
+
         } catch (IOException e) {
             log.error("Error while fetching device data from node-red.");
             e.printStackTrace();
@@ -66,7 +72,7 @@ public class NodeRedClient {
         return null;
     }
 
-    public boolean isServiceAvailable(boolean withException) {
+    public boolean isNodeRedAvailable(boolean withException) {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(nodeRedUrl))
                 .GET()
@@ -95,15 +101,10 @@ public class NodeRedClient {
     /**
      * Should check if there is a device with the given id.
      */
-    public void checkDevice(final long deviceId, Interface anInterface) {
+    public void checkDevice(final long deviceId, InterfaceConfig config, Interface anInterface) {
         log.info("Search for device {} ... using node-red url: {}", deviceId, nodeRedUrl);
 
-        isServiceAvailable(true);
+        isNodeRedAvailable(true);
 
-        try {
-            fetchDeviceData(anInterface, deviceId);
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

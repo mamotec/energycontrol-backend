@@ -1,5 +1,7 @@
 package com.mamotec.energycontrolbackend.client;
 
+import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
+import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceType;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.dao.Interface;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.dao.RegisterMapping;
 import lombok.NoArgsConstructor;
@@ -10,28 +12,35 @@ import java.util.Map;
 @NoArgsConstructor
 public final class DeviceRequestBodyBuilder {
 
-    public static Map<String, String> buildSerialPost(Interface i, long unitId) {
-        HashMap<String, String> requestBody = new HashMap<>();
+    public static void buildConnectionPost(Interface i, InterfaceConfig config, long unitId, Map<String, String> requestBody) {
 
-        // Modbus-Server
-        requestBody.put("baudrate", String.valueOf(i.getConnection().getBaudRate()));
-        requestBody.put("parity", String.valueOf(i.getConnection().getParity()));
-        requestBody.put("stopbits", String.valueOf(i.getConnection().getStopBits()));
-        requestBody.put("databits", String.valueOf(i.getConnection().getDataBits()));
-        requestBody.put("serialPort", "/dev/ttyS0");
+        if (config.getType().equals(InterfaceType.RS485)) {
+            // Modbus-Server - SERIAL
+            requestBody.put("baudrate", String.valueOf(i.getConnection().getBaudRate()));
+            requestBody.put("serialPort", config.getPort());
+            requestBody.put("connectorType", "SERIAL");
+        } else if (config.getType().equals(InterfaceType.TCP)) {
+            // Modbus-Server - TCP
+            requestBody.put("host", i.getConnection().getHost());
+            requestBody.put("port", String.valueOf(i.getConnection().getPort()));
+            requestBody.put("connectorType", "TCP");
+        }
 
         // Modbus-Client
         requestBody.put("unitid", String.valueOf(unitId));
 
-        return requestBody;
     }
 
-    public static void buildPostWithMapping(RegisterMapping mapping, Map<String, String> requestBody) {
+    public static Map<String, String> buildPostWithMapping(RegisterMapping mapping) {
+
+        HashMap<String, String> requestBody = new HashMap<>();
+
 
         requestBody.put("fc", String.valueOf(mapping.getFc().getCode()));
         requestBody.put("address", String.valueOf(mapping.getRegister().get(0)));
         requestBody.put("quantity", String.valueOf(mapping.getRegister().size()));
 
+        return requestBody;
     }
 
 }
