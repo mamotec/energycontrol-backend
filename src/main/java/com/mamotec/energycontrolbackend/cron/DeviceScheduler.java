@@ -1,6 +1,5 @@
 package com.mamotec.energycontrolbackend.cron;
 
-import com.mamotec.energycontrolbackend.client.DeviceRequestBodyBuilder;
 import com.mamotec.energycontrolbackend.client.NodeRedClient;
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
@@ -42,7 +41,7 @@ public class DeviceScheduler {
             log.info("Found {} devices for interface {}.", devices.size(), config.getType());
             for (Device d : devices) {
                 RegisterMapping mapping = i.getMapping().getPower();
-                String res = nodeRedClient.fetchDeviceData(i, config, d, map -> DeviceRequestBodyBuilder.buildPostWithMapping(mapping));
+                String res = nodeRedClient.fetchDeviceData(i, config, d, mapping);
                 deviceDataService.saveDeviceData(d, mapping, res);
             }
         }

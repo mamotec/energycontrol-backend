@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.dao.Interface;
+import com.mamotec.energycontrolbackend.domain.interfaceconfig.dao.RegisterMapping;
 import com.mamotec.energycontrolbackend.exception.ExternalServiceNotAvailableException;
-import com.mamotec.energycontrolbackend.service.device.DeviceDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +17,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Map;
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 @Component
 @Slf4j
@@ -36,14 +36,15 @@ public class NodeRedClient {
     private String nodeRedUrl;
 
 
-    public String fetchDeviceData(Interface i, InterfaceConfig config, final Device device, Consumer<Map<String, String>> mapping) throws IOException, InterruptedException {
+    public String fetchDeviceData(Interface i, InterfaceConfig config, final Device device, RegisterMapping mapping) throws IOException, InterruptedException {
         log.info("Fetching device {} data... using node-red url: {}", device.getUnitId(), nodeRedUrl);
         isNodeRedAvailable(true);
 
-        Map<String, String> values = new java.util.HashMap<>();
-        //values = mapping.accept(values);
-        DeviceRequestBodyBuilder.buildConnectionPost(i, config, device.getUnitId(), values);
+        Function<RegisterMapping, Map<String, String>> buildMapping = DeviceRequestBodyBuilder::buildPostWithMapping;
 
+        Map<String, String> values;
+        values = buildMapping.apply(mapping);
+        DeviceRequestBodyBuilder.buildConnectionPost(i, config, device.getUnitId(), values);
 
         String requestBody = objectMapper.writeValueAsString(values);
 
@@ -74,6 +75,7 @@ public class NodeRedClient {
 
     public boolean isNodeRedAvailable(boolean withException) {
         HttpRequest request = HttpRequest.newBuilder()
+                .timeout(java.time.Duration.ofSeconds(5))
                 .uri(URI.create(nodeRedUrl))
                 .GET()
                 .build();

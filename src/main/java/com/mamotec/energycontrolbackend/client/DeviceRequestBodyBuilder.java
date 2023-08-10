@@ -33,8 +33,7 @@ public final class DeviceRequestBodyBuilder {
 
     public static Map<String, String> buildPostWithMapping(RegisterMapping mapping) {
 
-        HashMap<String, String> requestBody = new HashMap<>();
-
+        Map<String, String> requestBody = new HashMap<>();
 
         requestBody.put("fc", String.valueOf(mapping.getFc().getCode()));
         requestBody.put("address", String.valueOf(mapping.getRegister().get(0)));
