@@ -17,7 +17,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Map;
-import java.util.function.Function;
 
 @Component
 @Slf4j
@@ -40,10 +39,8 @@ public class NodeRedClient {
         log.info("Fetching device {} data... using node-red url: {}", device.getUnitId(), nodeRedUrl);
         isNodeRedAvailable(true);
 
-        Function<RegisterMapping, Map<String, String>> buildMapping = DeviceRequestBodyBuilder::buildPostWithMapping;
-
         Map<String, String> values;
-        values = buildMapping.apply(mapping);
+        values = DeviceRequestBodyBuilder.buildPostWithMapping(mapping);
         DeviceRequestBodyBuilder.buildConnectionPost(i, config, device.getUnitId(), values);
 
         String requestBody = objectMapper.writeValueAsString(values);
