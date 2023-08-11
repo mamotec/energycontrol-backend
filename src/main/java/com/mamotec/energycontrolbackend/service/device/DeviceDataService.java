@@ -31,18 +31,19 @@ public class DeviceDataService {
         log.info("Saving data for device {} and measurement {}.", device.getUnitId(), mapping.getType());
         WriteApiBlocking writeApiBlocking = influxClient.getWriteApiBlocking();
 
-        List<Point> points = new ArrayList<>();
+        Point p = Point.measurement(mapping.getType())
+                .addTag("device", device.getUnitId()
+                        .toString())
+                .time(Instant.now(), WritePrecision.NS);
 
-        for (int j : StringUtils.toArray(body)) {
-            Point p = Point.measurement(mapping.getType())
-                    .addTag("device", device.getUnitId().toString())
-                    .addField("value", j)
-                    .time(Instant.now(), WritePrecision.NS);
-
-            points.add(p);
+        int[] array = StringUtils.toArray(body);
+        int counter = 0;
+        for (int j : array) {
+            counter++;
+            p.addField(String.format("value_%s", counter), j);
         }
 
-        writeApiBlocking.writePoints(points);
+        writeApiBlocking.writePoint(p);
         log.info("Saved data for device {} and measurement {}.", device.getUnitId(), mapping.getType());
     }
 
