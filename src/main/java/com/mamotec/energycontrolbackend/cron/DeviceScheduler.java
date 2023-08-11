@@ -29,7 +29,7 @@ public class DeviceScheduler {
     private final DeviceDataService deviceDataService;
 
 
-    @Scheduled(cron = "*/5 * * * * *")
+    @Scheduled(cron = "*/10 * * * * *")
     public void fetchDeviceData() throws IOException, InterruptedException {
         List<InterfaceConfig> configs = interfaceConfigService.findAll();
         log.info("Found {} interfaces in repository.", configs.size());
@@ -42,7 +42,7 @@ public class DeviceScheduler {
             for (Device d : devices) {
                 RegisterMapping mapping = i.getMapping().getPower();
                 String res = nodeRedClient.fetchDeviceData(i, config, d, mapping);
-                deviceDataService.saveDeviceData(d, mapping, res);
+                deviceDataService.saveDeviceData(d, res);
             }
         }
 
