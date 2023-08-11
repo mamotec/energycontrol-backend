@@ -2,11 +2,14 @@ package com.mamotec.energycontrolbackend.client;
 
 import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.InfluxDBClientFactory;
+import com.influxdb.client.QueryApi;
 import com.influxdb.client.WriteApiBlocking;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
+@Getter
 public class InfluxClient {
 
     @Value("${influx.url}")
@@ -27,6 +30,10 @@ public class InfluxClient {
 
     public WriteApiBlocking getWriteApiBlocking(){
         return getInfluxClient().getWriteApiBlocking();
+    }
+
+    public QueryApi getQueryApi(){
+        return getInfluxClient().getQueryApi();
     }
 
     public void closeInfluxClient(InfluxDBClient influxDBClient) {

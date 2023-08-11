@@ -39,15 +39,3 @@ CREATE TABLE device
     updated_at          TIMESTAMP,
     CONSTRAINT fk_interface_config FOREIGN KEY (interface_config_id) REFERENCES interface_config (id)
 );
-
-CREATE TABLE device_data
-(
-    id         SERIAL PRIMARY KEY,
-    device_id  INTEGER,
-    type       TEXT,
-    value      TEXT,
-    unit       TEXT,
-    created_at TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP,
-    CONSTRAINT fk_device FOREIGN KEY (device_id) REFERENCES device (id)
-);

@@ -9,6 +9,7 @@ import com.mamotec.energycontrolbackend.service.device.DeviceDataService;
 import com.mamotec.energycontrolbackend.service.device.DeviceService;
 import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceConfigService;
 import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,7 +21,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class DeviceScheduler {
+public class WriteDeviceScheduler {
 
     private final InterfaceConfigService interfaceConfigService;
     private final InterfaceService interfaceService;
@@ -28,23 +29,25 @@ public class DeviceScheduler {
     private final NodeRedClient nodeRedClient;
     private final DeviceDataService deviceDataService;
 
-
     @Scheduled(cron = "*/10 * * * * *")
-    public void fetchDeviceData() throws IOException, InterruptedException {
+    @Transactional
+    public void writeDeviceData() throws IOException, InterruptedException {
         List<InterfaceConfig> configs = interfaceConfigService.findAll();
-        log.info("Found {} interfaces in repository.", configs.size());
+        log.info("WRITE - Found {} interfaces in repository.", configs.size());
 
         for (InterfaceConfig config : configs) {
             Interface i = interfaceService.getInterfaceByProtocolId(config.getProtocolID());
 
             List<Device> devices = deviceService.getDevicesForInterfaceConfig(config.getId());
-            log.info("Found {} devices for interface {}.", devices.size(), config.getType());
-            for (Device d : devices) {
-                RegisterMapping mapping = i.getMapping().getPower();
-                String res = nodeRedClient.fetchDeviceData(i, config, d, mapping);
-                deviceDataService.saveDeviceData(d, res);
+            log.info("WRITE - Found {} devices for interface {}.", devices.size(), config.getType());
+            for (Device device : devices) {
+                // Which register mapping to use?
+                RegisterMapping mapping = i.getMapping()
+                        .getPower();
+
+                deviceDataService.readLastDeviceData(device, mapping);
             }
         }
-
     }
+
 }

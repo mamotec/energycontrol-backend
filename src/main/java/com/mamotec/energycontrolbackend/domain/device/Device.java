@@ -29,9 +29,6 @@ public class Device extends BaseEntity {
     @NotNull
     private Integer unitId;
 
-    @OneToMany(mappedBy = "device", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<DeviceData> deviceData;
-
     @JoinColumn(name = "interface_config_id")
     @OneToOne
     private InterfaceConfig interfaceConfig;
