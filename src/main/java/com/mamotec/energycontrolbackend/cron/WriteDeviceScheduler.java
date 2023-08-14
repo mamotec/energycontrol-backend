@@ -29,7 +29,6 @@ public class WriteDeviceScheduler {
     private final NodeRedClient nodeRedClient;
     private final DeviceDataService deviceDataService;
 
-    @Scheduled(cron = "*/10 * * * * *")
     @Transactional
     public void writeDeviceData() throws IOException, InterruptedException {
         List<InterfaceConfig> configs = interfaceConfigService.findAll();

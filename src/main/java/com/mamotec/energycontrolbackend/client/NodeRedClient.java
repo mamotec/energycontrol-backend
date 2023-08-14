@@ -47,7 +47,7 @@ public class NodeRedClient {
         String requestBody = objectMapper.writeValueAsString(values);
 
         HttpRequest request = HttpRequest.newBuilder()
-                .timeout(java.time.Duration.ofSeconds(5))
+                .timeout(java.time.Duration.ofSeconds(2))
                 .uri(URI.create(nodeRedUrl + String.format(DEVICE_URL, deviceUnitId)))
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                 .build();
@@ -73,7 +73,7 @@ public class NodeRedClient {
 
     public boolean isNodeRedAvailable(boolean withException) {
         HttpRequest request = HttpRequest.newBuilder()
-                .timeout(java.time.Duration.ofSeconds(5))
+                .timeout(java.time.Duration.ofSeconds(2))
                 .uri(URI.create(nodeRedUrl))
                 .GET()
                 .build();
