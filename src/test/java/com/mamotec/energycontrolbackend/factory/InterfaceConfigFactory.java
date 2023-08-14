@@ -9,7 +9,7 @@ public class InterfaceConfigFactory {
     public static InterfaceConfig aInterfaceConfig() {
         return InterfaceConfig.builder()
                 .port("tty/s0")
-                .protocolID(1)
+                .protocolId(1)
                 .type(InterfaceType.RS485)
                 .build();
     }

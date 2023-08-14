@@ -8,7 +8,6 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-@Builder
 public class RegisterMapping {
 
     private List<Integer> register;

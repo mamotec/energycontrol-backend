@@ -36,7 +36,7 @@ public class WriteDeviceScheduler {
         log.info("WRITE - Found {} interfaces in repository.", configs.size());
 
         for (InterfaceConfig config : configs) {
-            Interface i = interfaceService.getInterfaceByProtocolId(config.getProtocolID());
+            Interface i = interfaceService.getInterfaceByProtocolId(config.getProtocolId());
 
             List<Device> devices = deviceService.getDevicesForInterfaceConfig(config.getId());
             log.info("WRITE - Found {} devices for interface {}.", devices.size(), config.getType());

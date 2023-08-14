@@ -18,7 +18,7 @@ public class InterfaceConfig extends BaseEntity {
      * ID specified in YAML file for the given device internally
      */
     @Column(name = "protocol_id")
-    private long protocolID;
+    private long protocolId;
 
     @Enumerated(EnumType.STRING)
     private InterfaceType type;

@@ -33,7 +33,7 @@ public class DeviceScannerService {
     }
 
     private void scan(InterfaceConfig config) {
-        Interface anInterface = interfaceService.getInterfaceByProtocolId(config.getProtocolID());
+        Interface anInterface = interfaceService.getInterfaceByProtocolId(config.getProtocolId());
 
         for (int slaveAddress = 1; slaveAddress <= config.getType()
                 .getMaxDevices(); slaveAddress++) {

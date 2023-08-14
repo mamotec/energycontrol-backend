@@ -36,7 +36,7 @@ public class ReadDeviceScheduler {
         log.info("READ - Found {} interfaces in repository.", configs.size());
 
         for (InterfaceConfig config : configs) {
-            Interface i = interfaceService.getInterfaceByProtocolId(config.getProtocolID());
+            Interface i = interfaceService.getInterfaceByProtocolId(config.getProtocolId());
 
             List<Device> devices = deviceService.getDevicesForInterfaceConfig(config.getId());
             log.info("READ - Found {} devices for interface {}.", devices.size(), config.getType());

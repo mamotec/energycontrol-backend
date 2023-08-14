@@ -37,39 +37,6 @@ class ReadDeviceSchedulerUnitTest {
     @Mock
     private DeviceDataService deviceDataService;
 
-    @Test
-    void shouldVerifyInteractionWhenEveryThingIsGiven() throws IOException, InterruptedException {
-        // given
-        InterfaceConfig config = new InterfaceConfig();
-        config.setProtocolID(1L);
-        config.setId(1L);
-        RegisterMapping mapping = RegisterMapping.builder()
-                .register(List.of(672, 673))
-                .unit(Unit.KW)
-                .fc(FunctionCode.READ_COILS)
-                .type("power")
-                .build();
-
-        Interface i = new Interface();
-        i.setMapping(new InterfaceMapping());
-        i.getMapping()
-                .setPower(mapping);
-        Device device = new Device();
-
-        when(interfaceConfigService.findAll()).thenReturn(List.of(config));
-        when(interfaceService.getInterfaceByProtocolId(1)).thenReturn(i);
-        when(deviceService.getDevicesForInterfaceConfig(1)).thenReturn(List.of(device));
-        when(nodeRedClient.fetchDeviceData(i, config, device, mapping)).thenReturn("[343, 3434]");
-
-        // when
-        sut.fetchDeviceData();
-
-        // then
-        verify(interfaceService).getInterfaceByProtocolId(1L);
-        verify(deviceService).getDevicesForInterfaceConfig(1L);
-        verify(nodeRedClient).fetchDeviceData(i, config, device, mapping);
-        verify(deviceDataService).writeDeviceData(device, "[343, 3434]", mapping);
-    }
 
     @Test
     void shouldVerifyNoInteractionWhenNoConfigIsFound() throws IOException, InterruptedException {

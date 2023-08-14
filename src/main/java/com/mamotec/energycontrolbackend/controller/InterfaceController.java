@@ -34,6 +34,13 @@ public class InterfaceController {
         return ResponseEntity.ok(interfaceService.getAllInterfaces());
     }
 
+    @GetMapping("/config")
+    @Operation(summary = "Lade alle Schnittstellen erstellten Schnittstellen konfigurationen")
+    public ResponseEntity<List<InterfaceConfigDao>> fetchInterfaceConfigs() {
+        log.info("GET /interface/config is being called.");
+        return ResponseEntity.ok(interfaceConfigMapper.map(interfaceConfigService.findAll()));
+    }
+
     @PostMapping("/config")
     @Operation(summary = "Erstelle eine neue Schnittstellen konfiguration für die angegebene Schnittstelle")
     public ResponseEntity<InterfaceConfigDao> createInterfaceConfig(@RequestBody InterfaceConfigDao interfaceConfig) {
