@@ -20,6 +20,9 @@ public class InterfaceConfig extends BaseEntity {
     @Column(name = "protocol_id")
     private long protocolId;
 
+    @Column(name = "protocol_name")
+    private String protocolName;
+
     @Enumerated(EnumType.STRING)
     private InterfaceType type;
 

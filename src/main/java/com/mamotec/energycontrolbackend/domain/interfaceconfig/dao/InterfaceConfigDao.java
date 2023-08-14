@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class InterfaceConfigDao {
 
     private long protocolId;
+    private String protocolName;
     private InterfaceType type;
     private String port;
 }

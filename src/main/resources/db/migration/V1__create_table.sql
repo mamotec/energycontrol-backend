@@ -21,6 +21,7 @@ CREATE TABLE interface_config
 (
     id          SERIAL PRIMARY KEY,
     protocol_id bigint,
+    protocol_name TEXT,
     type        TEXT,
     port        TEXT,
     created_at  TIMESTAMP NOT NULL,
