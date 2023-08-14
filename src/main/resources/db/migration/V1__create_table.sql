@@ -39,3 +39,13 @@ CREATE TABLE device
     updated_at          TIMESTAMP,
     CONSTRAINT fk_interface_config FOREIGN KEY (interface_config_id) REFERENCES interface_config (id)
 );
+
+
+CREATE TABLE groups
+(
+    id                  SERIAL PRIMARY KEY,
+    name                TEXT,
+    type                TEXT,
+    created_at          TIMESTAMP NOT NULL,
+    updated_at          TIMESTAMP
+);

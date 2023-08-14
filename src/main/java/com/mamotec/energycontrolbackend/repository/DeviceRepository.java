@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface DeviceRepository extends JpaRepository<Device, Integer> {
 
-    public List<Device> findByInterfaceConfigId(long interfaceConfigId);
+    List<Device> findByInterfaceConfigId(long interfaceConfigId);
 }

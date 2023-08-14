@@ -1,9 +1,11 @@
 package com.mamotec.energycontrolbackend.controller;
 
-import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.dao.Interface;
+import com.mamotec.energycontrolbackend.domain.interfaceconfig.dao.InterfaceConfigDao;
+import com.mamotec.energycontrolbackend.mapper.InterfaceConfigMapper;
 import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceConfigService;
 import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,16 +25,20 @@ public class InterfaceController {
 
     private final InterfaceConfigService interfaceConfigService;
 
+    private final InterfaceConfigMapper interfaceConfigMapper;
+
     @GetMapping
+    @Operation(summary = "Lade alle verfügbaren Schnittstellen")
     public ResponseEntity<List<Interface>> fetchInterfaces() {
         log.info("GET /interface is being called.");
         return ResponseEntity.ok(interfaceService.getAllInterfaces());
     }
 
     @PostMapping("/config")
-    public ResponseEntity<InterfaceConfig> createInterfaceConfig(@RequestBody InterfaceConfig interfaceConfig) {
+    @Operation(summary = "Erstelle eine neue Schnittstellen konfiguration für die angegebene Schnittstelle")
+    public ResponseEntity<InterfaceConfigDao> createInterfaceConfig(@RequestBody InterfaceConfigDao interfaceConfig) {
         log.info("POST /interface/config is being called.");
-        return ResponseEntity.ok(interfaceConfigService.save(interfaceConfig));
+        return ResponseEntity.ok(interfaceConfigMapper.map(interfaceConfigService.save(interfaceConfigMapper.map(interfaceConfig))));
     }
 
 }

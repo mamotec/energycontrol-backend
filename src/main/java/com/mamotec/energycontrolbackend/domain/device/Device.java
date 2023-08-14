@@ -2,11 +2,12 @@ package com.mamotec.energycontrolbackend.domain.device;
 
 import com.mamotec.energycontrolbackend.domain.BaseEntity;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-
-import java.util.Set;
 
 
 @EqualsAndHashCode(callSuper = true)

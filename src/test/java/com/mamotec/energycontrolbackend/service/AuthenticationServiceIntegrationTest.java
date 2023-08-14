@@ -1,5 +1,6 @@
 package com.mamotec.energycontrolbackend.service;
 
+import com.mamotec.energycontrolbackend.base.SpringBootBaseTest;
 import com.mamotec.energycontrolbackend.domain.auth.AuthenticationRequest;
 import com.mamotec.energycontrolbackend.domain.auth.AuthenticationResponse;
 import com.mamotec.energycontrolbackend.domain.auth.RegisterRequest;
@@ -9,7 +10,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.BadCredentialsException;
 
@@ -18,8 +18,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@SpringBootTest
-class AuthenticationServiceIntegrationTest {
+class AuthenticationServiceIntegrationTest extends SpringBootBaseTest {
 
     @Autowired
     private AuthenticationService authenticationService;
