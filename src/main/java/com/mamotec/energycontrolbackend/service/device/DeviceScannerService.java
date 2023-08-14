@@ -1,8 +1,10 @@
 package com.mamotec.energycontrolbackend.service.device;
 
 import com.mamotec.energycontrolbackend.client.NodeRedClient;
+import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.dao.Interface;
+import com.mamotec.energycontrolbackend.repository.DeviceRepository;
 import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceConfigService;
 import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,10 @@ public class DeviceScannerService {
 
     private final NodeRedClient nodeRedClient;
 
+    private final DeviceRepository deviceRepository;
+
+    private final DeviceService deviceService;
+
     public void deviceScan() {
         List<InterfaceConfig> interfaces = interfaceConfigService.findAll();
 
@@ -38,6 +44,17 @@ public class DeviceScannerService {
         for (int slaveAddress = 1; slaveAddress <= config.getType()
                 .getMaxDevices(); slaveAddress++) {
             nodeRedClient.checkDevice(slaveAddress, config, anInterface);
+            if (deviceRepository.existsByUnitIdAndInterfaceConfigType(slaveAddress, config.getType())) {
+                log.info("Device with unitId {} and interface {} already exists in database", slaveAddress, config.getType());
+            } else {
+                log.info("Device with unitId {} and interface {} does not exist in database", slaveAddress, config.getType());
+                Device d = new Device();
+                d.setUnitId(slaveAddress);
+                d.setInterfaceConfig(config);
+                deviceService.create(d);
+            }
         }
     }
+
+
 }
