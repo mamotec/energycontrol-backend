@@ -48,4 +48,18 @@ class InterfaceConfigServiceTest extends SpringBootBaseTest {
         }
     }
 
+    @Nested
+    class Delete {
+
+        @Test
+        void shouldDeleteInterfaceConfig() {
+            // given
+            InterfaceConfig interfaceConfig = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
+            // when
+            interfaceConfigService.delete(interfaceConfig.getId().intValue());
+            // then
+            assertEquals(0, interfaceConfigRepository.count());
+        }
+    }
+
 }

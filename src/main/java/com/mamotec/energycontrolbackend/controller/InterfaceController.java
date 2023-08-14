@@ -27,11 +27,26 @@ public class InterfaceController {
 
     private final InterfaceConfigMapper interfaceConfigMapper;
 
+    // region Schnittstellen
+
     @GetMapping
     @Operation(summary = "Lade alle verfügbaren Schnittstellen")
     public ResponseEntity<List<Interface>> fetchInterfaces() {
         log.info("GET /interface is being called.");
         return ResponseEntity.ok(interfaceService.getAllInterfaces());
+    }
+
+    // endregion
+
+    // region Schnittstellen konfigurationen
+
+    @DeleteMapping("/config/{id}")
+    @Operation(summary = "Lösche die Schnittstellen konfiguration mit der angegebenen ID")
+    public ResponseEntity<Void> deleteInterfaceConfig(@PathVariable Integer id) {
+        log.info("DELETE /interface/config/{} is being called.", id);
+        interfaceConfigService.delete(id);
+        return ResponseEntity.ok()
+                .build();
     }
 
     @GetMapping("/config")
@@ -47,5 +62,7 @@ public class InterfaceController {
         log.info("POST /interface/config is being called.");
         return ResponseEntity.ok(interfaceConfigMapper.map(interfaceConfigService.save(interfaceConfigMapper.map(interfaceConfig))));
     }
+
+    // endregion
 
 }

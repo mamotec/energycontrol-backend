@@ -22,4 +22,16 @@ public interface CrudOperations<T> {
         throw new NotImplementedException("Create not implemented!");
 
     }
+
+    default void delete(Integer id) {
+        if (this.getRepository().isPresent()) {
+            JpaRepository<T, Integer> repo = this.getRepository()
+                    .get();
+
+            repo.deleteById(id);
+        } else {
+            throw new NotImplementedException("Delete not implemented!");
+        }
+
+    }
 }
