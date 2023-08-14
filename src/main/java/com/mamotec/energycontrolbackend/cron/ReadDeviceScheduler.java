@@ -52,7 +52,7 @@ public class ReadDeviceScheduler {
 
     private void doFetchPerDevice(InterfaceConfig config, Device d, Interface i, RegisterMapping mapping) throws IOException, InterruptedException {
         // Fetch data from node-red
-        String res = nodeRedClient.fetchDeviceData(i, config, d, mapping);
+        String res = nodeRedClient.fetchDeviceData(i, config, d.getUnitId(), mapping);
         // Save data to influxdb
         deviceDataService.writeDeviceData(d, res, mapping);
     }

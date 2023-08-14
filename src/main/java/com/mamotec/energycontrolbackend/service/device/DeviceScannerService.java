@@ -43,16 +43,19 @@ public class DeviceScannerService {
 
         for (int slaveAddress = 1; slaveAddress <= config.getType()
                 .getMaxDevices(); slaveAddress++) {
-            nodeRedClient.checkDevice(slaveAddress, config, anInterface);
-            if (deviceRepository.existsByUnitIdAndInterfaceConfigType(slaveAddress, config.getType())) {
-                log.info("Device with unitId {} and interface {} already exists in database", slaveAddress, config.getType());
-            } else {
-                log.info("Device with unitId {} and interface {} does not exist in database", slaveAddress, config.getType());
-                Device d = new Device();
-                d.setUnitId(slaveAddress);
-                d.setInterfaceConfig(config);
-                deviceService.create(d);
+            boolean isDeviceAvailable = nodeRedClient.checkDevice(slaveAddress, config, anInterface);
+            if (isDeviceAvailable) {
+                if (deviceRepository.existsByUnitIdAndInterfaceConfigType(slaveAddress, config.getType())) {
+                    log.info("Device with unitId {} and interface {} already exists in database", slaveAddress, config.getType());
+                } else {
+                    log.info("Device with unitId {} and interface {} does not exist in database", slaveAddress, config.getType());
+                    Device d = new Device();
+                    d.setUnitId(slaveAddress);
+                    d.setInterfaceConfig(config);
+                    deviceService.create(d);
+                }
             }
+
         }
     }
 
