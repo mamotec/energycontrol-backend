@@ -1,6 +1,7 @@
 package com.mamotec.energycontrolbackend.controller;
 
 import com.mamotec.energycontrolbackend.client.NodeRedClient;
+import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateRequest;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateResponse;
 import com.mamotec.energycontrolbackend.mapper.DeviceMapper;
@@ -12,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/device")
@@ -33,6 +36,13 @@ public class DeviceController {
     public ResponseEntity<DeviceCreateResponse> createDevice(@RequestBody DeviceCreateRequest request) {
         log.info("POST /device is being called.");
         return ResponseEntity.ok(deviceService.create(deviceMapper.map(request)));
+    }
+
+    @GetMapping
+    @Operation(summary = "Lade alle verfügbaren Geräte")
+    public ResponseEntity<List<Device>> fetchDevices() {
+        log.info("GET /device is being called.");
+        return ResponseEntity.ok(deviceService.getAllDevices());
     }
 
     @GetMapping("/service")

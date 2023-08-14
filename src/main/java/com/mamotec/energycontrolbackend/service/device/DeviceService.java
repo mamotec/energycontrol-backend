@@ -31,6 +31,10 @@ public class DeviceService implements CrudOperations<Device> {
         return repository.findByInterfaceConfigId(interfaceConfigId);
     }
 
+    public List<Device> getAllDevices() {
+        return repository.findAll();
+    }
+
     @Override
     public Optional<JpaRepository<Device, Integer>> getRepository() {
         return Optional.of(repository);

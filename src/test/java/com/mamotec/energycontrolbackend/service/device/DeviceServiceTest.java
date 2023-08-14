@@ -60,5 +60,24 @@ class DeviceServiceTest extends SpringBootBaseTest {
 
     }
 
+    @Nested
+    class GetAllDevices {
+
+        @Test
+        void shouldReturnAllDevices() {
+            // given
+            InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
+            deviceService.create(DeviceFactory.aDevice(config));
+            deviceService.create(DeviceFactory.aDevice(config));
+            deviceService.create(DeviceFactory.aDevice(config));
+
+            // when
+            List<Device> allDevices = deviceService.getAllDevices();
+
+            // then
+            assertEquals(3, allDevices.size());
+        }
+    }
+
 
 }
