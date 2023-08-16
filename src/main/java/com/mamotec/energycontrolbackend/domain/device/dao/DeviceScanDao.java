@@ -1,20 +1,19 @@
 package com.mamotec.energycontrolbackend.domain.device.dao;
 
-import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeviceCreateRequest {
+public class DeviceScanDao {
 
-    private long id;
-
-    private Integer unitId;
-
-    private InterfaceConfig interfaceConfig;
+    List<DeviceCreateRequest> alreadyExistingDevices = new ArrayList<>();
+    List<DeviceCreateRequest> newDevices = new ArrayList<>();
 }

@@ -28,6 +28,9 @@ public class DeviceDataService {
 
     @Transactional
     public void writeDeviceData(Device device, String body, RegisterMapping mapping) {
+        if (body == null) {
+            return;
+        }
         log.info("Saving data for device {} and measurement {}.", device.getUnitId(), mapping.getType());
         WriteApiBlocking writeApiBlocking = influxClient.getWriteApiBlocking();
 

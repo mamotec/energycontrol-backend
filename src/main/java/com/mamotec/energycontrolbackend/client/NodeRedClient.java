@@ -1,7 +1,6 @@
 package com.mamotec.energycontrolbackend.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.dao.Interface;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.dao.RegisterMapping;
@@ -47,7 +46,7 @@ public class NodeRedClient {
         String requestBody = objectMapper.writeValueAsString(values);
 
         HttpRequest request = HttpRequest.newBuilder()
-                .timeout(java.time.Duration.ofSeconds(2))
+                .timeout(java.time.Duration.ofSeconds(5))
                 .uri(URI.create(nodeRedUrl + String.format(DEVICE_URL, deviceUnitId)))
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                 .build();

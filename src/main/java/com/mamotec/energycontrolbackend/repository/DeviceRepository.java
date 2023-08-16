@@ -13,4 +13,5 @@ public interface DeviceRepository extends JpaRepository<Device, Integer> {
     List<Device> findByInterfaceConfigId(long interfaceConfigId);
 
     boolean existsByUnitIdAndInterfaceConfigType(long unitId, InterfaceType interfaceConfigType);
+
 }

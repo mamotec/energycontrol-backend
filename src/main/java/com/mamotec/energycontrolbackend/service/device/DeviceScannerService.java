@@ -1,7 +1,8 @@
 package com.mamotec.energycontrolbackend.service.device;
 
 import com.mamotec.energycontrolbackend.client.NodeRedClient;
-import com.mamotec.energycontrolbackend.domain.device.Device;
+import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateRequest;
+import com.mamotec.energycontrolbackend.domain.device.dao.DeviceScanDao;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.dao.Interface;
 import com.mamotec.energycontrolbackend.repository.DeviceRepository;
@@ -28,18 +29,21 @@ public class DeviceScannerService {
 
     private final DeviceService deviceService;
 
-    public void deviceScan() {
+    public DeviceScanDao deviceScan() {
         List<InterfaceConfig> interfaces = interfaceConfigService.findAll();
 
         for (InterfaceConfig interfaceConfig : interfaces) {
             log.info("Scanning interface {}...", interfaceConfig.getType());
-            scan(interfaceConfig);
-            log.info("Scanning interface {}... done", interfaceConfig.getType());
+            return scan(interfaceConfig);
         }
+
+        // TODO: Throw exception if no interface is available
+        return null;
     }
 
-    private void scan(InterfaceConfig config) {
+    private DeviceScanDao scan(InterfaceConfig config) {
         Interface anInterface = interfaceService.getInterfaceByProtocolId(config.getProtocolId());
+        DeviceScanDao dao = new DeviceScanDao();
 
         for (int slaveAddress = 1; slaveAddress <= config.getType()
                 .getMaxDevices(); slaveAddress++) {
@@ -47,16 +51,20 @@ public class DeviceScannerService {
             if (isDeviceAvailable) {
                 if (deviceRepository.existsByUnitIdAndInterfaceConfigType(slaveAddress, config.getType())) {
                     log.info("Device with unitId {} and interface {} already exists in database", slaveAddress, config.getType());
-                } else {
-                    log.info("Device with unitId {} and interface {} does not exist in database", slaveAddress, config.getType());
-                    Device d = new Device();
+                    DeviceCreateRequest d = new DeviceCreateRequest();
                     d.setUnitId(slaveAddress);
                     d.setInterfaceConfig(config);
-                    deviceService.create(d);
+                    dao.getAlreadyExistingDevices().add(d);
+                } else {
+                    log.info("Device with unitId {} and interface {} does not exist in database", slaveAddress, config.getType());
+                    DeviceCreateRequest d = new DeviceCreateRequest();
+                    d.setUnitId(slaveAddress);
+                    d.setInterfaceConfig(config);
+                    dao.getNewDevices().add(d);
                 }
             }
-
         }
+        return dao;
     }
 
 

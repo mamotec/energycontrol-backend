@@ -4,6 +4,7 @@ import com.mamotec.energycontrolbackend.client.NodeRedClient;
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateRequest;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateResponse;
+import com.mamotec.energycontrolbackend.domain.device.dao.DeviceScanDao;
 import com.mamotec.energycontrolbackend.mapper.DeviceMapper;
 import com.mamotec.energycontrolbackend.service.device.DeviceScannerService;
 import com.mamotec.energycontrolbackend.service.device.DeviceService;
@@ -54,9 +55,8 @@ public class DeviceController {
 
     @GetMapping("/scan")
     @Operation(summary = "Starte einen Scan nach neuen Geräten")
-    public ResponseEntity<Void> deviceScan() {
+    public ResponseEntity<DeviceScanDao> deviceScan() {
         log.info("GET /device/scan is being called.");
-        deviceScannerService.deviceScan();
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(deviceScannerService.deviceScan());
     }
 }
