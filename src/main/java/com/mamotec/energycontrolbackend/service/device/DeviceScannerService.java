@@ -10,6 +10,11 @@ import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceConfigS
 import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.wimpi.modbus.io.ModbusSerialTransaction;
+import net.wimpi.modbus.msg.ReadInputRegistersRequest;
+import net.wimpi.modbus.msg.ReadInputRegistersResponse;
+import net.wimpi.modbus.net.SerialConnection;
+import net.wimpi.modbus.util.SerialParameters;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,8 +52,9 @@ public class DeviceScannerService {
 
         for (int slaveAddress = 1; slaveAddress <= config.getType()
                 .getMaxDevices(); slaveAddress++) {
-            boolean isDeviceAvailable = nodeRedClient.checkDevice(slaveAddress, config, anInterface);
-            if (isDeviceAvailable) {
+            searchModbusDevices();
+            //boolean isDeviceAvailable = nodeRedClient.checkDevice(slaveAddress, config, anInterface);
+            if (false) {
                 if (deviceRepository.existsByUnitIdAndInterfaceConfigType(slaveAddress, config.getType())) {
                     log.info("Device with unitId {} and interface {} already exists in database", slaveAddress, config.getType());
                     DeviceCreateRequest d = new DeviceCreateRequest();
@@ -65,6 +71,46 @@ public class DeviceScannerService {
             }
         }
         return dao;
+    }
+
+    public static void searchModbusDevices() {
+        try {
+            // Set up connection parameters
+            SerialParameters serialParameters = new SerialParameters();
+            serialParameters.setPortName("/dev/ttyS0"); // Replace with your serial port
+            serialParameters.setBaudRate(9600);
+            serialParameters.setDatabits(8);
+            serialParameters.setParity("None");
+            serialParameters.setStopbits(1);
+
+            // Create a serial connection
+            SerialConnection connection = new SerialConnection(serialParameters);
+            connection.open();
+
+            // Loop through possible Modbus addresses and check for responses
+            for (int unitId = 1; unitId <= 247; unitId++) {
+                ReadInputRegistersRequest request = new ReadInputRegistersRequest(0, 1);
+                request.setUnitID(unitId);
+
+                ModbusSerialTransaction transaction = new ModbusSerialTransaction(connection);
+                transaction.setRequest(request);
+
+                try {
+                    transaction.execute();
+                    ReadInputRegistersResponse response = (ReadInputRegistersResponse) transaction.getResponse();
+
+                    // If a response is received, a device is present at this address
+                    System.out.println("Device found at Modbus address: " + unitId);
+                } catch (Exception e) {
+                    // No response received, device not present at this address
+                }
+            }
+
+            // Close the connection
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
