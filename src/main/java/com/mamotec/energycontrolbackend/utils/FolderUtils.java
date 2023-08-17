@@ -1,28 +1,42 @@
 package com.mamotec.energycontrolbackend.utils;
 
-import org.springframework.stereotype.Component;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.core.io.Resource;
 
-import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FolderUtils {
 
-    public static List<URL> getResourcesInFolder(String folderPath) throws IOException {
+    public static List<URL> getResourcesInFolder(String folderPath) throws IOException, URISyntaxException {
+        List<Path> resourcePaths;
         List<URL> resources = new ArrayList<>();
-        URL folderUrl = FolderUtils.class.getClassLoader()
-                .getResource(folderPath);
 
-        File folder = new File(folderUrl.getFile());
-        File[] files = folder.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                resources.add(file.toURI()
+        ClassPathXmlApplicationContext appContext = new ClassPathXmlApplicationContext();
+        try {
+            Resource resource = appContext.getResource("classpath:" + folderPath);
+
+            resourcePaths = Files.walk(Path.of(FolderUtils.class.getResource(folderPath)
+                            .toURI()))
+                    .filter(Files::isRegularFile)
+                    .toList();
+
+
+
+            for (Path path : resourcePaths) {
+                resources.add(path.toUri()
                         .toURL());
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+
         return resources;
     }
 }
