@@ -4,9 +4,7 @@ import com.mamotec.energycontrolbackend.client.NodeRedClient;
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateRequest;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateResponse;
-import com.mamotec.energycontrolbackend.domain.device.dao.DeviceScanDao;
 import com.mamotec.energycontrolbackend.mapper.DeviceMapper;
-import com.mamotec.energycontrolbackend.service.device.DeviceScannerService;
 import com.mamotec.energycontrolbackend.service.device.DeviceService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -25,8 +23,6 @@ import java.util.List;
 public class DeviceController {
 
     private final DeviceService deviceService;
-
-    private final DeviceScannerService deviceScannerService;
 
     private final DeviceMapper deviceMapper;
 
@@ -53,10 +49,4 @@ public class DeviceController {
         return ResponseEntity.ok(nodeRedClient.isNodeRedAvailable(false));
     }
 
-    @GetMapping("/scan")
-    @Operation(summary = "Starte einen Scan nach neuen Geräten")
-    public ResponseEntity<DeviceScanDao> deviceScan() {
-        log.info("GET /device/scan is being called.");
-        return ResponseEntity.ok(deviceScannerService.deviceScan());
-    }
 }

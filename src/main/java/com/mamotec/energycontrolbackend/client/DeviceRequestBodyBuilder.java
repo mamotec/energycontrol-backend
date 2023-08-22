@@ -2,8 +2,8 @@ package com.mamotec.energycontrolbackend.client;
 
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceType;
-import com.mamotec.energycontrolbackend.domain.interfaceconfig.dao.Interface;
-import com.mamotec.energycontrolbackend.domain.interfaceconfig.dao.RegisterMapping;
+import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.DeviceYaml;
+import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.RegisterMapping;
 import lombok.NoArgsConstructor;
 
 import java.util.HashMap;
@@ -12,17 +12,14 @@ import java.util.Map;
 @NoArgsConstructor
 public final class DeviceRequestBodyBuilder {
 
-    public static void buildConnectionPost(Interface i, InterfaceConfig config, long unitId, Map<String, String> requestBody) {
+    public static void buildConnectionPost(DeviceYaml i, InterfaceConfig config, long unitId, Map<String, String> requestBody) {
 
         if (config.getType().equals(InterfaceType.RS485)) {
             // Modbus-Server - SERIAL
             requestBody.put("baudrate", String.valueOf(i.getConnection().getBaudRate()));
-            requestBody.put("serialPort", config.getPort());
             requestBody.put("connectorType", "SERIAL");
         } else if (config.getType().equals(InterfaceType.TCP)) {
             // Modbus-Server - TCP
-            requestBody.put("host", i.getConnection().getHost());
-            requestBody.put("port", String.valueOf(i.getConnection().getPort()));
             requestBody.put("connectorType", "TCP");
         }
 

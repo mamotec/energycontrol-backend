@@ -10,22 +10,12 @@ import lombok.*;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
-@Builder
 @Table(name = "interface_config")
 public class InterfaceConfig extends BaseEntity {
-
-    /**
-     * ID specified in YAML file for the given device internally
-     */
-    @Column(name = "protocol_id")
-    private long protocolId;
-
-    @Column(name = "protocol_name")
-    private String protocolName;
 
     @Enumerated(EnumType.STRING)
     private InterfaceType type;
 
-    private String port;
+    private String description;
 
 }

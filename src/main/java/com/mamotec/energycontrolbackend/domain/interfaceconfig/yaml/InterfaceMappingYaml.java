@@ -1,9 +1,9 @@
-package com.mamotec.energycontrolbackend.domain.interfaceconfig.dao;
+package com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml;
 
 import lombok.Data;
 
 @Data
-public class InterfaceMapping {
+public class InterfaceMappingYaml {
 
     private RegisterMapping power;
     private RegisterMapping powerReduction;

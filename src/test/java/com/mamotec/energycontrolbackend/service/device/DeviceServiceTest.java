@@ -43,7 +43,7 @@ class DeviceServiceTest extends SpringBootBaseTest {
     }
 
     @Nested
-    class GetDevicesForInterfaceConfig {
+    class GetDevicesForInterfaceConfigYaml {
 
         @Test
         void shouldReturnDevicesForInterfaceConfig() {

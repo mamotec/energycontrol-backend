@@ -1,8 +1,10 @@
 package com.mamotec.energycontrolbackend.controller;
 
-import com.mamotec.energycontrolbackend.domain.interfaceconfig.dao.Interface;
-import com.mamotec.energycontrolbackend.domain.interfaceconfig.dao.InterfaceConfigDao;
-import com.mamotec.energycontrolbackend.mapper.InterfaceConfigMapper;
+import com.mamotec.energycontrolbackend.domain.device.DeviceType;
+import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
+import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.DeviceYaml;
+import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.InterfaceYaml;
+import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.ManufacturerYaml;
 import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceConfigService;
 import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,15 +27,27 @@ public class InterfaceController {
 
     private final InterfaceConfigService interfaceConfigService;
 
-    private final InterfaceConfigMapper interfaceConfigMapper;
-
-    // region Schnittstellen
+    // region Schnittstellen (YAML)
 
     @GetMapping
     @Operation(summary = "Lade alle verfügbaren Schnittstellen")
-    public ResponseEntity<List<Interface>> fetchInterfaces() {
+    public ResponseEntity<List<InterfaceYaml>> fetchInterfaces() {
         log.info("GET /interface is being called.");
         return ResponseEntity.ok(interfaceService.getAllInterfaces());
+    }
+
+    @GetMapping("/manufacturer")
+    @Operation(summary = "Lade alle verfügbaren Hersteller")
+    public ResponseEntity<List<ManufacturerYaml>> fetchManufactures() {
+        log.info("GET /interface/manufacturer is being called.");
+        return ResponseEntity.ok(interfaceService.getAllManufactures());
+    }
+
+    @GetMapping("/{manufacturerId}/devices/{deviceType}")
+    @Operation(summary = "Lade alle verfügbaren Geräte für den angegebenen Hersteller")
+    public ResponseEntity<List<DeviceYaml>> fetchDevicesForManufacturer(@PathVariable Long manufacturerId, @PathVariable DeviceType deviceType) {
+        log.info("GET /interface/{}/devices?{} is being called.", manufacturerId, deviceType);
+        return ResponseEntity.ok(interfaceService.getAllDevicesByManufacturerAndDeviceType(manufacturerId, deviceType));
     }
 
     // endregion
@@ -51,16 +65,16 @@ public class InterfaceController {
 
     @GetMapping("/config")
     @Operation(summary = "Lade alle Schnittstellen erstellten Schnittstellen konfigurationen")
-    public ResponseEntity<List<InterfaceConfigDao>> fetchInterfaceConfigs() {
+    public ResponseEntity<List<InterfaceConfig>> fetchInterfaceConfigs() {
         log.info("GET /interface/config is being called.");
-        return ResponseEntity.ok(interfaceConfigMapper.map(interfaceConfigService.findAll()));
+        return ResponseEntity.ok(interfaceConfigService.findAll());
     }
 
     @PostMapping("/config")
     @Operation(summary = "Erstelle eine neue Schnittstellen konfiguration für die angegebene Schnittstelle")
-    public ResponseEntity<InterfaceConfigDao> createInterfaceConfig(@RequestBody InterfaceConfigDao interfaceConfig) {
+    public ResponseEntity<InterfaceConfig> createInterfaceConfig(@RequestBody InterfaceConfig interfaceConfig) {
         log.info("POST /interface/config is being called.");
-        return ResponseEntity.ok(interfaceConfigMapper.map(interfaceConfigService.save(interfaceConfigMapper.map(interfaceConfig))));
+        return ResponseEntity.ok(interfaceConfigService.save(interfaceConfig));
     }
 
     // endregion

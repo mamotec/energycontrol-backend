@@ -8,7 +8,7 @@ import com.influxdb.query.FluxRecord;
 import com.influxdb.query.FluxTable;
 import com.mamotec.energycontrolbackend.client.InfluxClient;
 import com.mamotec.energycontrolbackend.domain.device.Device;
-import com.mamotec.energycontrolbackend.domain.interfaceconfig.dao.RegisterMapping;
+import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.RegisterMapping;
 import com.mamotec.energycontrolbackend.utils.StringUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

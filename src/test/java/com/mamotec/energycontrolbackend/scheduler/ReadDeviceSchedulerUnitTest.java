@@ -2,9 +2,6 @@ package com.mamotec.energycontrolbackend.scheduler;
 
 import com.mamotec.energycontrolbackend.client.NodeRedClient;
 import com.mamotec.energycontrolbackend.cron.ReadDeviceScheduler;
-import com.mamotec.energycontrolbackend.domain.device.Device;
-import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
-import com.mamotec.energycontrolbackend.domain.interfaceconfig.dao.*;
 import com.mamotec.energycontrolbackend.service.device.DeviceDataService;
 import com.mamotec.energycontrolbackend.service.device.DeviceService;
 import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceConfigService;

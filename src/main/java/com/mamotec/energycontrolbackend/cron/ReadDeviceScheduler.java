@@ -3,8 +3,9 @@ package com.mamotec.energycontrolbackend.cron;
 import com.mamotec.energycontrolbackend.client.NodeRedClient;
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
-import com.mamotec.energycontrolbackend.domain.interfaceconfig.dao.Interface;
-import com.mamotec.energycontrolbackend.domain.interfaceconfig.dao.RegisterMapping;
+import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.DeviceYaml;
+import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.InterfaceYaml;
+import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.RegisterMapping;
 import com.mamotec.energycontrolbackend.service.device.DeviceDataService;
 import com.mamotec.energycontrolbackend.service.device.DeviceService;
 import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceConfigService;
@@ -29,18 +30,20 @@ public class ReadDeviceScheduler {
     private final NodeRedClient nodeRedClient;
     private final DeviceDataService deviceDataService;
 
-    @Scheduled(cron = "*/10 * * * * *")
+    @Scheduled(cron = "*/59 * * * * *")
     @Transactional
     public void fetchDeviceData() throws IOException, InterruptedException {
         List<InterfaceConfig> configs = interfaceConfigService.findAll();
         log.info("READ - Found {} interfaces in repository.", configs.size());
 
         for (InterfaceConfig config : configs) {
-            Interface i = interfaceService.getInterfaceByProtocolId(config.getProtocolId());
 
             List<Device> devices = deviceService.getDevicesForInterfaceConfig(config.getId());
+
             log.info("READ - Found {} devices for interface {}.", devices.size(), config.getType());
             for (Device device : devices) {
+                DeviceYaml i = interfaceService.getDeviceInformationForManufactureAndDeviceId(device.getManufacturerId(), device.getDeviceId());
+
                 // Which register mapping to use?
                 RegisterMapping mapping = i.getMapping()
                         .getPower();
@@ -50,9 +53,9 @@ public class ReadDeviceScheduler {
         }
     }
 
-    private void doFetchPerDevice(InterfaceConfig config, Device d, Interface i, RegisterMapping mapping) throws IOException, InterruptedException {
+    private void doFetchPerDevice(InterfaceConfig config, Device d, DeviceYaml deviceYaml, RegisterMapping mapping) throws IOException, InterruptedException {
         // Fetch data from node-red
-        String res = nodeRedClient.fetchDeviceData(i, config, d.getUnitId(), mapping);
+        String res = nodeRedClient.fetchDeviceData(deviceYaml, config, d.getUnitId(), mapping);
         // Save data to influxdb
         deviceDataService.writeDeviceData(d, res, mapping);
     }

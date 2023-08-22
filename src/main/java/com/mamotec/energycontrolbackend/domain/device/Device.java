@@ -2,10 +2,7 @@ package com.mamotec.energycontrolbackend.domain.device;
 
 import com.mamotec.energycontrolbackend.domain.BaseEntity;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -21,18 +18,30 @@ public class Device extends BaseEntity {
 
     // region Fields
 
+    @JoinColumn(name = "interface_config_id")
+    @OneToOne
+    private InterfaceConfig interfaceConfig;
+
     private String name;
 
-    private String description;
+    /**
+     * The manufacturer id in the YAML file.
+     */
+    @Column(name = "manufacturer_id")
+    private long manufacturerId;
 
-    private String serialNumber;
+    /**
+     * The device id in the YAML file.
+     */
+    @Column(name = "device_id")
+    private long deviceId;
+
+    @Enumerated(EnumType.STRING)
+    private DeviceType deviceType;
 
     @NotNull
     private Integer unitId;
 
-    @JoinColumn(name = "interface_config_id")
-    @OneToOne
-    private InterfaceConfig interfaceConfig;
 
     // endregion
 }

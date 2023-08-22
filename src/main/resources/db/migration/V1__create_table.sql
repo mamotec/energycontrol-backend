@@ -20,10 +20,8 @@ CREATE TABLE mamotec_user
 CREATE TABLE interface_config
 (
     id          SERIAL PRIMARY KEY,
-    protocol_id bigint,
-    protocol_name TEXT,
     type        TEXT,
-    port        TEXT,
+    description TEXT,
     created_at  TIMESTAMP NOT NULL,
     updated_at  TIMESTAMP
 );
@@ -31,11 +29,12 @@ CREATE TABLE interface_config
 CREATE TABLE device
 (
     id                  SERIAL PRIMARY KEY,
-    name                TEXT,
-    description         TEXT,
-    serial_number       TEXT,
-    unit_id             INTEGER,
     interface_config_id INTEGER,
+    name                TEXT,
+    manufacturer_id     INTEGER,
+    device_id           INTEGER,
+    device_type         TEXT,
+    unit_id             INTEGER,
     created_at          TIMESTAMP NOT NULL,
     updated_at          TIMESTAMP,
     CONSTRAINT fk_interface_config FOREIGN KEY (interface_config_id) REFERENCES interface_config (id)

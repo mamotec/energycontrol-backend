@@ -7,11 +7,11 @@ import com.mamotec.energycontrolbackend.repository.InterfaceConfigRepository;
 public class InterfaceConfigFactory {
 
     public static InterfaceConfig aInterfaceConfig() {
-        return InterfaceConfig.builder()
-                .port("tty/s0")
-                .protocolId(1)
-                .type(InterfaceType.RS485)
-                .build();
+        InterfaceConfig c = new InterfaceConfig();
+        c.setDescription("Port 1 - RS485");
+        c.setType(InterfaceType.RS485);
+
+        return c;
     }
 
     public static InterfaceConfig aInterfaceConfig(final InterfaceConfigRepository interfaceConfigRepository) {
