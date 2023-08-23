@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +21,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Validated
 public class DeviceService implements CrudOperations<Device> {
 
     private final DeviceRepository repository;
@@ -30,8 +32,11 @@ public class DeviceService implements CrudOperations<Device> {
 
     private final InfluxService influxService;
 
+    private final DeviceValidationService validationService;
+
     @Transactional
     public DeviceCreateResponse create(Device device) {
+        validationService.validate(device);
         return mapper.map(save(device));
     }
 
@@ -66,5 +71,6 @@ public class DeviceService implements CrudOperations<Device> {
     public Optional<JpaRepository<Device, Integer>> getRepository() {
         return Optional.of(repository);
     }
+
 
 }
