@@ -7,11 +7,13 @@ WORKDIR /app
 # Kopiere die Projektquelle in das Arbeitsverzeichnis
 COPY . /app
 
+RUN chmod +x mvnw
+
 # Baue das Projekt mit Maven
 RUN ./mvnw clean package -DskipTests
 
 # Use the official Azul Zulu OpenJDK 17 image as the base image
-FROM eclipse-temurin:17-jdk
+FROM arm64v8/openjdk:17-jdk-slim
 
 # Set the working directory
 WORKDIR /app
