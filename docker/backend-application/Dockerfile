@@ -1,7 +1,8 @@
 # Verwende ein ARM-kompatibles OpenJDK-Basisimage
 FROM eclipse-temurin:17-jdk as builder
+
 RUN apt-get update && \
-    apt-get install -y maven \
+    apt-get install -y maven
 
 # Setze das Arbeitsverzeichnis im Container
 WORKDIR /app
