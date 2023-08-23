@@ -10,9 +10,6 @@ WORKDIR /app
 # Kopiere die Projektquelle in das Arbeitsverzeichnis
 COPY . /app
 
-# Installiere Maven
-
-
 # Baue das Projekt mit Maven
 RUN mvn clean package -DskipTests
 
