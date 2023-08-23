@@ -7,6 +7,10 @@ WORKDIR /app
 # Kopiere die Projektquelle in das Arbeitsverzeichnis
 COPY . /app
 
+# Installiere Maven
+RUN apt-get update && \
+    apt-get install -y maven \
+
 # Baue das Projekt mit Maven
 RUN mvn clean package -DskipTests
 
