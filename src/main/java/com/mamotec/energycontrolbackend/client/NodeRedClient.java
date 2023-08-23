@@ -3,12 +3,11 @@ package com.mamotec.energycontrolbackend.client;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.DeviceYaml;
-import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.InterfaceYaml;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.RegisterMapping;
 import com.mamotec.energycontrolbackend.exception.ExternalServiceNotAvailableException;
+import com.mamotec.energycontrolbackend.utils.DeviceRequestBodyBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

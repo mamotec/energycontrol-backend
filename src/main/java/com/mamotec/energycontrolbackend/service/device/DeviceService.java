@@ -30,6 +30,7 @@ public class DeviceService implements CrudOperations<Device> {
 
     private final InfluxService influxService;
 
+    @Transactional
     public DeviceCreateResponse create(Device device) {
         return mapper.map(save(device));
     }

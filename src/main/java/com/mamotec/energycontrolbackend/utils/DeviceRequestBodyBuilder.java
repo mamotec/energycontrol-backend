@@ -1,4 +1,4 @@
-package com.mamotec.energycontrolbackend.client;
+package com.mamotec.energycontrolbackend.utils;
 
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceType;
