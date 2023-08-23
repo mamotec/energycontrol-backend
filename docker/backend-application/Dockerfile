@@ -1,5 +1,5 @@
 # Verwende ein ARM-kompatibles OpenJDK-Basisimage
-FROM eclipse-temurin:17-jdk as builder
+FROM eclipse-temurin:17-jdk-focal as builder
 
 RUN apt-get update && \
     apt-get install -y maven
@@ -14,7 +14,7 @@ COPY . /app
 RUN mvn clean package -DskipTests
 
 # Use the official Azul Zulu OpenJDK 17 image as the base image
-FROM eclipse-temurin:17-jdk
+FROM eclipse-temurin:17-jdk-focal
 
 # Set the working directory
 WORKDIR /app
