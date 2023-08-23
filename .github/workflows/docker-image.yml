@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file docker/Dockerfile --tag mamotec/energycontrol-backend:$(date +%s)
+      run: docker build . --file docker/backend-application/Dockerfile --tag mamotec/energycontrol-backend:$(date +%s)
