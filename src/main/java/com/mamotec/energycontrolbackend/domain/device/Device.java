@@ -42,6 +42,9 @@ public class Device extends BaseEntity {
     @NotNull
     private Integer unitId;
 
+    @NotNull
+    private boolean active = false;
+
     @Transient
     private String model;
 

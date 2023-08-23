@@ -9,6 +9,7 @@ import com.influxdb.query.FluxTable;
 import com.mamotec.energycontrolbackend.client.InfluxClient;
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.RegisterMapping;
+import com.mamotec.energycontrolbackend.repository.DeviceRepository;
 import com.mamotec.energycontrolbackend.utils.StringUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -24,12 +25,15 @@ import java.util.List;
 public class DeviceDataService {
 
     private final InfluxClient influxClient;
+    private final DeviceRepository deviceRepository;
 
     @Transactional
     public void writeDeviceData(Device device, String body, RegisterMapping mapping) {
         if (body == null) {
             return;
         }
+
+        // InfluxDB
         log.info("Saving data for device {} and measurement {}.", device.getUnitId(), mapping.getType());
         WriteApiBlocking writeApiBlocking = influxClient.getWriteApiBlocking();
 
@@ -47,6 +51,10 @@ public class DeviceDataService {
 
         writeApiBlocking.writePoint(p);
         log.info("Saved data for device {} and measurement {}.", device.getUnitId(), mapping.getType());
+    }
+
+    public void markDeviceAsActive(Device device, boolean active) {
+        deviceRepository.markDeviceAsActive(device.getId(), active);
     }
 
     public void readLastDeviceData(Device device, RegisterMapping mapping) {

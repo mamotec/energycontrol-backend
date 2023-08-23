@@ -35,6 +35,7 @@ CREATE TABLE device
     device_id           INTEGER,
     device_type         TEXT,
     unit_id             INTEGER,
+    active BOOLEAN NOT NULL DEFAULT false,
     created_at          TIMESTAMP NOT NULL,
     updated_at          TIMESTAMP,
     CONSTRAINT fk_interface_config FOREIGN KEY (interface_config_id) REFERENCES interface_config (id)

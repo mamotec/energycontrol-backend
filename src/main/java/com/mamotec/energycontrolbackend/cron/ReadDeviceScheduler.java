@@ -4,7 +4,6 @@ import com.mamotec.energycontrolbackend.client.NodeRedClient;
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.DeviceYaml;
-import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.InterfaceYaml;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.RegisterMapping;
 import com.mamotec.energycontrolbackend.service.device.DeviceDataService;
 import com.mamotec.energycontrolbackend.service.device.DeviceService;
@@ -32,7 +31,7 @@ public class ReadDeviceScheduler {
 
     @Scheduled(cron = "*/59 * * * * *")
     @Transactional
-    public void fetchDeviceData() throws IOException, InterruptedException {
+    public void fetchDeviceData() {
         List<InterfaceConfig> configs = interfaceConfigService.findAll();
         log.info("READ - Found {} interfaces in repository.", configs.size());
 
@@ -42,13 +41,20 @@ public class ReadDeviceScheduler {
 
             log.info("READ - Found {} devices for interface {}.", devices.size(), config.getType());
             for (Device device : devices) {
+                boolean noError = true;
                 DeviceYaml i = interfaceService.getDeviceInformationForManufactureAndDeviceId(device.getManufacturerId(), device.getDeviceId());
 
                 // Which register mapping to use?
                 RegisterMapping mapping = i.getMapping()
                         .getPower();
 
-                doFetchPerDevice(config, device, i, mapping);
+                try {
+                    doFetchPerDevice(config, device, i, mapping);
+                } catch (Exception e) {
+                    noError = false;
+                    log.error("READ - Error while fetching data for device {}.", device.getUnitId(), e);
+                }
+                deviceDataService.markDeviceAsActive(device, noError);
             }
         }
     }
