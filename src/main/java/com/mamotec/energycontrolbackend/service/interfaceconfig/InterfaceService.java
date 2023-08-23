@@ -69,4 +69,20 @@ public class InterfaceService {
         }
         return devices;
     }
+
+    public String getDeviceNameByManufacturerAndDeviceId(Long manufacturerId, Long deviceId) {
+        List<InterfaceYaml> allInterfaces = getAllInterfaces();
+        for (InterfaceYaml i : allInterfaces) {
+            if (i.getMetaData()
+                    .getManufacturer()
+                    .getManufacturerId() == manufacturerId) {
+                for (DeviceYaml d : i.getDevices()) {
+                    if (d.getDeviceId() == deviceId) {
+                        return d.getName();
+                    }
+                }
+            }
+        }
+        return null;
+    }
 }

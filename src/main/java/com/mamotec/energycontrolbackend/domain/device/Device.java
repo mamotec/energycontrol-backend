@@ -42,6 +42,9 @@ public class Device extends BaseEntity {
     @NotNull
     private Integer unitId;
 
+    @Transient
+    private String model;
+
 
     // endregion
 }

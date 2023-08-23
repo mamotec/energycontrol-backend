@@ -5,6 +5,7 @@ import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateResponse;
 import com.mamotec.energycontrolbackend.mapper.DeviceMapper;
 import com.mamotec.energycontrolbackend.repository.DeviceRepository;
 import com.mamotec.energycontrolbackend.service.CrudOperations;
+import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,6 +24,8 @@ public class DeviceService implements CrudOperations<Device> {
 
     private final DeviceMapper mapper;
 
+    private final InterfaceService interfaceService;
+
     public DeviceCreateResponse create(Device device) {
         return mapper.map(save(device));
     }
@@ -32,7 +35,12 @@ public class DeviceService implements CrudOperations<Device> {
     }
 
     public List<Device> getAllDevices() {
-        return repository.findAll();
+        List<Device> all = repository.findAll();
+
+        for (Device device : all) {
+            device.setModel(interfaceService.getDeviceNameByManufacturerAndDeviceId(device.getManufacturerId(), device.getDeviceId()));
+        }
+        return all;
     }
 
     @Override
