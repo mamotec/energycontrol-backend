@@ -1,5 +1,5 @@
 # Verwende ein ARM-kompatibles OpenJDK-Basisimage
-FROM arm64v8/openjdk:17-jdk-slim as builder
+FROM eclipse-temurin:17-jdk
 
 # Setze das Arbeitsverzeichnis im Container
 WORKDIR /app
@@ -7,13 +7,11 @@ WORKDIR /app
 # Kopiere die Projektquelle in das Arbeitsverzeichnis
 COPY . /app
 
-RUN chmod +x mvnw
-
 # Baue das Projekt mit Maven
-RUN ./mvnw clean package -DskipTests
+RUN mvn clean package -DskipTests
 
 # Use the official Azul Zulu OpenJDK 17 image as the base image
-FROM arm64v8/openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jdk
 
 # Set the working directory
 WORKDIR /app
