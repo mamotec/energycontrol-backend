@@ -1,5 +1,5 @@
 # Use the official Azul Zulu OpenJDK 17 image as the base image
-FROM azul/zulu-openjdk:17
+FROM eclipse-temurin:17-jdk
 
 # Set the working directory
 WORKDIR /app
