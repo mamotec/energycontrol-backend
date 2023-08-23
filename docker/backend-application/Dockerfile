@@ -10,7 +10,7 @@ FROM eclipse-temurin:17-jdk
 WORKDIR /app
 
 # Copy the JAR file from the build output to the container
-COPY target/energycontrol-backend.jar /app/energycontrol-backend.jar
+COPY --from=build /home/app/target/energycontrol-backend.jar /app/energycontrol-backend.jar
 
 # Set the container entrypoint to execute the Spring Boot application
 ENTRYPOINT ["java", "-jar", "/app/energycontrol-backend.jar"]
