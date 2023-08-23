@@ -11,7 +11,7 @@ WORKDIR /app
 COPY . /app
 
 # Baue das Projekt mit Maven
-RUN mvn clean package -DskipTests
+RUN ./mvnw clean package -DskipTests
 
 # Use the official Azul Zulu OpenJDK 17 image as the base image
 FROM eclipse-temurin:17-jdk-focal
