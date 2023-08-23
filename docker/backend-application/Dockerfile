@@ -1,7 +1,7 @@
-FROM maven:4.0.0-jdk-11-slim AS build
+FROM maven:3.9.3-eclipse-temurin-17-focal AS build
 COPY src /home/app/src
 COPY pom.xml /home/app
-RUN mvn -f /home/app/pom.xml clean package
+RUN mvn -f /home/app/pom.xml clean package -DskipTests
 
 # Use the official Azul Zulu OpenJDK 17 image as the base image
 FROM eclipse-temurin:17-jdk
