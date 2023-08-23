@@ -1,5 +1,5 @@
 # Verwende ein ARM-kompatibles OpenJDK-Basisimage
-FROM eclipse-temurin:17-jdk
+FROM eclipse-temurin:17-jdk as builder
 
 # Setze das Arbeitsverzeichnis im Container
 WORKDIR /app
