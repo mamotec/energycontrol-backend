@@ -5,7 +5,9 @@ import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateResponse;
 import com.mamotec.energycontrolbackend.mapper.DeviceMapper;
 import com.mamotec.energycontrolbackend.repository.DeviceRepository;
 import com.mamotec.energycontrolbackend.service.CrudOperations;
+import com.mamotec.energycontrolbackend.service.influx.InfluxService;
 import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,6 +28,8 @@ public class DeviceService implements CrudOperations<Device> {
 
     private final InterfaceService interfaceService;
 
+    private final InfluxService influxService;
+
     public DeviceCreateResponse create(Device device) {
         return mapper.map(save(device));
     }
@@ -41,6 +45,20 @@ public class DeviceService implements CrudOperations<Device> {
             device.setModel(interfaceService.getDeviceNameByManufacturerAndDeviceId(device.getManufacturerId(), device.getDeviceId()));
         }
         return all;
+    }
+
+    @Transactional
+    public void deleteDevice(long id) {
+        Optional<Device> byId = repository.findById(Math.toIntExact(id));
+
+        // Delete Data Points from InfluxDB
+        if (byId.isPresent()) {
+            Device device = byId.get();
+            influxService.deleteAllDataPointsForDevice(device);
+        }
+
+        // Delete Device in DB
+        delete(Math.toIntExact(id));
     }
 
     @Override

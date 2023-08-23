@@ -1,9 +1,6 @@
 package com.mamotec.energycontrolbackend.client;
 
-import com.influxdb.client.InfluxDBClient;
-import com.influxdb.client.InfluxDBClientFactory;
-import com.influxdb.client.QueryApi;
-import com.influxdb.client.WriteApiBlocking;
+import com.influxdb.client.*;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -30,6 +27,10 @@ public class InfluxClient {
 
     public WriteApiBlocking getWriteApiBlocking(){
         return getInfluxClient().getWriteApiBlocking();
+    }
+
+    public DeleteApi getDeleteApi(){
+        return getInfluxClient().getDeleteApi();
     }
 
     public QueryApi getQueryApi(){

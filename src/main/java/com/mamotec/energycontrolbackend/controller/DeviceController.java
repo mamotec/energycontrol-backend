@@ -35,6 +35,14 @@ public class DeviceController {
         return ResponseEntity.ok(deviceService.create(deviceMapper.map(request)));
     }
 
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Lösche ein Gerät")
+    public ResponseEntity<Void> deleteDevice(@PathVariable Long id) {
+        log.info("DELETE /device/{} is being called.", id);
+        deviceService.deleteDevice(id);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping
     @Operation(summary = "Lade alle verfügbaren Geräte")
     public ResponseEntity<List<Device>> fetchDevices() {
