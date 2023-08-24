@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Controller for authentication of the user.
  */
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 @Slf4j
 public class AuthenticationController {
