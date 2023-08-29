@@ -93,6 +93,7 @@ public class NodeRedClient {
             if (withException) {
                 throw new ExternalServiceNotAvailableException("NodeRED service not available.", e);
             }
+            log.error("NodeRED service not available.");
             return false;
         }
     }
