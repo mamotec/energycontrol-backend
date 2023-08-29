@@ -85,8 +85,8 @@ public class ReadDeviceScheduler {
             connection.open();
 
             // Modbus-Anfrage erstellen
-            ReadInputRegistersRequest req = new ReadInputRegistersRequest(672, 2); // Startadresse: 672, Anzahl: 2
-            req.setUnitID(1); // Unit-ID des Modbus-Slave-Geräts
+            ReadInputRegistersRequest req = new ReadInputRegistersRequest(mapping.getRegister().get(0), mapping.getRegister().size()); // Startadresse: 672, Anzahl: 2
+            req.setUnitID(d.getUnitId()); // Unit-ID des Modbus-Slave-Geräts
 
             // Modbus-Transaktion ausführen
             ModbusSerialTransaction transaction = new ModbusSerialTransaction(connection);
