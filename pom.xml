@@ -50,12 +50,13 @@
         </profile>
     </profiles>
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/net.wimpi/jamod -->
+        <!-- https://mvnrepository.com/artifact/com.ghgande/j2mod -->
         <dependency>
-            <groupId>net.wimpi</groupId>
-            <artifactId>jamod</artifactId>
-            <version>1.2</version>
+            <groupId>com.ghgande</groupId>
+            <artifactId>j2mod</artifactId>
+            <version>3.1.1</version>
         </dependency>
+
 
         <dependency>
             <groupId>com.influxdb</groupId>
