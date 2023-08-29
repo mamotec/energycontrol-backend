@@ -51,23 +51,17 @@ public class NodeRedClient {
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                 .build();
 
-        try {
-            HttpResponse<String> response = httpClient.send(request,
-                    java.net.http.HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = httpClient.send(request,
+                java.net.http.HttpResponse.BodyHandlers.ofString());
 
-            if (response.statusCode() != 200) {
-                log.error("Error while fetching device data from node-red. Status code: {}", response.statusCode());
-                throw new ExternalServiceNotAvailableException("NodeRED service not available.");
-            }
-
-            return response.body();
-
-        } catch (IOException e) {
-            log.error("Error while fetching device data from node-red.");
-            e.printStackTrace();
+        if (response.statusCode() != 200) {
+            log.error("Error while fetching device data from node-red. Status code: {}", response.statusCode());
+            throw new ExternalServiceNotAvailableException("NodeRED service not available.");
         }
 
-        return null;
+        return response.body();
+
+
     }
 
     public boolean isNodeRedAvailable(boolean withException) {
