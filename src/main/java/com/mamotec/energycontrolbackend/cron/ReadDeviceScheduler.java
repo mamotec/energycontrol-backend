@@ -15,6 +15,11 @@ import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceService
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.retrodaredevil.io.IOBundle;
+import me.retrodaredevil.io.modbus.*;
+import me.retrodaredevil.io.modbus.handling.MessageHandler;
+import me.retrodaredevil.io.serial.SerialConfig;
+import me.retrodaredevil.io.serial.SerialConfigBuilder;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -64,36 +69,21 @@ public class ReadDeviceScheduler {
 
     private void doFetchPerDevice(InterfaceConfig config, Device d, DeviceYaml deviceYaml, RegisterMapping mapping) throws IOException, InterruptedException {
         // Fetch data from node-red
-        // String res = nodeRedClient.fetchDeviceData(deviceYaml, config, d.getUnitId(), mapping);
-        SerialParameters params = new SerialParameters();
-        params.setPortName("/dev/ttyS0");
-        params.setBaudRate(9600);
-        params.setDatabits(8);
-        params.setParity("None");
-        params.setStopbits(1);
-        params.setEncoding("rtu");
 
-        ModbusSerialMaster modbusClient = new ModbusSerialMaster(params); // Serieller Port
+        SerialConfig serialConfig = new SerialConfigBuilder(9600) // 9600 baud rate
+                .setDataBits(8) // 8 data bits, the default
+                .setParity(SerialConfig.Parity.NONE) // no parity, the default
+                .setStopBits(SerialConfig.StopBits.ONE) // one stop bit, the default
+                .build();
 
-        try {
+        IOBundle ioBundle = JSerialIOBundle.createPort("/dev/ttyS0", serialConfig);
 
-            modbusClient.connect();
-            int startAddress = 672; // Startadresse
-            int quantity = 2; // Anzahl von Registern
-
-            InputRegister[] inputRegisters = modbusClient.readInputRegisters(2, startAddress, quantity);
-            for (int i = 0; i < inputRegisters.length; i++) {
-                System.out.println("Register " + (startAddress + i) + ": " + inputRegisters[i]);
-            }
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            modbusClient.disconnect();
-        }
+        ModbusSlaveBus modbus = new IOModbusSlaveBus(ioBundle, new RtuDataEncoder(2000, 20, 4)); // 2 second initial timeout, 20ms timeout for end of message, 4ms sleep
+        ModbusSlave slave = new ImmutableAddressModbusSlave(2, modbus);
+        slave.sendRequestMessage(new Opfeer());
 
         // Save data to influxdb
-        deviceDataService.writeDeviceData(d, "res", mapping);
+        //deviceDataService.writeDeviceData(d, "res", mapping);
     }
 
 
