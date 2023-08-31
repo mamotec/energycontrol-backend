@@ -1,11 +1,11 @@
 package com.mamotec.energycontrolbackend.domain.group;
 
 import com.mamotec.energycontrolbackend.domain.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
+import com.mamotec.energycontrolbackend.domain.device.Device;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -13,13 +13,15 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
 @Builder
-@Table(name = "groups")
-public class Group extends BaseEntity {
+@Table(name = "device_group")
+public class DeviceGroup extends BaseEntity {
 
     private String name;
 
     @Enumerated(EnumType.STRING)
     private GroupType type;
 
+    @OneToMany(mappedBy = "deviceGroup")
+    private List<Device> devices;
 
 }

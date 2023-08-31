@@ -1,6 +1,7 @@
 package com.mamotec.energycontrolbackend.domain.device;
 
 import com.mamotec.energycontrolbackend.domain.BaseEntity;
+import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -48,6 +49,8 @@ public class Device extends BaseEntity {
     @Transient
     private String model;
 
+    @ManyToOne
+    private DeviceGroup deviceGroup;
 
     // endregion
 }

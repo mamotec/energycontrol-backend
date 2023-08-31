@@ -24,7 +24,7 @@ import java.util.Optional;
 @Validated
 public class DeviceService implements CrudOperations<Device> {
 
-    private final DeviceRepository repository;
+    private final DeviceRepository deviceRepository;
 
     private final DeviceMapper mapper;
 
@@ -41,11 +41,11 @@ public class DeviceService implements CrudOperations<Device> {
     }
 
     public List<Device> getDevicesForInterfaceConfig(long interfaceConfigId) {
-        return repository.findByInterfaceConfigIdAndActiveTrue(interfaceConfigId);
+        return deviceRepository.findByInterfaceConfigIdAndActiveTrue(interfaceConfigId);
     }
 
     public List<Device> getAllDevices() {
-        List<Device> all = repository.findAll();
+        List<Device> all = deviceRepository.findAll();
 
         for (Device device : all) {
             device.setModel(interfaceService.getDeviceNameByManufacturerAndDeviceId(device.getManufacturerId(), device.getDeviceId()));
@@ -55,7 +55,7 @@ public class DeviceService implements CrudOperations<Device> {
 
     @Transactional
     public void deleteDevice(long id) {
-        Optional<Device> byId = repository.findById(Math.toIntExact(id));
+        Optional<Device> byId = deviceRepository.findById(Math.toIntExact(id));
 
         // Delete Data Points from InfluxDB
         if (byId.isPresent()) {
@@ -69,7 +69,7 @@ public class DeviceService implements CrudOperations<Device> {
 
     @Override
     public Optional<JpaRepository<Device, Integer>> getRepository() {
-        return Optional.of(repository);
+        return Optional.of(deviceRepository);
     }
 
 

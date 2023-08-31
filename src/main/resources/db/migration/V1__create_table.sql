@@ -26,6 +26,15 @@ CREATE TABLE interface_config
     updated_at  TIMESTAMP
 );
 
+CREATE TABLE device_group
+(
+    id                  SERIAL PRIMARY KEY,
+    name                TEXT,
+    type                TEXT,
+    created_at          TIMESTAMP NOT NULL,
+    updated_at          TIMESTAMP
+);
+
 CREATE TABLE device
 (
     id                  SERIAL PRIMARY KEY,
@@ -38,15 +47,7 @@ CREATE TABLE device
     active BOOLEAN NOT NULL DEFAULT false,
     created_at          TIMESTAMP NOT NULL,
     updated_at          TIMESTAMP,
-    CONSTRAINT fk_interface_config FOREIGN KEY (interface_config_id) REFERENCES interface_config (id)
-);
-
-
-CREATE TABLE groups
-(
-    id                  SERIAL PRIMARY KEY,
-    name                TEXT,
-    type                TEXT,
-    created_at          TIMESTAMP NOT NULL,
-    updated_at          TIMESTAMP
+    device_group_id     INTEGER,
+    CONSTRAINT fk_interface_config FOREIGN KEY (interface_config_id) REFERENCES interface_config (id),
+    CONSTRAINT fk_device_group_id FOREIGN KEY (device_group_id) REFERENCES device_group (id)
 );

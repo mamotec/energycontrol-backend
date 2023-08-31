@@ -1,26 +1,47 @@
 package com.mamotec.energycontrolbackend.service.group;
 
-import com.mamotec.energycontrolbackend.domain.group.Group;
-import com.mamotec.energycontrolbackend.repository.GroupRepository;
+import com.mamotec.energycontrolbackend.domain.device.Device;
+import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
+import com.mamotec.energycontrolbackend.repository.DeviceGroupRepository;
+import com.mamotec.energycontrolbackend.repository.DeviceRepository;
 import com.mamotec.energycontrolbackend.service.CrudOperations;
+import com.mamotec.energycontrolbackend.service.device.DeviceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class GroupService implements CrudOperations<Group> {
+public class GroupService implements CrudOperations<DeviceGroup> {
 
-    private final GroupRepository repository;
+    private final DeviceGroupRepository deviceGroupRepository;
+    private final DeviceRepository deviceRepository;
 
     @Override
-    public Optional<JpaRepository<Group, Integer>> getRepository() {
-        return Optional.of(repository);
+    public Optional<JpaRepository<DeviceGroup, Integer>> getRepository() {
+        return Optional.of(deviceGroupRepository);
     }
 
 
+    public void deleteGroup(Long id) {
+        delete(Math.toIntExact(id));
+    }
+
+    public void addDevicesToGroup(Long id, List<Device> devices) {
+        Optional<DeviceGroup> byId = deviceGroupRepository.findById(Math.toIntExact(id));
+        if (byId.isPresent()) {
+            DeviceGroup deviceGroup = byId.get();
+
+            for (Device d : devices) {
+                Device device = deviceRepository.findById(Math.toIntExact(d.getId())).orElseThrow();
+                device.setDeviceGroup(deviceGroup);
+                deviceRepository.save(device);
+            }
+        }
+    }
 }
