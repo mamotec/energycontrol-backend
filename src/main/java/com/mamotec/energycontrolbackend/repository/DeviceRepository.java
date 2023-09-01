@@ -1,6 +1,7 @@
 package com.mamotec.energycontrolbackend.repository;
 
 import com.mamotec.energycontrolbackend.domain.device.Device;
+import com.mamotec.energycontrolbackend.domain.device.DeviceType;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -20,4 +21,5 @@ public interface DeviceRepository extends JpaRepository<Device, Long> {
     @Query("update Device d set d.active = ?2 where d.id = ?1")
     void markDeviceAsActive(long id, boolean active);
 
+    List<Device> findAllByDeviceTypeIn(List<DeviceType> validDeviceTypes);
 }

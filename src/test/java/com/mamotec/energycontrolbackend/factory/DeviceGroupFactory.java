@@ -9,7 +9,7 @@ public final class DeviceGroupFactory {
     public static DeviceGroup aDeviceGroup() {
         DeviceGroup c = new DeviceGroup();
         c.setName("PV - Rechte Seiete");
-        c.setType(DeviceGroupType.PV_PLANT);
+        c.setType(DeviceGroupType.PLANT);
         return c;
     }
 

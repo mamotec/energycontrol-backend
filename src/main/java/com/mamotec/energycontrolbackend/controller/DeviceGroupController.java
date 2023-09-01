@@ -51,4 +51,5 @@ public class DeviceGroupController {
         deviceGroupService.deleteDevicesFromGroup(devices);
         return ResponseEntity.ok().build();
     }
+
 }

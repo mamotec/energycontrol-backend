@@ -2,9 +2,12 @@ package com.mamotec.energycontrolbackend.service.device;
 
 import com.mamotec.energycontrolbackend.base.SpringBootBaseTest;
 import com.mamotec.energycontrolbackend.domain.device.Device;
+import com.mamotec.energycontrolbackend.domain.device.DeviceType;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateResponse;
+import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.factory.DeviceFactory;
+import com.mamotec.energycontrolbackend.factory.DeviceGroupFactory;
 import com.mamotec.energycontrolbackend.factory.InterfaceConfigFactory;
 import com.mamotec.energycontrolbackend.repository.InterfaceConfigRepository;
 import org.junit.jupiter.api.Nested;
@@ -76,6 +79,26 @@ class DeviceServiceTest extends SpringBootBaseTest {
 
             // then
             assertEquals(3, allDevices.size());
+        }
+
+        @Test
+        void shouldReturnValidDevicesForGroup() {
+            // given
+            InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
+            DeviceGroup group = DeviceGroupFactory.aDeviceGroup(deviceGroupRepository);
+            // Inverter
+            DeviceFactory.aDevice(config, 1, deviceRepository);
+            DeviceFactory.aDevice(config, 2, deviceRepository);
+            // Battery
+            Device battery = DeviceFactory.aDevice(config, 3, deviceRepository);
+            battery.setDeviceType(DeviceType.BATTERY);
+            deviceRepository.save(battery);
+
+            // when
+            List<Device> allDevices = deviceService.getValidDevicesForGroup(group.getId());
+
+            // then
+            assertEquals(2, allDevices.size());
         }
     }
 

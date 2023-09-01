@@ -50,6 +50,13 @@ public class DeviceController {
         return ResponseEntity.ok(deviceService.getAllDevices());
     }
 
+    @GetMapping("/group/{id}")
+    @Operation(summary = "Lade alle validen Geräte für eine Gruppe")
+    public ResponseEntity<List<Device>> fetchDevicesForGroup(@PathVariable Long id) {
+        log.info("GET /device/group/{} is being called.", id);
+        return ResponseEntity.ok(deviceService.getValidDevicesForGroup(id));
+    }
+
     @GetMapping("/service")
     @Operation(summary = "Prüfe ob NodeRED verfügbar ist")
     public ResponseEntity<Boolean> isServiceAvailable() {

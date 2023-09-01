@@ -1,5 +1,6 @@
 package com.mamotec.energycontrolbackend.domain.device;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mamotec.energycontrolbackend.domain.BaseEntity;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
@@ -50,6 +51,7 @@ public class Device extends BaseEntity {
     private String model;
 
     @ManyToOne
+    @JsonIgnore
     private DeviceGroup deviceGroup;
 
     // endregion

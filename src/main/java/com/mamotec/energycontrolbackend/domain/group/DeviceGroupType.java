@@ -13,7 +13,8 @@ import static com.mamotec.energycontrolbackend.domain.device.DeviceType.INVERTER
 @Schema(description = "Die Gruppen Typen")
 @Getter
 public enum DeviceGroupType {
-    PV_PLANT(INVERTER, HYBRID_INVERTER);
+
+    PLANT(INVERTER, HYBRID_INVERTER);
 
     private final List<DeviceType> validDeviceTypes;
 

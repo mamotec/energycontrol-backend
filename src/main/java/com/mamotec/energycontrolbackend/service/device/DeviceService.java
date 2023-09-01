@@ -2,7 +2,9 @@ package com.mamotec.energycontrolbackend.service.device;
 
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateResponse;
+import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.mapper.DeviceMapper;
+import com.mamotec.energycontrolbackend.repository.DeviceGroupRepository;
 import com.mamotec.energycontrolbackend.repository.DeviceRepository;
 import com.mamotec.energycontrolbackend.service.CrudOperations;
 import com.mamotec.energycontrolbackend.service.influx.InfluxService;
@@ -33,6 +35,8 @@ public class DeviceService implements CrudOperations<Device> {
     private final InfluxService influxService;
 
     private final DeviceValidationService validationService;
+
+    private final DeviceGroupRepository deviceGroupRepository;
 
     @Transactional
     public DeviceCreateResponse create(Device device) {
@@ -73,4 +77,11 @@ public class DeviceService implements CrudOperations<Device> {
     }
 
 
+    public List<Device> getValidDevicesForGroup(Long groupId) {
+        DeviceGroup deviceGroup = deviceGroupRepository.findById(groupId)
+                .orElseThrow();
+
+        return deviceRepository.findAllByDeviceTypeIn(deviceGroup.getType()
+                .getValidDeviceTypes());
+    }
 }
