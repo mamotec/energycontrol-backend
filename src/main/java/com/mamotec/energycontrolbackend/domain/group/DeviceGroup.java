@@ -21,7 +21,7 @@ public class DeviceGroup extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private DeviceGroupType type;
 
-    @OneToMany(mappedBy = "deviceGroup")
+    @OneToMany(mappedBy = "deviceGroup", fetch = FetchType.EAGER)
     private List<Device> devices;
 
 }

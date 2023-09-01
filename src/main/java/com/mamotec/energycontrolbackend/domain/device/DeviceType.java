@@ -6,6 +6,7 @@ import lombok.Getter;
 public enum DeviceType {
 
     INVERTER,
-    HYBRID_INVERTER
+    HYBRID_INVERTER,
+    BATTERY,
 
 }

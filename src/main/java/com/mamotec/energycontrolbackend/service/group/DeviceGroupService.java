@@ -29,6 +29,15 @@ public class DeviceGroupService implements CrudOperations<DeviceGroup> {
     }
 
 
+    public List<DeviceGroup> findAll() {
+        return deviceGroupRepository.findAll();
+    }
+
+    public DeviceGroup findById(Long id) {
+        return deviceGroupRepository.findById(id)
+                .orElseThrow();
+    }
+
     public void deleteGroup(Long id) {
         delete(id);
     }
@@ -42,7 +51,6 @@ public class DeviceGroupService implements CrudOperations<DeviceGroup> {
                 Device device = deviceRepository.findById(d.getId())
                         .orElseThrow();
                 validate(deviceGroup, device);
-
                 device.setDeviceGroup(deviceGroup);
                 deviceRepository.save(device);
             }

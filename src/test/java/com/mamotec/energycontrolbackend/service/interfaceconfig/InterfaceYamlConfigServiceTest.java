@@ -56,7 +56,7 @@ class InterfaceYamlConfigServiceTest extends SpringBootBaseTest {
             // given
             InterfaceConfig interfaceConfig = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
             // when
-            interfaceConfigService.delete(interfaceConfig.getId().intValue());
+            interfaceConfigService.delete(interfaceConfig.getId());
             // then
             assertEquals(0, interfaceConfigRepository.count());
         }
