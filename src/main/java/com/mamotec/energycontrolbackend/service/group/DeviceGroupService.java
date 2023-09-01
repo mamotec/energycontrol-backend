@@ -16,7 +16,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class GroupService implements CrudOperations<DeviceGroup> {
+public class DeviceGroupService implements CrudOperations<DeviceGroup> {
 
     private final DeviceGroupRepository deviceGroupRepository;
     private final DeviceRepository deviceRepository;
