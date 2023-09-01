@@ -69,18 +69,8 @@ public class ReadDeviceScheduler {
 
     private void doFetchPerDevice(InterfaceConfig config, Device d, DeviceYaml deviceYaml, RegisterMapping mapping) throws IOException, InterruptedException {
         // Fetch data from node-red
-
-        SerialConfig serialConfig = new SerialConfigBuilder(9600) // 9600 baud rate
-                .setDataBits(8) // 8 data bits, the default
-                .setParity(SerialConfig.Parity.NONE) // no parity, the default
-                .setStopBits(SerialConfig.StopBits.ONE) // one stop bit, the default
-                .build();
-
-        IOBundle ioBundle = JSerialIOBundle.createPort("/dev/ttyS0", serialConfig);
-
-        ModbusSlaveBus modbus = new IOModbusSlaveBus(ioBundle, new RtuDataEncoder(2000, 20, 4)); // 2 second initial timeout, 20ms timeout for end of message, 4ms sleep
-        ModbusSlave slave = new ImmutableAddressModbusSlave(2, modbus);
-        slave.sendRequestMessage(new Opfeer());
+        String res = nodeRedClient.fetchDeviceData(deviceYaml, config, d.getUnitId(), mapping);
+        log.info(res);
 
         // Save data to influxdb
         //deviceDataService.writeDeviceData(d, "res", mapping);
