@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static com.mamotec.energycontrolbackend.service.group.DeviceGroupValidator.validate;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -39,6 +41,8 @@ public class DeviceGroupService implements CrudOperations<DeviceGroup> {
             for (Device d : devices) {
                 Device device = deviceRepository.findById(d.getId())
                         .orElseThrow();
+                validate(deviceGroup, device);
+
                 device.setDeviceGroup(deviceGroup);
                 deviceRepository.save(device);
             }

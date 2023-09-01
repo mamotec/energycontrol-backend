@@ -19,7 +19,7 @@ public class DeviceGroup extends BaseEntity {
     private String name;
 
     @Enumerated(EnumType.STRING)
-    private GroupType type;
+    private DeviceGroupType type;
 
     @OneToMany(mappedBy = "deviceGroup")
     private List<Device> devices;

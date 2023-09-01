@@ -5,11 +5,7 @@ import lombok.Getter;
 @Getter
 public enum DeviceType {
 
-    INVERTER("Wechselrichter");
+    INVERTER,
+    HYBRID_INVERTER
 
-    DeviceType(String descriptionDe) {
-        this.descriptionDe = descriptionDe;
-    }
-
-    private final String descriptionDe;
 }

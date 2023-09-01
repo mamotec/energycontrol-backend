@@ -6,7 +6,7 @@ interfaces:
         manufacturer: "DEYE"
     devices:
       - deviceId: 1
-        deviceType: INVERTER
+        deviceType: HYBRID_INVERTER
         name: "DEYE SUN-5K-SG04LP3"
         connection:
           baudRate: 9600
@@ -28,7 +28,7 @@ interfaces:
             type: "powerReduction"
             fc: WRITE_SINGLE_REGISTER
       - deviceId: 2
-        deviceType: INVERTER
+        deviceType: HYBRID_INVERTER
         name: "DEYE SUN-6K-SG04LP3"
         connection:
           baudRate: 9600
@@ -50,7 +50,7 @@ interfaces:
             type: "powerReduction"
             fc: WRITE_SINGLE_REGISTER
       - deviceId: 3
-        deviceType: INVERTER
+        deviceType: HYBRID_INVERTER
         name: "DEYE SUN-8K-SG04LP3"
         connection:
           baudRate: 9600
@@ -72,7 +72,7 @@ interfaces:
             type: "powerReduction"
             fc: WRITE_SINGLE_REGISTER
       - deviceId: 4
-        deviceType: INVERTER
+        deviceType: HYBRID_INVERTER
         name: "DEYE SUN-10K-SG04LP3"
         connection:
           baudRate: 9600
@@ -94,7 +94,7 @@ interfaces:
             type: "powerReduction"
             fc: WRITE_SINGLE_REGISTER
       - deviceId: 5
-        deviceType: INVERTER
+        deviceType: HYBRID_INVERTER
         name: "DEYE SUN-12K-SG04LP3"
         connection:
           baudRate: 9600
