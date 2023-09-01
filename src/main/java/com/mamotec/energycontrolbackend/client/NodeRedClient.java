@@ -46,7 +46,7 @@ public class NodeRedClient {
         String requestBody = objectMapper.writeValueAsString(values);
 
         HttpRequest request = HttpRequest.newBuilder()
-                .timeout(java.time.Duration.ofSeconds(5))
+                .timeout(java.time.Duration.ofSeconds(8))
                 .uri(URI.create(nodeRedUrl + String.format(DEVICE_URL, deviceUnitId)))
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                 .build();

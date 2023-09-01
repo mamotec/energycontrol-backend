@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface DeviceRepository extends JpaRepository<Device, Long> {
 
-    List<Device> findByInterfaceConfigIdAndActiveTrue(long interfaceConfigId);
+    List<Device> findByInterfaceConfigId(long interfaceConfigId);
 
     boolean existsByUnitIdAndInterfaceConfig(long unitId, InterfaceConfig config);
 

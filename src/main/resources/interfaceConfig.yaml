@@ -18,7 +18,7 @@ interfaces:
             register:
               - 672
               - 673
-            unit: KW
+            unit: W
             type: "power"
             fc: READ_HOLDING_REGISTERS
           powerReduction:
@@ -40,7 +40,7 @@ interfaces:
             register:
               - 672
               - 673
-            unit: KW
+            unit: W
             type: "power"
             fc: READ_HOLDING_REGISTERS
           powerReduction:
@@ -62,7 +62,7 @@ interfaces:
             register:
               - 672
               - 673
-            unit: KW
+            unit: W
             type: "power"
             fc: READ_HOLDING_REGISTERS
           powerReduction:
@@ -84,7 +84,7 @@ interfaces:
             register:
               - 672
               - 673
-            unit: KW
+            unit: W
             type: "power"
             fc: READ_HOLDING_REGISTERS
           powerReduction:

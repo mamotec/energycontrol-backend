@@ -41,7 +41,7 @@ public class DeviceService implements CrudOperations<Device> {
     }
 
     public List<Device> getDevicesForInterfaceConfig(long interfaceConfigId) {
-        return deviceRepository.findByInterfaceConfigIdAndActiveTrue(interfaceConfigId);
+        return deviceRepository.findByInterfaceConfigId(interfaceConfigId);
     }
 
     public List<Device> getAllDevices() {
