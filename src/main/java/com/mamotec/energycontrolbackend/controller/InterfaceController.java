@@ -56,7 +56,7 @@ public class InterfaceController {
 
     @DeleteMapping("/config/{id}")
     @Operation(summary = "Lösche die Schnittstellen konfiguration mit der angegebenen ID")
-    public ResponseEntity<Void> deleteInterfaceConfig(@PathVariable Integer id) {
+    public ResponseEntity<Void> deleteInterfaceConfig(@PathVariable Long id) {
         log.info("DELETE /interface/config/{} is being called.", id);
         interfaceConfigService.delete(id);
         return ResponseEntity.ok()

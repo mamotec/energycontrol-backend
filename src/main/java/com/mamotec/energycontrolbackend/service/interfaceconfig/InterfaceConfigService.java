@@ -17,7 +17,7 @@ public class InterfaceConfigService implements CrudOperations<InterfaceConfig> {
     private final InterfaceConfigRepository repository;
 
     @Override
-    public Optional<JpaRepository<InterfaceConfig, Integer>> getRepository() {
+    public Optional<JpaRepository<InterfaceConfig, Long>> getRepository() {
         return Optional.of(repository);
     }
 

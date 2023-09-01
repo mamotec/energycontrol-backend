@@ -44,11 +44,11 @@ public class GroupController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{id}/unlink")
-    @Operation(summary = "Lösche ein oder mehrere Device aus einer Gruppe")
-    public ResponseEntity<Void> deleteDeviceFromGroup(@PathVariable Long id, @RequestBody List<Device> devices) {
-        log.info("DELETE /group/{}/unlink is being called.", id);
-        groupService.deleteDevicesFromGroup(id, devices);
+    @DeleteMapping("/unlink")
+    @Operation(summary = "Lösche referenz zur Gruppe für ein oder mehrere Geräte")
+    public ResponseEntity<Void> deleteDeviceFromGroup(@RequestBody List<Device> devices) {
+        log.info("DELETE /group/unlink is being called.");
+        groupService.deleteDevicesFromGroup(devices);
         return ResponseEntity.ok().build();
     }
 }

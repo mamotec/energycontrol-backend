@@ -55,7 +55,7 @@ public class DeviceService implements CrudOperations<Device> {
 
     @Transactional
     public void deleteDevice(long id) {
-        Optional<Device> byId = deviceRepository.findById(Math.toIntExact(id));
+        Optional<Device> byId = deviceRepository.findById(id);
 
         // Delete Data Points from InfluxDB
         if (byId.isPresent()) {
@@ -64,11 +64,11 @@ public class DeviceService implements CrudOperations<Device> {
         }
 
         // Delete Device in DB
-        delete(Math.toIntExact(id));
+        delete(id);
     }
 
     @Override
-    public Optional<JpaRepository<Device, Integer>> getRepository() {
+    public Optional<JpaRepository<Device, Long>> getRepository() {
         return Optional.of(deviceRepository);
     }
 

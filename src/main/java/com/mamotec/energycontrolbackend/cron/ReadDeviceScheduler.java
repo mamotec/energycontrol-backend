@@ -1,8 +1,5 @@
 package com.mamotec.energycontrolbackend.cron;
 
-import com.ghgande.j2mod.modbus.facade.ModbusSerialMaster;
-import com.ghgande.j2mod.modbus.procimg.InputRegister;
-import com.ghgande.j2mod.modbus.util.SerialParameters;
 import com.mamotec.energycontrolbackend.client.NodeRedClient;
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
@@ -15,11 +12,6 @@ import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceService
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.retrodaredevil.io.IOBundle;
-import me.retrodaredevil.io.modbus.*;
-import me.retrodaredevil.io.modbus.handling.MessageHandler;
-import me.retrodaredevil.io.serial.SerialConfig;
-import me.retrodaredevil.io.serial.SerialConfigBuilder;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 

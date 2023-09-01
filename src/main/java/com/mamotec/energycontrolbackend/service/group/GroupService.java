@@ -5,7 +5,6 @@ import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.repository.DeviceGroupRepository;
 import com.mamotec.energycontrolbackend.repository.DeviceRepository;
 import com.mamotec.energycontrolbackend.service.CrudOperations;
-import com.mamotec.energycontrolbackend.service.device.DeviceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,25 +22,35 @@ public class GroupService implements CrudOperations<DeviceGroup> {
     private final DeviceRepository deviceRepository;
 
     @Override
-    public Optional<JpaRepository<DeviceGroup, Integer>> getRepository() {
+    public Optional<JpaRepository<DeviceGroup, Long>> getRepository() {
         return Optional.of(deviceGroupRepository);
     }
 
 
     public void deleteGroup(Long id) {
-        delete(Math.toIntExact(id));
+        delete(id);
     }
 
     public void addDevicesToGroup(Long id, List<Device> devices) {
-        Optional<DeviceGroup> byId = deviceGroupRepository.findById(Math.toIntExact(id));
+        Optional<DeviceGroup> byId = deviceGroupRepository.findById(id);
         if (byId.isPresent()) {
             DeviceGroup deviceGroup = byId.get();
 
             for (Device d : devices) {
-                Device device = deviceRepository.findById(Math.toIntExact(d.getId())).orElseThrow();
+                Device device = deviceRepository.findById(d.getId())
+                        .orElseThrow();
                 device.setDeviceGroup(deviceGroup);
                 deviceRepository.save(device);
             }
+        }
+    }
+
+    public void deleteDevicesFromGroup(List<Device> devices) {
+        for (Device d : devices) {
+            Device device = deviceRepository.findById(d.getId())
+                    .orElseThrow();
+            device.setDeviceGroup(null);
+            deviceRepository.save(device);
         }
     }
 }

@@ -7,13 +7,13 @@ import java.util.Optional;
 
 public interface CrudOperations<T> {
 
-    default Optional<JpaRepository<T, Integer>> getRepository() {
+    default Optional<JpaRepository<T, Long>> getRepository() {
         return Optional.empty();
     }
 
     default T save(T record) {
         if (this.getRepository().isPresent()) {
-            JpaRepository<T, Integer> repo = this.getRepository()
+            JpaRepository<T, Long> repo = this.getRepository()
                     .get();
 
             return repo.save(record);
@@ -23,9 +23,9 @@ public interface CrudOperations<T> {
 
     }
 
-    default void delete(Integer id) {
+    default void delete(Long id) {
         if (this.getRepository().isPresent()) {
-            JpaRepository<T, Integer> repo = this.getRepository()
+            JpaRepository<T, Long> repo = this.getRepository()
                     .get();
 
             repo.deleteById(id);
