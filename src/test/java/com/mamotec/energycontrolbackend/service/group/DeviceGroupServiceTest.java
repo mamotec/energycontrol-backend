@@ -3,6 +3,7 @@ package com.mamotec.energycontrolbackend.service.group;
 import com.mamotec.energycontrolbackend.base.SpringBootBaseTest;
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.DeviceType;
+import com.mamotec.energycontrolbackend.domain.device.dao.DeviceLinkRequest;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.exception.AddDeviceToGroupException;
@@ -65,9 +66,10 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
             DeviceGroup deviceGroup = DeviceGroupFactory.aDeviceGroup(deviceGroupRepository);
             InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
             Device d1 = DeviceFactory.aDevice(config, 1, deviceRepository);
+            DeviceLinkRequest request = new DeviceLinkRequest(List.of(d1.getId()));
 
             // when
-            deviceGroupService.addDevicesToGroup(deviceGroup.getId(), List.of(d1));
+            deviceGroupService.addDevicesToGroup(deviceGroup.getId(), request);
 
             // then
             DeviceGroup loadedGroup = deviceGroupService.findById(deviceGroup.getId());
@@ -82,9 +84,10 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
             InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
             Device d1 = DeviceFactory.aDevice(config, 1, deviceRepository);
             Device d2 = DeviceFactory.aDevice(config, 2, deviceRepository);
+            DeviceLinkRequest request = new DeviceLinkRequest(List.of(d1.getId(), d2.getId()));
 
             // when
-            deviceGroupService.addDevicesToGroup(deviceGroup.getId(), List.of(d1, d2));
+            deviceGroupService.addDevicesToGroup(deviceGroup.getId(), request);
 
             // then
             DeviceGroup loadedGroup = deviceGroupService.findById(deviceGroup.getId());
@@ -100,10 +103,11 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
             Device d1 = DeviceFactory.aDevice(config, 1, deviceRepository);
             d1.setDeviceType(DeviceType.BATTERY);
             deviceRepository.save(d1);
+            DeviceLinkRequest request = new DeviceLinkRequest(List.of(d1.getId()));
 
             // when
             // then
-            assertThrows(AddDeviceToGroupException.class, () -> deviceGroupService.addDevicesToGroup(deviceGroup.getId(), List.of(d1)));
+            assertThrows(AddDeviceToGroupException.class, () -> deviceGroupService.addDevicesToGroup(deviceGroup.getId(), request));
         }
 
         @Test
@@ -112,9 +116,10 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
             DeviceGroup deviceGroup = DeviceGroupFactory.aDeviceGroup(deviceGroupRepository);
             InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
             Device d1 = DeviceFactory.aDevice(config, deviceGroup, 1, deviceRepository);
+            DeviceLinkRequest request = new DeviceLinkRequest(List.of(d1.getId()));
 
             // when
-            deviceGroupService.deleteDevicesFromGroup(List.of(d1));
+            deviceGroupService.deleteDevicesFromGroup(request);
 
             // then
             DeviceGroup loadedGroup = deviceGroupService.findById(deviceGroup.getId());
@@ -129,10 +134,12 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
             InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
             Device d1 = DeviceFactory.aDevice(config, 1, deviceRepository);
             Device d2 = DeviceFactory.aDevice(config, 2, deviceRepository);
-            deviceGroupService.addDevicesToGroup(deviceGroup.getId(), List.of(d1, d2));
+            DeviceLinkRequest request = new DeviceLinkRequest(List.of(d1.getId(), d2.getId()));
+
+            deviceGroupService.addDevicesToGroup(deviceGroup.getId(), request);
 
             // when
-            deviceGroupService.deleteDevicesFromGroup(List.of(d1, d2));
+            deviceGroupService.deleteDevicesFromGroup(request);
 
             // then
             DeviceGroup loadedGroup = deviceGroupService.findById(deviceGroup.getId());

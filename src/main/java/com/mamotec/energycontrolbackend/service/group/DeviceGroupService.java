@@ -1,6 +1,7 @@
 package com.mamotec.energycontrolbackend.service.group;
 
 import com.mamotec.energycontrolbackend.domain.device.Device;
+import com.mamotec.energycontrolbackend.domain.device.dao.DeviceLinkRequest;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.repository.DeviceGroupRepository;
 import com.mamotec.energycontrolbackend.repository.DeviceRepository;
@@ -42,13 +43,13 @@ public class DeviceGroupService implements CrudOperations<DeviceGroup> {
         delete(id);
     }
 
-    public void addDevicesToGroup(Long id, List<Device> devices) {
+    public void addDevicesToGroup(Long id, DeviceLinkRequest request) {
         Optional<DeviceGroup> byId = deviceGroupRepository.findById(id);
         if (byId.isPresent()) {
             DeviceGroup deviceGroup = byId.get();
 
-            for (Device d : devices) {
-                Device device = deviceRepository.findById(d.getId())
+            for (Long deviceIdToLink : request.getDeviceIds()) {
+                Device device = deviceRepository.findById(deviceIdToLink)
                         .orElseThrow();
                 validate(deviceGroup, device);
                 device.setDeviceGroup(deviceGroup);
@@ -57,9 +58,9 @@ public class DeviceGroupService implements CrudOperations<DeviceGroup> {
         }
     }
 
-    public void deleteDevicesFromGroup(List<Device> devices) {
-        for (Device d : devices) {
-            Device device = deviceRepository.findById(d.getId())
+    public void deleteDevicesFromGroup(DeviceLinkRequest request) {
+        for (Long deviceIdToUnlink : request.getDeviceIds()) {
+            Device device = deviceRepository.findById(deviceIdToUnlink)
                     .orElseThrow();
             device.setDeviceGroup(null);
             deviceRepository.save(device);
