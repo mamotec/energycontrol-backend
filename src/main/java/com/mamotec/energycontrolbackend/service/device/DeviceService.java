@@ -81,7 +81,7 @@ public class DeviceService implements CrudOperations<Device> {
         DeviceGroup deviceGroup = deviceGroupRepository.findById(groupId)
                 .orElseThrow();
 
-        return deviceRepository.findAllByDeviceTypeIn(deviceGroup.getType()
+        return deviceRepository.findAllByDeviceTypeInAndDeviceGroupNull(deviceGroup.getType()
                 .getValidDeviceTypes());
     }
 }

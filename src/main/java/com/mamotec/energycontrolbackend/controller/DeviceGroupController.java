@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/group")
 @RequiredArgsConstructor
@@ -18,6 +20,13 @@ import org.springframework.web.bind.annotation.*;
 public class DeviceGroupController {
 
     private final DeviceGroupService deviceGroupService;
+
+    @GetMapping
+    @Operation(summary = "Liefere alle Gruppen")
+    public ResponseEntity<List<DeviceGroup>> getAllGroups() {
+        log.info("GET /group is being called.");
+        return ResponseEntity.ok(deviceGroupService.findAll());
+    }
 
     @PostMapping
     @Operation(summary = "Erstelle eine neue Gruppe")

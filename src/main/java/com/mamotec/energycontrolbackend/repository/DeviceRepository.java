@@ -21,5 +21,5 @@ public interface DeviceRepository extends JpaRepository<Device, Long> {
     @Query("update Device d set d.active = ?2 where d.id = ?1")
     void markDeviceAsActive(long id, boolean active);
 
-    List<Device> findAllByDeviceTypeIn(List<DeviceType> validDeviceTypes);
+    List<Device> findAllByDeviceTypeInAndDeviceGroupNull(List<DeviceType> validDeviceTypes);
 }
