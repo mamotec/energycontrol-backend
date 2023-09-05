@@ -45,7 +45,11 @@ public class DeviceService implements CrudOperations<Device> {
     }
 
     public List<Device> getDevicesForInterfaceConfig(long interfaceConfigId) {
-        return deviceRepository.findByInterfaceConfigId(interfaceConfigId);
+        List<Device> byInterfaceConfigId = deviceRepository.findByInterfaceConfigId(interfaceConfigId);
+        for (Device device: byInterfaceConfigId) {
+            device.setModel(interfaceService.getDeviceNameByManufacturerAndDeviceId(device.getManufacturerId(), device.getDeviceId()));
+        }
+        return byInterfaceConfigId;
     }
 
     public List<Device> getAllDevices() {
@@ -81,7 +85,13 @@ public class DeviceService implements CrudOperations<Device> {
         DeviceGroup deviceGroup = deviceGroupRepository.findById(groupId)
                 .orElseThrow();
 
-        return deviceRepository.findAllByDeviceTypeInAndDeviceGroupNull(deviceGroup.getType()
+        List<Device> allByDeviceTypeIn = deviceRepository.findAllByDeviceTypeInAndDeviceGroupNull(deviceGroup.getType()
                 .getValidDeviceTypes());
+
+        for (Device device: allByDeviceTypeIn) {
+            device.setModel(interfaceService.getDeviceNameByManufacturerAndDeviceId(device.getManufacturerId(), device.getDeviceId()));
+        }
+
+        return allByDeviceTypeIn;
     }
 }
