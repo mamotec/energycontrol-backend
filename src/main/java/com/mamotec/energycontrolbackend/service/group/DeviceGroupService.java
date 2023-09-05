@@ -6,6 +6,7 @@ import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.repository.DeviceGroupRepository;
 import com.mamotec.energycontrolbackend.repository.DeviceRepository;
 import com.mamotec.energycontrolbackend.service.CrudOperations;
+import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,6 +24,7 @@ public class DeviceGroupService implements CrudOperations<DeviceGroup> {
 
     private final DeviceGroupRepository deviceGroupRepository;
     private final DeviceRepository deviceRepository;
+    private final InterfaceService interfaceService;
 
     @Override
     public Optional<JpaRepository<DeviceGroup, Long>> getRepository() {
@@ -31,7 +33,14 @@ public class DeviceGroupService implements CrudOperations<DeviceGroup> {
 
 
     public List<DeviceGroup> findAll() {
-        return deviceGroupRepository.findAll();
+        List<DeviceGroup> all = deviceGroupRepository.findAll();
+
+        for (DeviceGroup g : all) {
+            for (Device d : g.getDevices()) {
+                d.setModel(interfaceService.getDeviceNameByManufacturerAndDeviceId(d.getManufacturerId(), d.getDeviceId()));
+            }
+        }
+        return all;
     }
 
     public DeviceGroup findById(Long id) {
@@ -40,6 +49,11 @@ public class DeviceGroupService implements CrudOperations<DeviceGroup> {
     }
 
     public void deleteGroup(Long id) {
+        DeviceGroup group = findById(id);
+        for (Device d : group.getDevices()) {
+            d.setDeviceGroup(null);
+            deviceRepository.save(d);
+        }
         delete(id);
     }
 
