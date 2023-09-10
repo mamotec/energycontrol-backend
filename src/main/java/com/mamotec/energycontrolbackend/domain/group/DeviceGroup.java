@@ -15,13 +15,15 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
-@Builder
 @Table(name = "device_group")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 public class DeviceGroup extends BaseEntity {
 
     private String name;
 
     @Enumerated(EnumType.STRING)
+    @Column(insertable = false, updatable = false)
     private DeviceGroupType type;
 
     @OneToMany(mappedBy = "deviceGroup", fetch = FetchType.EAGER)

@@ -28,11 +28,12 @@ CREATE TABLE interface_config
 
 CREATE TABLE device_group
 (
-    id                  SERIAL PRIMARY KEY,
-    name                TEXT,
-    type                TEXT,
-    created_at          TIMESTAMP NOT NULL,
-    updated_at          TIMESTAMP
+    id              SERIAL PRIMARY KEY,
+    name            TEXT,
+    type            TEXT,
+    direct_marketing BOOLEAN,
+    created_at      TIMESTAMP NOT NULL,
+    updated_at      TIMESTAMP
 );
 
 CREATE TABLE device
@@ -44,7 +45,7 @@ CREATE TABLE device
     device_id           INTEGER,
     device_type         TEXT,
     unit_id             INTEGER,
-    active BOOLEAN NOT NULL DEFAULT false,
+    active              BOOLEAN   NOT NULL DEFAULT false,
     created_at          TIMESTAMP NOT NULL,
     updated_at          TIMESTAMP,
     device_group_id     INTEGER,
