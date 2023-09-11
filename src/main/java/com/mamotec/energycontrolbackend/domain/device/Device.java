@@ -50,6 +50,9 @@ public class Device extends BaseEntity {
     @Transient
     private String model;
 
+    @Transient
+    private Integer groupId;
+
     @JsonIgnore
     @ManyToOne
     private DeviceGroup deviceGroup;

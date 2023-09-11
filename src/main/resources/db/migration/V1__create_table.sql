@@ -58,7 +58,7 @@ CREATE TABLE device
     CONSTRAINT fk_device_group_id FOREIGN KEY (device_group_id) REFERENCES device_group (id)
 );
 
-CREATE TABLE configuration
+CREATE TABLE system_configuration
 (
     id               SERIAL PRIMARY KEY,
     direct_marketing BOOLEAN   not null default false,

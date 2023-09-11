@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 public class PlantDeviceGroupCreate extends DeviceGroupCreate {
 
     private boolean directMarketing;
-    private DeviceGroupType type = DeviceGroupType.PLANT;
 
 }
 

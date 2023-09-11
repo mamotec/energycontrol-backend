@@ -12,8 +12,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
 @Builder
-@Table(name = "configuration")
-public class Configuration extends BaseEntity {
+@Table(name = "system_configuration")
+public class SystemConfiguration extends BaseEntity {
 
     @NotNull
     private boolean directMarketing;

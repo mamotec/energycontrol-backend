@@ -1,6 +1,6 @@
 package com.mamotec.energycontrolbackend.controller;
 
-import com.mamotec.energycontrolbackend.domain.configuration.Configuration;
+import com.mamotec.energycontrolbackend.domain.configuration.SystemConfiguration;
 import com.mamotec.energycontrolbackend.service.configuration.ConfigurationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -20,16 +20,16 @@ public class ConfigurationController {
 
     @GetMapping
     @Operation(summary = "Liefere Konfiguration")
-    public ResponseEntity<Configuration> getConfiguration() {
+    public ResponseEntity<SystemConfiguration> getConfiguration() {
         log.info("GET /configuration is being called.");
         return ResponseEntity.ok(configurationService.get());
     }
 
     @PutMapping
     @Operation(summary = "Aktualisiere Konfiguration")
-    public ResponseEntity<Configuration> updateConfiguration(@RequestBody Configuration configuration) {
+    public ResponseEntity<SystemConfiguration> updateConfiguration(@RequestBody SystemConfiguration systemConfiguration) {
         log.info("PUT /configuration is being called.");
-        return ResponseEntity.ok(configurationService.save(configuration));
+        return ResponseEntity.ok(configurationService.save(systemConfiguration));
     }
 
 
