@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PlantDeviceGroupCreate extends DeviceGroupCreate {
+public class PlantDeviceGroupUpdate extends DeviceGroupUpdate {
 
     private boolean directMarketing;
 
