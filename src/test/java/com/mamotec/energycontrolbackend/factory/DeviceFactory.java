@@ -16,6 +16,14 @@ public final class DeviceFactory {
                 .name("TestDevice")
                 .build();
     }
+    public static Device aDevice(InterfaceConfig interfaceConfig, int slaveId) {
+        return Device.builder()
+                .interfaceConfig(interfaceConfig)
+                .deviceType(DeviceType.INVERTER)
+                .unitId(slaveId)
+                .name("TestDevice")
+                .build();
+    }
 
     public static Device aDevice(InterfaceConfig interfaceConfig, Integer unitId, DeviceRepository deviceRepository) {
         return deviceRepository.save(Device.builder()

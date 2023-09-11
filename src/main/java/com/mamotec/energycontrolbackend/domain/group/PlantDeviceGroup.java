@@ -3,6 +3,7 @@ package com.mamotec.energycontrolbackend.domain.group;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.*;
 
 @EqualsAndHashCode(callSuper = true)
@@ -11,10 +12,16 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
 @Builder
+@Table(name = "plant_device_group")
 @DiscriminatorValue("PLANT")
 public class PlantDeviceGroup extends DeviceGroup {
 
     @Column(name = "direct_marketing")
     private boolean directMarketing;
 
+
+    @Override
+    public DeviceGroupType getType() {
+        return DeviceGroupType.PLANT;
+    }
 }

@@ -31,9 +31,14 @@ CREATE TABLE device_group
     id               SERIAL PRIMARY KEY,
     name             TEXT,
     type             TEXT,
-    direct_marketing BOOLEAN,
     created_at       TIMESTAMP NOT NULL,
     updated_at       TIMESTAMP
+);
+
+CREATE TABLE plant_device_group
+(
+    id               SERIAL PRIMARY KEY,
+    direct_marketing BOOLEAN
 );
 
 CREATE TABLE device

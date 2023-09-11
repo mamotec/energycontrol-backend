@@ -22,6 +22,10 @@ public enum DeviceGroupType {
         validDeviceTypes = Arrays.asList(types);
     }
 
+    public String getDeviceGroupType(DeviceGroupType type) {
+        return type.toString();
+    }
+
     public boolean canAddDeviceToGroup(DeviceType type) {
         return validDeviceTypes.contains(type);
     }

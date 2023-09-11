@@ -5,6 +5,7 @@ import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.DeviceType;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateResponse;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
+import com.mamotec.energycontrolbackend.domain.group.PlantDeviceGroup;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.factory.DeviceFactory;
 import com.mamotec.energycontrolbackend.factory.DeviceGroupFactory;
@@ -71,8 +72,8 @@ class DeviceServiceTest extends SpringBootBaseTest {
             // given
             InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
             deviceService.create(DeviceFactory.aDevice(config));
-            deviceService.create(DeviceFactory.aDevice(config));
-            deviceService.create(DeviceFactory.aDevice(config));
+            deviceService.create(DeviceFactory.aDevice(config, 2));
+            deviceService.create(DeviceFactory.aDevice(config, 3));
 
             // when
             List<Device> allDevices = deviceService.getAllDevices();
@@ -85,7 +86,7 @@ class DeviceServiceTest extends SpringBootBaseTest {
         void shouldReturnValidDevicesForGroup() {
             // given
             InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
-            DeviceGroup group = DeviceGroupFactory.aDeviceGroup(deviceGroupRepository);
+            PlantDeviceGroup group = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
             // Inverter
             DeviceFactory.aDevice(config, 1, deviceRepository);
             DeviceFactory.aDevice(config, 2, deviceRepository);

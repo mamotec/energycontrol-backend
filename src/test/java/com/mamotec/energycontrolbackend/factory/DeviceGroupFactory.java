@@ -1,19 +1,18 @@
 package com.mamotec.energycontrolbackend.factory;
 
-import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
-import com.mamotec.energycontrolbackend.domain.group.DeviceGroupType;
+import com.mamotec.energycontrolbackend.domain.group.PlantDeviceGroup;
 import com.mamotec.energycontrolbackend.repository.DeviceGroupRepository;
 
 public final class DeviceGroupFactory {
 
-    public static DeviceGroup aDeviceGroup() {
-        DeviceGroup c = new DeviceGroup();
+    public static PlantDeviceGroup aPlantDeviceGroup() {
+        PlantDeviceGroup c = new PlantDeviceGroup();
         c.setName("PV - Rechte Seiete");
-        c.setType(DeviceGroupType.PLANT);
+        c.setDirectMarketing(true);
         return c;
     }
 
-    public static DeviceGroup aDeviceGroup(final DeviceGroupRepository deviceGroupRepository) {
-        return deviceGroupRepository.save(aDeviceGroup());
+    public static PlantDeviceGroup aPlantDeviceGroup(final DeviceGroupRepository deviceGroupRepository) {
+        return deviceGroupRepository.save(aPlantDeviceGroup());
     }
 }

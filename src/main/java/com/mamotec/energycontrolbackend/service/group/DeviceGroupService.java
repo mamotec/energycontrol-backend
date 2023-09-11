@@ -4,6 +4,7 @@ import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceLinkRequest;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.domain.group.dao.DeviceGroupCreate;
+import com.mamotec.energycontrolbackend.mapper.DeviceGroupMapper;
 import com.mamotec.energycontrolbackend.repository.DeviceGroupRepository;
 import com.mamotec.energycontrolbackend.repository.DeviceRepository;
 import com.mamotec.energycontrolbackend.service.CrudOperations;
@@ -27,9 +28,9 @@ public class DeviceGroupService implements CrudOperations<DeviceGroup> {
     private final DeviceRepository deviceRepository;
     private final InterfaceService interfaceService;
 
-    public DeviceGroup save(DeviceGroupCreate record) {
-
-        return null;
+    @Override
+    public DeviceGroup save(DeviceGroup deviceGroup) {
+        return deviceGroupRepository.save(deviceGroup);
     }
 
     public List<DeviceGroup> findAll() {

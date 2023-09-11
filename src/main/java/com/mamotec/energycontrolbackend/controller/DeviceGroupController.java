@@ -3,6 +3,7 @@ package com.mamotec.energycontrolbackend.controller;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceLinkRequest;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.domain.group.dao.DeviceGroupCreate;
+import com.mamotec.energycontrolbackend.mapper.DeviceGroupMapper;
 import com.mamotec.energycontrolbackend.service.group.DeviceGroupService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -21,6 +22,7 @@ import java.util.List;
 public class DeviceGroupController {
 
     private final DeviceGroupService deviceGroupService;
+    private final DeviceGroupMapper deviceGroupMapper;
 
     @GetMapping
     @Operation(summary = "Liefere alle Gruppen")
@@ -33,7 +35,7 @@ public class DeviceGroupController {
     @Operation(summary = "Erstelle eine neue Gruppe")
     public ResponseEntity<DeviceGroup> createGroup(@RequestBody DeviceGroupCreate deviceGroup) {
         log.info("POST /group is being called.");
-        return ResponseEntity.ok(deviceGroupService.save(deviceGroup));
+        return ResponseEntity.ok(deviceGroupService.save(deviceGroupMapper.map(deviceGroup)));
     }
 
     @DeleteMapping("/{id}")
