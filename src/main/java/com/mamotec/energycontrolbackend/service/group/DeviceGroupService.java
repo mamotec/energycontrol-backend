@@ -3,6 +3,7 @@ package com.mamotec.energycontrolbackend.service.group;
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceLinkRequest;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
+import com.mamotec.energycontrolbackend.domain.group.dao.DeviceGroupCreate;
 import com.mamotec.energycontrolbackend.repository.DeviceGroupRepository;
 import com.mamotec.energycontrolbackend.repository.DeviceRepository;
 import com.mamotec.energycontrolbackend.service.CrudOperations;
@@ -26,11 +27,10 @@ public class DeviceGroupService implements CrudOperations<DeviceGroup> {
     private final DeviceRepository deviceRepository;
     private final InterfaceService interfaceService;
 
-    @Override
-    public Optional<JpaRepository<DeviceGroup, Long>> getRepository() {
-        return Optional.of(deviceGroupRepository);
-    }
+    public DeviceGroup save(DeviceGroupCreate record) {
 
+        return null;
+    }
 
     public List<DeviceGroup> findAll() {
         List<DeviceGroup> all = deviceGroupRepository.findAll();
@@ -80,4 +80,10 @@ public class DeviceGroupService implements CrudOperations<DeviceGroup> {
             deviceRepository.save(device);
         }
     }
+
+    @Override
+    public Optional<JpaRepository<DeviceGroup, Long>> getRepository() {
+        return Optional.of(deviceGroupRepository);
+    }
+
 }
