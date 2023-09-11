@@ -11,14 +11,12 @@ import lombok.*;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
-@Builder
 @Table(name = "plant_device_group")
 @DiscriminatorValue("PLANT")
 public class PlantDeviceGroup extends DeviceGroup {
 
     @Column(name = "direct_marketing")
     private boolean directMarketing;
-
 
     @Override
     public DeviceGroupType getType() {
