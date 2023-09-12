@@ -3,6 +3,7 @@ package com.mamotec.energycontrolbackend.mapper;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.domain.group.PlantDeviceGroup;
 import com.mamotec.energycontrolbackend.domain.group.dao.DeviceGroupCreate;
+import com.mamotec.energycontrolbackend.domain.group.dao.DeviceGroupUpdate;
 import com.mamotec.energycontrolbackend.domain.group.dao.PlantDeviceGroupCreate;
 import com.mamotec.energycontrolbackend.domain.group.dao.PlantDeviceGroupUpdate;
 import org.mapstruct.Mapper;
@@ -16,6 +17,6 @@ public interface DeviceGroupMapper {
     DeviceGroup map(DeviceGroupCreate deviceGroupCreate);
 
     @SubclassMapping(source = PlantDeviceGroupUpdate.class, target = PlantDeviceGroup.class)
-    DeviceGroup map(PlantDeviceGroupUpdate deviceGroupCreate);
+    DeviceGroup map(DeviceGroupUpdate deviceGroupUpdate);
 
 }
