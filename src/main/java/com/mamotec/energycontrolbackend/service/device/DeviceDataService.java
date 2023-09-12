@@ -9,7 +9,6 @@ import com.influxdb.query.FluxTable;
 import com.mamotec.energycontrolbackend.client.InfluxClient;
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.RegisterMapping;
-import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.Unit;
 import com.mamotec.energycontrolbackend.repository.DeviceRepository;
 import com.mamotec.energycontrolbackend.utils.StringUtils;
 import jakarta.transaction.Transactional;
@@ -39,7 +38,7 @@ public class DeviceDataService {
         WriteApiBlocking writeApiBlocking = influxClient.getWriteApiBlocking();
 
         Point p = Point.measurement(mapping.getType())
-                .addTag("device", device.getUnitId()
+                .addTag("device", device.getId()
                         .toString())
                 .addTag("deviceType", device.getDeviceType().toString())
                 .time(Instant.now(), WritePrecision.NS);

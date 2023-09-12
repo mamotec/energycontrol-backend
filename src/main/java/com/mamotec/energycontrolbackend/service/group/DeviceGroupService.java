@@ -3,8 +3,6 @@ package com.mamotec.energycontrolbackend.service.group;
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceLinkRequest;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
-import com.mamotec.energycontrolbackend.domain.group.dao.DeviceGroupCreate;
-import com.mamotec.energycontrolbackend.mapper.DeviceGroupMapper;
 import com.mamotec.energycontrolbackend.repository.DeviceGroupRepository;
 import com.mamotec.energycontrolbackend.repository.DeviceRepository;
 import com.mamotec.energycontrolbackend.service.CrudOperations;
