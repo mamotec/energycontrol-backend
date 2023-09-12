@@ -66,14 +66,19 @@ public class DeviceDataService {
 
     public long readLastDeviceData(List<Long> deviceIds, String measurement) {
         QueryApi queryApi = influxClient.getQueryApi();
-        StringBuilder deviceString = new StringBuilder("|> filter(fn: (r) => r[\"device\"] == \"%s\" ");
-        for (Long deviceId : deviceIds) {
-            deviceString.append(format("or r[\"device\"] == \"%s\" ", deviceId));
+        StringBuilder deviceString = new StringBuilder("|> filter(fn: (r) => ");
+        if (deviceIds.size() > 1) {
+            for (Long deviceId : deviceIds) {
+                deviceString.append(format("or r[\"device\"] == \"%s\" ", deviceId));
+            }
+        } else {
+            deviceString.append(format("r[\"device\"] == \"%s\" ", deviceIds.get(0)));
         }
+
         deviceString.append(")");
 
         String flux = format(new StringBuilder().append("from(bucket: \"%s\")")
-                .append("  |> range(start: -1h)")
+                .append("  |> range(start: -1d)")
                 .append("  |> filter(fn: (r) => r._measurement == \"%s\")")
                 .append(deviceString)
                 .append("  |> filter(fn: (r) => r[\"_field\"] == \"sum\")")

@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.List;
 
 @Component
@@ -44,7 +43,7 @@ public class WriteDeviceScheduler {
                 RegisterMapping mapping = i.getMapping()
                         .getPower();
 
-                deviceDataService.readLastDeviceData(device, mapping.getType());
+                deviceDataService.readLastDeviceData(List.of(device.getId()), mapping.getType());
             }
         }
     }

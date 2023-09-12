@@ -29,7 +29,7 @@ public class ReadDeviceScheduler {
     private final NodeRedClient nodeRedClient;
     private final DeviceDataService deviceDataService;
 
-    @Scheduled(cron = "*/10 * * * * *")
+    @Scheduled(cron = "*/30 * * * * *")
     @Transactional
     public void fetchDeviceData() {
         List<InterfaceConfig> configs = interfaceConfigService.findAll();
@@ -66,8 +66,6 @@ public class ReadDeviceScheduler {
 
         // Save data to influxdb
         deviceDataService.writeDeviceData(d, res, mapping);
-
-        deviceDataService.readLastDeviceData(d, mapping.getType());
     }
 
 

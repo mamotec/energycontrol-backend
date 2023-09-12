@@ -84,24 +84,6 @@ public class DeviceGroupService implements CrudOperations<DeviceGroup> {
         }
     }
 
-    public DeviceGroupRepresentation readDataForGroup(Long id) {
-        DeviceGroup group = findById(id);
-        DeviceGroupType type = group.getType();
-
-        switch (type) {
-            case PLANT:
-                return readPlantData(group);
-            default:
-                throw new IllegalArgumentException("Unknown group type: " + type);
-        }
-        var sum = 0;
-        for (Device d : group.getDevices()) {
-            var value = deviceDataService.readLastDeviceData(d, null);
-
-            sum += value;
-        }
-    }
-
     @Override
     public Optional<JpaRepository<DeviceGroup, Long>> getRepository() {
         return Optional.of(deviceGroupRepository);
