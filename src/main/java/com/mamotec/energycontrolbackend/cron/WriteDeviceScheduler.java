@@ -29,7 +29,7 @@ public class WriteDeviceScheduler {
     private final DeviceDataService deviceDataService;
 
     @Transactional
-    public void writeDeviceData() throws IOException, InterruptedException {
+    public void writeDeviceData() {
         List<InterfaceConfig> configs = interfaceConfigService.findAll();
         log.info("WRITE - Found {} interfaces in repository.", configs.size());
 
