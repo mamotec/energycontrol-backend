@@ -12,8 +12,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -74,10 +72,10 @@ public class DeviceGroupController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{id}/{type}")
+    @GetMapping("/data/{id}")
     @Operation(summary = "Liefere die Daten für eine Gruppe")
-    public ResponseEntity<Long> fetchData(@PathVariable Long id, @PathVariable String type) {
-        return ResponseEntity.ok(deviceGroupService.readDataForGroup(id, type));
+    public ResponseEntity<Long> fetchData(@PathVariable Long id) {
+        return ResponseEntity.ok(deviceGroupService.readDataForGroup(id));
     }
 
 }

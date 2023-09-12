@@ -1,6 +1,6 @@
 package com.mamotec.energycontrolbackend.mapper;
 
-import com.mamotec.energycontrolbackend.domain.group.dao.PlantDeviceGroupCreate;
+import com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroupCreate;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

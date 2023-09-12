@@ -4,11 +4,11 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroupType;
+import com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroupCreate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 @Data

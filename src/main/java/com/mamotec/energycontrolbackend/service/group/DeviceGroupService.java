@@ -82,11 +82,11 @@ public class DeviceGroupService implements CrudOperations<DeviceGroup> {
         }
     }
 
-    public long readDataForGroup(Long id, String type) {
+    public long readDataForGroup(Long id) {
         DeviceGroup group = findById(id);
         var sum = 0;
         for (Device d : group.getDevices()) {
-            var value = deviceDataService.readLastDeviceData(d, type);
+            var value = deviceDataService.readLastDeviceData(d, null);
 
             sum += value;
         }

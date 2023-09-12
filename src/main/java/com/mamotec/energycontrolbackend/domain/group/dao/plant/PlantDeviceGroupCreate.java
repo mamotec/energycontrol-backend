@@ -1,5 +1,6 @@
-package com.mamotec.energycontrolbackend.domain.group.dao;
+package com.mamotec.energycontrolbackend.domain.group.dao.plant;
 
+import com.mamotec.energycontrolbackend.domain.group.dao.DeviceGroupCreate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
