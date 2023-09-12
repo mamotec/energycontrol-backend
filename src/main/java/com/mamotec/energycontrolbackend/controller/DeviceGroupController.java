@@ -6,7 +6,7 @@ import com.mamotec.energycontrolbackend.domain.group.dao.DeviceGroupCreate;
 import com.mamotec.energycontrolbackend.domain.group.dao.DeviceGroupRepresentation;
 import com.mamotec.energycontrolbackend.domain.group.dao.DeviceGroupUpdate;
 import com.mamotec.energycontrolbackend.mapper.DeviceGroupMapper;
-import com.mamotec.energycontrolbackend.service.device.DeviceDataService;
+import com.mamotec.energycontrolbackend.service.group.AggregateDeviceGroupDataService;
 import com.mamotec.energycontrolbackend.service.group.DeviceGroupService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -25,7 +25,7 @@ import java.util.List;
 public class DeviceGroupController {
 
     private final DeviceGroupService deviceGroupService;
-    private final DeviceDataService deviceDataService;
+    private final AggregateDeviceGroupDataService aggregateDeviceGroupDataService;
     private final DeviceGroupMapper deviceGroupMapper;
 
     @GetMapping
@@ -76,7 +76,7 @@ public class DeviceGroupController {
     @GetMapping("/data/{id}")
     @Operation(summary = "Liefere die Daten für eine Gruppe")
     public ResponseEntity<DeviceGroupRepresentation> fetchData(@PathVariable Long id) {
-        return ResponseEntity.ok(deviceGroupService.readDataForGroup(id));
+        return ResponseEntity.ok(aggregateDeviceGroupDataService.aggregate(id));
     }
 
 }

@@ -15,8 +15,6 @@ public class AggregateDeviceGroupDataService {
     private final DeviceGroupRepository deviceGroupRepository;
     private final AggregatePlantDataService aggregatePlantDataService;
 
-
-
     public DeviceGroupRepresentation aggregate(long deviceGroupId) {
         DeviceGroup group = deviceGroupRepository.findById(deviceGroupId)
                 .orElseThrow();
@@ -27,6 +25,5 @@ public class AggregateDeviceGroupDataService {
             default:
                 return null;
         }
-        return null;
     }
 }
