@@ -5,12 +5,15 @@ import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.domain.group.dao.DeviceGroupCreate;
 import com.mamotec.energycontrolbackend.domain.group.dao.DeviceGroupUpdate;
 import com.mamotec.energycontrolbackend.mapper.DeviceGroupMapper;
+import com.mamotec.energycontrolbackend.service.device.DeviceDataService;
 import com.mamotec.energycontrolbackend.service.group.DeviceGroupService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +26,7 @@ import java.util.List;
 public class DeviceGroupController {
 
     private final DeviceGroupService deviceGroupService;
+    private final DeviceDataService deviceDataService;
     private final DeviceGroupMapper deviceGroupMapper;
 
     @GetMapping
@@ -70,6 +74,10 @@ public class DeviceGroupController {
         return ResponseEntity.ok().build();
     }
 
-
+    @GetMapping("/{id}/{type}")
+    @Operation(summary = "Liefere die Daten für eine Gruppe")
+    public ResponseEntity<Long> fetchData(@PathVariable Long id, @PathVariable String type) {
+        return ResponseEntity.ok(deviceGroupService.readDataForGroup(id, type));
+    }
 
 }

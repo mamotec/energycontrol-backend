@@ -67,7 +67,7 @@ public class ReadDeviceScheduler {
         // Save data to influxdb
         deviceDataService.writeDeviceData(d, res, mapping);
 
-        deviceDataService.readLastDeviceData(d, mapping);
+        deviceDataService.readLastDeviceData(d, mapping.getType());
     }
 
 

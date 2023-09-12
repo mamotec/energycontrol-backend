@@ -44,7 +44,7 @@ public class WriteDeviceScheduler {
                 RegisterMapping mapping = i.getMapping()
                         .getPower();
 
-                deviceDataService.readLastDeviceData(device, mapping);
+                deviceDataService.readLastDeviceData(device, mapping.getType());
             }
         }
     }

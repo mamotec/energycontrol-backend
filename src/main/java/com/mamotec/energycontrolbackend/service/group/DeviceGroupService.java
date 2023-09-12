@@ -6,6 +6,7 @@ import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.repository.DeviceGroupRepository;
 import com.mamotec.energycontrolbackend.repository.DeviceRepository;
 import com.mamotec.energycontrolbackend.service.CrudOperations;
+import com.mamotec.energycontrolbackend.service.device.DeviceDataService;
 import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ public class DeviceGroupService implements CrudOperations<DeviceGroup> {
 
     private final DeviceGroupRepository deviceGroupRepository;
     private final DeviceRepository deviceRepository;
+    private final DeviceDataService deviceDataService;
     private final InterfaceService interfaceService;
 
     @Override
@@ -78,6 +80,18 @@ public class DeviceGroupService implements CrudOperations<DeviceGroup> {
             device.setDeviceGroup(null);
             deviceRepository.save(device);
         }
+    }
+
+    public long readDataForGroup(Long id, String type) {
+        DeviceGroup group = findById(id);
+        var sum = 0;
+        for (Device d : group.getDevices()) {
+            var value = deviceDataService.readLastDeviceData(d, type);
+
+            sum += value;
+        }
+
+        return sum;
     }
 
     @Override

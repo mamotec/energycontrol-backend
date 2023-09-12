@@ -65,11 +65,4 @@ public class DeviceController {
         log.info("GET /device/service is being called.");
         return ResponseEntity.ok(nodeRedClient.isNodeRedAvailable(false));
     }
-    @MessageMapping("/fetch-data")
-    @SendTo("/topic/data-updates")
-    public String fetchData(List<Long> deviceIds, String measurement) {
-        log.info("Message received: {}", deviceIds);
-        return measurement;
-    }
-
 }

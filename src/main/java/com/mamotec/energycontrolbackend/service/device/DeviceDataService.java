@@ -62,8 +62,8 @@ public class DeviceDataService {
         deviceRepository.markDeviceAsActive(device.getId(), active);
     }
 
-    public void readLastDeviceData(Device device, RegisterMapping mapping) {
-        log.info("Reading data for device {} and measurement {}.", device.getUnitId(), mapping.getType());
+    public long readLastDeviceData(Device device, String measurement) {
+        log.info("Reading data for device {} and measurement {}.", device.getUnitId(), measurement);
         QueryApi queryApi = influxClient.getQueryApi();
 
         String flux = String.format("from(bucket: \"%s\")" +
@@ -71,7 +71,7 @@ public class DeviceDataService {
                 "  |> filter(fn: (r) => r._measurement == \"%s\")" +
                 "  |> filter(fn: (r) => r[\"_field\"] == \"sum\")" +
                 "  |> last()" +
-                "  |> yield(name: \"last\")", influxClient.getInfluxBucket(), mapping.getType());
+                "  |> yield(name: \"last\")", influxClient.getInfluxBucket(), measurement);
 
         List<FluxTable> tables = queryApi.query(flux);
 
@@ -79,8 +79,11 @@ public class DeviceDataService {
             List<FluxRecord> records = table.getRecords();
 
             for (FluxRecord record : records) {
-                log.info("Record: {}", record.getValue());
+                return (long) record.getValue();
             }
         }
+
+        return 0;
+
     }
 }
