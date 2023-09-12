@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -62,6 +64,12 @@ public class DeviceController {
     public ResponseEntity<Boolean> isServiceAvailable() {
         log.info("GET /device/service is being called.");
         return ResponseEntity.ok(nodeRedClient.isNodeRedAvailable(false));
+    }
+    @MessageMapping("/fetch-data")
+    @SendTo("/topic/data-updates")
+    public String fetchData(List<Long> deviceIds, String measurement) {
+        log.info("Message received: {}", deviceIds);
+        return measurement;
     }
 
 }
