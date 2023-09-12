@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.List;
 
+import static java.lang.String.format;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -48,7 +50,7 @@ public class DeviceDataService {
         int sum = 0;
         for (int j : array) {
             counter++;
-            p.addField(String.format("value_%s", counter), j);
+            p.addField(format("value_%s", counter), j);
             sum += j;
         }
 
@@ -62,16 +64,22 @@ public class DeviceDataService {
         deviceRepository.markDeviceAsActive(device.getId(), active);
     }
 
-    public long readLastDeviceData(Device device, String measurement) {
-        log.info("Reading data for device {} and measurement {}.", device.getUnitId(), measurement);
+    public long readLastDeviceData(List<Long> deviceIds, String measurement) {
         QueryApi queryApi = influxClient.getQueryApi();
+        StringBuilder deviceString = new StringBuilder("|> filter(fn: (r) => r[\"device\"] == \"%s\" ");
+        for (Long deviceId : deviceIds) {
+            deviceString.append(format("or r[\"device\"] == \"%s\" ", deviceId));
+        }
+        deviceString.append(")");
 
-        String flux = String.format("from(bucket: \"%s\")" +
-                "  |> range(start: -1h)" +
-                "  |> filter(fn: (r) => r._measurement == \"%s\")" +
-                "  |> filter(fn: (r) => r[\"_field\"] == \"sum\")" +
-                "  |> last()" +
-                "  |> yield(name: \"last\")", influxClient.getInfluxBucket(), measurement);
+        String flux = format(new StringBuilder().append("from(bucket: \"%s\")")
+                .append("  |> range(start: -1h)")
+                .append("  |> filter(fn: (r) => r._measurement == \"%s\")")
+                .append(deviceString)
+                .append("  |> filter(fn: (r) => r[\"_field\"] == \"sum\")")
+                .append("  |> last()")
+                .append("  |> yield(name: \"last\")")
+                .toString(), influxClient.getInfluxBucket(), measurement);
 
         List<FluxTable> tables = queryApi.query(flux);
 

@@ -3,6 +3,7 @@ package com.mamotec.energycontrolbackend.controller;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceLinkRequest;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.domain.group.dao.DeviceGroupCreate;
+import com.mamotec.energycontrolbackend.domain.group.dao.DeviceGroupRepresentation;
 import com.mamotec.energycontrolbackend.domain.group.dao.DeviceGroupUpdate;
 import com.mamotec.energycontrolbackend.mapper.DeviceGroupMapper;
 import com.mamotec.energycontrolbackend.service.device.DeviceDataService;
@@ -74,7 +75,7 @@ public class DeviceGroupController {
 
     @GetMapping("/data/{id}")
     @Operation(summary = "Liefere die Daten für eine Gruppe")
-    public ResponseEntity<Long> fetchData(@PathVariable Long id) {
+    public ResponseEntity<DeviceGroupRepresentation> fetchData(@PathVariable Long id) {
         return ResponseEntity.ok(deviceGroupService.readDataForGroup(id));
     }
 

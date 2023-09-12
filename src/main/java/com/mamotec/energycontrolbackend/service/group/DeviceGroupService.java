@@ -3,6 +3,8 @@ package com.mamotec.energycontrolbackend.service.group;
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceLinkRequest;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
+import com.mamotec.energycontrolbackend.domain.group.DeviceGroupType;
+import com.mamotec.energycontrolbackend.domain.group.dao.DeviceGroupRepresentation;
 import com.mamotec.energycontrolbackend.repository.DeviceGroupRepository;
 import com.mamotec.energycontrolbackend.repository.DeviceRepository;
 import com.mamotec.energycontrolbackend.service.CrudOperations;
@@ -82,16 +84,22 @@ public class DeviceGroupService implements CrudOperations<DeviceGroup> {
         }
     }
 
-    public long readDataForGroup(Long id) {
+    public DeviceGroupRepresentation readDataForGroup(Long id) {
         DeviceGroup group = findById(id);
+        DeviceGroupType type = group.getType();
+
+        switch (type) {
+            case PLANT:
+                return readPlantData(group);
+            default:
+                throw new IllegalArgumentException("Unknown group type: " + type);
+        }
         var sum = 0;
         for (Device d : group.getDevices()) {
             var value = deviceDataService.readLastDeviceData(d, null);
 
             sum += value;
         }
-
-        return sum;
     }
 
     @Override
