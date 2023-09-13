@@ -1,12 +1,15 @@
 package com.mamotec.energycontrolbackend.client;
 
 import com.influxdb.client.*;
+import com.mamotec.energycontrolbackend.exception.ExternalServiceNotAvailableException;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 @Getter
+@Slf4j
 public class InfluxClient {
 
     @Value("${influx.url}")
@@ -39,5 +42,21 @@ public class InfluxClient {
 
     public void closeInfluxClient(InfluxDBClient influxDBClient) {
         getInfluxClient().close();
+    }
+
+
+    public boolean isInfluxDbAvailable(boolean withException) {
+        InfluxDBClient influxClient = getInfluxClient();
+        if (influxClient.ping()) {
+            log.info("InfluxDB service available.");
+            influxClient.close();
+            return true;
+        } else {
+            if (withException) {
+                throw new ExternalServiceNotAvailableException("InfluxDB service not available.");
+            }
+            log.error("InfluxDB service not available.");
+            return false;
+        }
     }
 }

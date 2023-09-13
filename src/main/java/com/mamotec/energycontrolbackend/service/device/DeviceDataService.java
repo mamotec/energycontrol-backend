@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.String.format;
@@ -86,7 +87,13 @@ public class DeviceDataService {
                 .append("  |> yield(name: \"last\")")
                 .toString(), influxClient.getInfluxBucket(), measurement);
 
-        List<FluxTable> tables = queryApi.query(flux);
+        List<FluxTable> tables;
+        try {
+            tables = queryApi.query(flux);
+        } catch (Exception e) {
+            log.error("Error while reading data from influxdb.", e);
+            return 0;
+        }
 
         for (FluxTable table : tables) {
             List<FluxRecord> records = table.getRecords();
