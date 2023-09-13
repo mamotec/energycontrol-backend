@@ -61,20 +61,6 @@ public class DeviceService implements CrudOperations<Device> {
         return all;
     }
 
-    @Transactional
-    public void deleteDevice(long id) {
-        Optional<Device> byId = deviceRepository.findById(id);
-
-        // Delete Data Points from InfluxDB
-        if (byId.isPresent()) {
-            Device device = byId.get();
-            influxService.deleteAllDataPointsForDevice(device);
-        }
-
-        // Delete Device in DB
-        delete(id);
-    }
-
     @Override
     public Optional<JpaRepository<Device, Long>> getRepository() {
         return Optional.of(deviceRepository);

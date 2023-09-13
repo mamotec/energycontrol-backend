@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.String.format;
@@ -72,8 +71,10 @@ public class DeviceDataService {
             for (Long deviceId : deviceIds) {
                 deviceString.append(format("or r[\"device\"] == \"%s\" ", deviceId));
             }
-        } else {
+        } else if (deviceIds.size() == 1) {
             deviceString.append(format("r[\"device\"] == \"%s\" ", deviceIds.get(0)));
+        } else {
+            return 0;
         }
 
         deviceString.append(")");

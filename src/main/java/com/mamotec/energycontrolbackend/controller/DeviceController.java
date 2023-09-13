@@ -36,10 +36,10 @@ public class DeviceController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Lösche ein Gerät")
+    @Operation(summary = "Lösche ein Gerät (Soft Delete))")
     public ResponseEntity<Void> deleteDevice(@PathVariable Long id) {
         log.info("DELETE /device/{} is being called.", id);
-        deviceService.deleteDevice(id);
+        deviceService.delete(id);
         return ResponseEntity.ok().build();
     }
 

@@ -76,6 +76,7 @@ public class DeviceGroupController {
     @GetMapping("/data/{id}")
     @Operation(summary = "Liefere die Daten für eine Gruppe")
     public ResponseEntity<DeviceGroupRepresentation> fetchData(@PathVariable Long id) {
+        log.info("GET /group/data/{} is being called.", id);
         return ResponseEntity.ok(aggregateDeviceGroupDataService.aggregate(id));
     }
 

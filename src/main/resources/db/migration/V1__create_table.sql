@@ -51,6 +51,7 @@ CREATE TABLE device
     device_type         TEXT,
     unit_id             INTEGER,
     active              BOOLEAN   NOT NULL DEFAULT false,
+    deleted BOOLEAN NOT NULL DEFAULT false,
     created_at          TIMESTAMP NOT NULL,
     updated_at          TIMESTAMP,
     device_group_id     INTEGER,
