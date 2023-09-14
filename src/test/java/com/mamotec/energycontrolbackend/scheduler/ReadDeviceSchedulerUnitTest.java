@@ -2,6 +2,7 @@ package com.mamotec.energycontrolbackend.scheduler;
 
 import com.mamotec.energycontrolbackend.client.NodeRedClient;
 import com.mamotec.energycontrolbackend.cron.ReadDeviceScheduler;
+import com.mamotec.energycontrolbackend.factory.InterfaceConfigFactory;
 import com.mamotec.energycontrolbackend.service.device.DeviceDataService;
 import com.mamotec.energycontrolbackend.service.device.DeviceService;
 import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceConfigService;
@@ -12,7 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.IOException;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
@@ -34,9 +34,8 @@ class ReadDeviceSchedulerUnitTest {
     @Mock
     private DeviceDataService deviceDataService;
 
-
     @Test
-    void shouldVerifyNoInteractionWhenNoConfigIsFound() throws IOException, InterruptedException {
+    void shouldVerifyNoInteractionWhenNoConfigIsFound() {
         // given
         when(interfaceConfigService.findAll()).thenReturn(List.of());
 
@@ -49,4 +48,5 @@ class ReadDeviceSchedulerUnitTest {
         verifyNoInteractions(nodeRedClient);
         verifyNoInteractions(deviceDataService);
     }
+
 }

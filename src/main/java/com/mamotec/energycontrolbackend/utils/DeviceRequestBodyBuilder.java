@@ -4,13 +4,15 @@ import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceType;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.DeviceYaml;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.RegisterMapping;
-import lombok.NoArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@NoArgsConstructor
 public final class DeviceRequestBodyBuilder {
+
+    private DeviceRequestBodyBuilder() {
+        throw new IllegalStateException("Utility class");
+    }
 
     public static void buildConnectionPost(DeviceYaml i, InterfaceConfig config, long unitId, Map<String, String> requestBody) {
 

@@ -2,6 +2,7 @@ package com.mamotec.energycontrolbackend.base;
 
 import com.mamotec.energycontrolbackend.client.InfluxClient;
 import com.mamotec.energycontrolbackend.client.NodeRedClient;
+import com.mamotec.energycontrolbackend.repository.ConfigurationRepository;
 import com.mamotec.energycontrolbackend.repository.DeviceGroupRepository;
 import com.mamotec.energycontrolbackend.repository.DeviceRepository;
 import com.mamotec.energycontrolbackend.repository.InterfaceConfigRepository;
@@ -26,8 +27,10 @@ public class SpringBootBaseTest {
     public InterfaceConfigRepository interfaceConfigRepository;
     @Autowired
     public DeviceRepository deviceRepository;
+    @Autowired
+    public ConfigurationRepository configurationRepository;
 
-    @BeforeEach
+    @AfterEach
     void setup() {
         delete();
     }
@@ -36,5 +39,6 @@ public class SpringBootBaseTest {
         deviceRepository.deleteAllInBatch();
         deviceGroupRepository.deleteAllInBatch();
         interfaceConfigRepository.deleteAllInBatch();
+        configurationRepository.deleteAllInBatch();
     }
 }
