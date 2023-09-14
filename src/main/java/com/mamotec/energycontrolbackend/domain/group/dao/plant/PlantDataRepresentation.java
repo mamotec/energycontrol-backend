@@ -13,4 +13,6 @@ import lombok.NoArgsConstructor;
 public class PlantDataRepresentation extends DeviceGroupRepresentation {
 
     private long activePower;
+    private boolean directMarketing;
+    private boolean feedInManagement;
 }

@@ -2,6 +2,7 @@ package com.mamotec.energycontrolbackend.service.group;
 
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
+import com.mamotec.energycontrolbackend.domain.group.PlantDeviceGroup;
 import com.mamotec.energycontrolbackend.domain.group.dao.DeviceGroupRepresentation;
 import com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDataRepresentation;
 import com.mamotec.energycontrolbackend.service.device.DeviceDataService;
@@ -20,8 +21,11 @@ public class AggregatePlantDataService implements AggregateService {
 
     @Override
     public DeviceGroupRepresentation aggregate(DeviceGroup group) {
+        PlantDeviceGroup pg = (PlantDeviceGroup) group;
         return PlantDataRepresentation.builder()
-                .activePower(aggregateActivePower(group))
+                .activePower(aggregateActivePower(pg))
+                .directMarketing(pg.isDirectMarketing())
+                .feedInManagement(pg.isFeedInManagement())
                 .build();
     }
 
