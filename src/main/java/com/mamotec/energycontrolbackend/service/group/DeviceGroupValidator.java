@@ -6,6 +6,10 @@ import com.mamotec.energycontrolbackend.exception.AddDeviceToGroupException;
 
 public final class DeviceGroupValidator {
 
+    private DeviceGroupValidator() throws InstantiationException {
+        throw new InstantiationException("Utility classes should not be instantiated");
+    }
+
     public static void validate(DeviceGroup deviceGroup, Device device) {
         if (!deviceGroup.getType()
                 .canAddDeviceToGroup(device.getDeviceType())) {

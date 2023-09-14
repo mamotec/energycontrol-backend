@@ -7,7 +7,6 @@ import com.mamotec.energycontrolbackend.mapper.DeviceMapper;
 import com.mamotec.energycontrolbackend.repository.DeviceGroupRepository;
 import com.mamotec.energycontrolbackend.repository.DeviceRepository;
 import com.mamotec.energycontrolbackend.service.CrudOperations;
-import com.mamotec.energycontrolbackend.service.influx.InfluxService;
 import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +30,6 @@ public class DeviceService implements CrudOperations<Device> {
     private final DeviceMapper mapper;
 
     private final InterfaceService interfaceService;
-
-    private final InfluxService influxService;
 
     private final DeviceValidationService validationService;
 

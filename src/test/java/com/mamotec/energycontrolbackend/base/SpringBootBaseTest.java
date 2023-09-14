@@ -5,7 +5,7 @@ import com.mamotec.energycontrolbackend.client.NodeRedClient;
 import com.mamotec.energycontrolbackend.repository.DeviceGroupRepository;
 import com.mamotec.energycontrolbackend.repository.DeviceRepository;
 import com.mamotec.energycontrolbackend.repository.InterfaceConfigRepository;
-import com.mamotec.energycontrolbackend.service.group.DeviceGroupService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,9 +28,13 @@ public class SpringBootBaseTest {
     public DeviceRepository deviceRepository;
 
     @BeforeEach
-    void setUp() {
-        deviceRepository.deleteAll();
-        deviceGroupRepository.deleteAll();
-        interfaceConfigRepository.deleteAll();
+    void setup() {
+        delete();
+    }
+
+    void delete() {
+        deviceRepository.deleteAllInBatch();
+        deviceGroupRepository.deleteAllInBatch();
+        interfaceConfigRepository.deleteAllInBatch();
     }
 }

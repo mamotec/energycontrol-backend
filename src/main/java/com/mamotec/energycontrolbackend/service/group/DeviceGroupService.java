@@ -25,7 +25,6 @@ public class DeviceGroupService implements CrudOperations<DeviceGroup> {
 
     private final DeviceGroupRepository deviceGroupRepository;
     private final DeviceRepository deviceRepository;
-    private final DeviceDataService deviceDataService;
     private final InterfaceService interfaceService;
 
     @Override
