@@ -9,7 +9,7 @@ COPY src /app/src/
 
 # Build the project using Maven
 RUN apt-get update && apt-get install -y maven
-RUN mvn clean package -DskipTests
+RUN mvn clean package
 
 # Use the official Azul Zulu OpenJDK 17 image as the base image
 FROM eclipse-temurin:17-jdk-focal
