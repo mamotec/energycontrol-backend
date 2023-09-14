@@ -18,6 +18,9 @@ public class PlantDeviceGroup extends DeviceGroup {
     @Column(name = "direct_marketing")
     private boolean directMarketing;
 
+    @Column(name = "feed_in_management")
+    private boolean feedInManagement;
+
     @Override
     public DeviceGroupType getType() {
         return DeviceGroupType.PLANT;

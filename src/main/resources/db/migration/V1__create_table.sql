@@ -38,7 +38,8 @@ CREATE TABLE device_group
 CREATE TABLE plant_device_group
 (
     id               SERIAL PRIMARY KEY,
-    direct_marketing BOOLEAN
+    direct_marketing   BOOLEAN,
+    feed_in_management BOOLEAN
 );
 
 CREATE TABLE device
@@ -63,6 +64,7 @@ CREATE TABLE system_configuration
 (
     id               SERIAL PRIMARY KEY,
     direct_marketing BOOLEAN   not null default false,
+    feed_in_management BOOLEAN not null default false,
     created_at       TIMESTAMP NOT NULL,
     updated_at       TIMESTAMP
 );

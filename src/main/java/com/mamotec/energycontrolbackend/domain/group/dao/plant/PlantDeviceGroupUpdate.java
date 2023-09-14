@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 public class PlantDeviceGroupUpdate extends DeviceGroupUpdate {
 
     private boolean directMarketing;
-
+    private boolean feedInManagement;
 }
 
