@@ -1,12 +1,13 @@
 package com.mamotec.energycontrolbackend.service.group;
 
 import com.mamotec.energycontrolbackend.domain.device.Device;
+import com.mamotec.energycontrolbackend.domain.device.SerialDevice;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceLinkRequest;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
+import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceType;
 import com.mamotec.energycontrolbackend.repository.DeviceGroupRepository;
 import com.mamotec.energycontrolbackend.repository.DeviceRepository;
 import com.mamotec.energycontrolbackend.service.CrudOperations;
-import com.mamotec.energycontrolbackend.service.device.DeviceDataService;
 import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +38,10 @@ public class DeviceGroupService implements CrudOperations<DeviceGroup> {
 
         for (DeviceGroup g : all) {
             for (Device d : g.getDevices()) {
-                d.setModel(interfaceService.getDeviceNameByManufacturerAndDeviceId(d.getManufacturerId(), d.getDeviceId()));
+                if (d.getInterfaceConfig().getType().equals(InterfaceType.RS485)) {
+                    SerialDevice serialDevice = (SerialDevice) d;
+                    serialDevice.setModel(interfaceService.getDeviceNameByManufacturerAndDeviceId(serialDevice.getManufacturerId(), serialDevice.getDeviceId()));
+                }
             }
         }
         return all;

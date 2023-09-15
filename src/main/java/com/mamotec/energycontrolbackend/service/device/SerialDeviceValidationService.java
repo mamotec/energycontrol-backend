@@ -1,20 +1,20 @@
 package com.mamotec.energycontrolbackend.service.device;
 
 
-import com.mamotec.energycontrolbackend.domain.device.Device;
+import com.mamotec.energycontrolbackend.domain.device.SerialDevice;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
-import com.mamotec.energycontrolbackend.repository.DeviceRepository;
+import com.mamotec.energycontrolbackend.repository.SerialDeviceRepository;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class DeviceValidationService {
+public class SerialDeviceValidationService {
 
-    private final DeviceRepository repository;
+    private final SerialDeviceRepository repository;
 
-    public void validate(Device device) {
+    public void validate(SerialDevice device) {
         if (existsByUnitIdAndInterfaceConfig(device.getUnitId(), device.getInterfaceConfig())) {
             throw new ConstraintViolationException("Gerät existiert bereits mit dieser Slave-Id für die Konfiguration.", null);
         }

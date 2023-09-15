@@ -47,10 +47,10 @@ CREATE TABLE device
     id                  SERIAL PRIMARY KEY,
     interface_config_id INTEGER,
     name                TEXT,
-    manufacturer_id     INTEGER,
-    device_id           INTEGER,
-    device_type         TEXT,
-    unit_id             INTEGER,
+    manufacturer_id INTEGER,
+    device_id       INTEGER,
+    device_type     TEXT,
+    interface_type  TEXT,
     active              BOOLEAN   NOT NULL DEFAULT false,
     deleted BOOLEAN NOT NULL DEFAULT false,
     created_at          TIMESTAMP NOT NULL,
@@ -58,6 +58,19 @@ CREATE TABLE device
     device_group_id     INTEGER,
     CONSTRAINT fk_interface_config FOREIGN KEY (interface_config_id) REFERENCES interface_config (id),
     CONSTRAINT fk_device_group_id FOREIGN KEY (device_group_id) REFERENCES device_group (id)
+);
+
+CREATE TABLE serial_device
+(
+    id      SERIAL PRIMARY KEY,
+    unit_id INTEGER
+);
+
+CREATE TABLE tcp_device
+(
+    id   SERIAL PRIMARY KEY,
+    host TEXT,
+    port TEXT
 );
 
 CREATE TABLE system_configuration

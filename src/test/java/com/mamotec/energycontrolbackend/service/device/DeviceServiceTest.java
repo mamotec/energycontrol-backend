@@ -3,8 +3,8 @@ package com.mamotec.energycontrolbackend.service.device;
 import com.mamotec.energycontrolbackend.base.SpringBootBaseTest;
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.DeviceType;
+import com.mamotec.energycontrolbackend.domain.device.SerialDevice;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateResponse;
-import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.domain.group.PlantDeviceGroup;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.factory.DeviceFactory;
@@ -36,12 +36,10 @@ class DeviceServiceTest extends SpringBootBaseTest {
             InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
 
             // when
-            DeviceCreateResponse deviceCreateResponse = deviceService.create(DeviceFactory.aDevice(config));
+            Device deviceCreateResponse = deviceService.save(DeviceFactory.aTcpDevice(config));
 
             // then
             assertNotNull(deviceCreateResponse);
-            assertNotNull(deviceCreateResponse.getUnitId());
-            assertEquals(1, deviceCreateResponse.getUnitId());
         }
 
     }
@@ -53,7 +51,7 @@ class DeviceServiceTest extends SpringBootBaseTest {
         void shouldReturnDevicesForInterfaceConfig() {
             // given
             InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
-            deviceService.create(DeviceFactory.aDevice(config));
+            deviceService.save(DeviceFactory.aTcpDevice(config));
 
             // when
             List<Device> devicesForInterfaceConfig = deviceService.getDevicesForInterfaceConfig(config.getId());
@@ -71,9 +69,9 @@ class DeviceServiceTest extends SpringBootBaseTest {
         void shouldReturnAllDevices() {
             // given
             InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
-            deviceService.create(DeviceFactory.aDevice(config));
-            deviceService.create(DeviceFactory.aDevice(config, 2));
-            deviceService.create(DeviceFactory.aDevice(config, 3));
+            deviceService.save(DeviceFactory.aTcpDevice(config));
+            deviceService.save(DeviceFactory.aTcpDevice(config));
+            deviceService.save(DeviceFactory.aTcpDevice(config));
 
             // when
             List<Device> allDevices = deviceService.getAllDevices();
@@ -88,10 +86,10 @@ class DeviceServiceTest extends SpringBootBaseTest {
             InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
             PlantDeviceGroup group = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
             // Inverter
-            DeviceFactory.aDevice(config, 1, deviceRepository);
-            DeviceFactory.aDevice(config, 2, deviceRepository);
+            DeviceFactory.aTcpDevice(config, deviceRepository);
+            DeviceFactory.aTcpDevice(config, deviceRepository);
             // Battery
-            Device battery = DeviceFactory.aDevice(config, 3, deviceRepository);
+            Device battery = DeviceFactory.aTcpDevice(config, deviceRepository);
             battery.setDeviceType(DeviceType.BATTERY);
             deviceRepository.save(battery);
 

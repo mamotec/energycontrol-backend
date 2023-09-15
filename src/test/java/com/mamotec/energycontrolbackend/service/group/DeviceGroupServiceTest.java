@@ -9,7 +9,6 @@ import com.mamotec.energycontrolbackend.exception.AddDeviceToGroupException;
 import com.mamotec.energycontrolbackend.factory.DeviceFactory;
 import com.mamotec.energycontrolbackend.factory.DeviceGroupFactory;
 import com.mamotec.energycontrolbackend.factory.InterfaceConfigFactory;
-import com.mamotec.energycontrolbackend.mapper.DeviceGroupMapper;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,7 +70,7 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
                 // given
                 com.mamotec.energycontrolbackend.domain.group.PlantDeviceGroup deviceGroup = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
                 InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
-                Device d1 = DeviceFactory.aDevice(config, 1, deviceRepository);
+                Device d1 = DeviceFactory.aTcpDevice(config, deviceRepository);
                 DeviceLinkRequest request = new DeviceLinkRequest(List.of(d1.getId()));
 
                 // when
@@ -88,8 +87,8 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
                 // given
                 com.mamotec.energycontrolbackend.domain.group.PlantDeviceGroup deviceGroup = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
                 InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
-                Device d1 = DeviceFactory.aDevice(config, 1, deviceRepository);
-                Device d2 = DeviceFactory.aDevice(config, 2, deviceRepository);
+                Device d1 = DeviceFactory.aTcpDevice(config, deviceRepository);
+                Device d2 = DeviceFactory.aTcpDevice(config, deviceRepository);
                 DeviceLinkRequest request = new DeviceLinkRequest(List.of(d1.getId(), d2.getId()));
 
                 // when
@@ -106,7 +105,7 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
                 // given
                 com.mamotec.energycontrolbackend.domain.group.PlantDeviceGroup deviceGroup = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
                 InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
-                Device d1 = DeviceFactory.aDevice(config, 1, deviceRepository);
+                Device d1 = DeviceFactory.aTcpDevice(config, deviceRepository);
                 d1.setDeviceType(DeviceType.BATTERY);
                 deviceRepository.save(d1);
                 DeviceLinkRequest request = new DeviceLinkRequest(List.of(d1.getId()));
@@ -121,7 +120,7 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
                 // given
                 com.mamotec.energycontrolbackend.domain.group.PlantDeviceGroup deviceGroup = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
                 InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
-                Device d1 = DeviceFactory.aDevice(config, deviceGroup, 1, deviceRepository);
+                Device d1 = DeviceFactory.aTcpDevice(config, deviceGroup, deviceRepository);
                 DeviceLinkRequest request = new DeviceLinkRequest(List.of(d1.getId()));
 
                 // when
@@ -138,8 +137,8 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
                 // given
                 com.mamotec.energycontrolbackend.domain.group.PlantDeviceGroup deviceGroup = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
                 InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
-                Device d1 = DeviceFactory.aDevice(config, 1, deviceRepository);
-                Device d2 = DeviceFactory.aDevice(config, 2, deviceRepository);
+                Device d1 = DeviceFactory.aTcpDevice(config, deviceRepository);
+                Device d2 = DeviceFactory.aTcpDevice(config, deviceRepository);
                 DeviceLinkRequest request = new DeviceLinkRequest(List.of(d1.getId(), d2.getId()));
 
                 deviceGroupService.addDevicesToGroup(deviceGroup.getId(), request);

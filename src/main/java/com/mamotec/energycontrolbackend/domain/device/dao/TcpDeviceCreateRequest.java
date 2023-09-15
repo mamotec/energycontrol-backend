@@ -5,15 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeviceScanDao {
+public class TcpDeviceCreateRequest extends DeviceCreateRequest {
 
-    List<SerialDeviceCreateRequest> alreadyExistingDevices = new ArrayList<>();
-    List<SerialDeviceCreateRequest> newDevices = new ArrayList<>();
+    private String host;
+    private String port;
+
 }

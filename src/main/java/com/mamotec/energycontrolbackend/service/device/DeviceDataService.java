@@ -36,7 +36,7 @@ public class DeviceDataService {
         }
 
         // InfluxDB
-        log.info("Saving data for device {} and measurement {}.", device.getUnitId(), mapping.getType());
+        log.info("Saving data for device {} and measurement {}.", device.getId(), mapping.getType());
         WriteApiBlocking writeApiBlocking = influxClient.getWriteApiBlocking();
 
         Point p = Point.measurement(mapping.getType())
@@ -57,7 +57,7 @@ public class DeviceDataService {
         p.addField("sum", sum);
 
         writeApiBlocking.writePoint(p);
-        log.info("Saved data for device {} and measurement {}.", device.getUnitId(), mapping.getType());
+        log.info("Saved data for device {} and measurement {}.", device.getId(), mapping.getType());
     }
 
     public void markDeviceAsActive(Device device, boolean active) {

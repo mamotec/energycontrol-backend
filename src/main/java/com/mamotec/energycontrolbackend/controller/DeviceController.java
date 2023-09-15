@@ -3,6 +3,7 @@ package com.mamotec.energycontrolbackend.controller;
 import com.mamotec.energycontrolbackend.client.NodeRedClient;
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateRequest;
+import com.mamotec.energycontrolbackend.domain.device.dao.SerialDeviceCreateRequest;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateResponse;
 import com.mamotec.energycontrolbackend.mapper.DeviceMapper;
 import com.mamotec.energycontrolbackend.service.device.DeviceService;
@@ -30,9 +31,10 @@ public class DeviceController {
 
     @PostMapping
     @Operation(summary = "Erstelle ein neues Gerät")
-    public ResponseEntity<DeviceCreateResponse> createDevice(@RequestBody DeviceCreateRequest request) {
+    public ResponseEntity<Void> createDevice(@RequestBody DeviceCreateRequest request) {
         log.info("POST /device is being called.");
-        return ResponseEntity.ok(deviceService.create(deviceMapper.map(request)));
+        deviceService.save(deviceMapper.map(request));
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")

@@ -1,6 +1,7 @@
 package com.mamotec.energycontrolbackend.service.device;
 
 import com.mamotec.energycontrolbackend.domain.device.Device;
+import com.mamotec.energycontrolbackend.domain.device.SerialDevice;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateResponse;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.mapper.DeviceMapper;
@@ -27,23 +28,15 @@ public class DeviceService implements CrudOperations<Device> {
 
     private final DeviceRepository deviceRepository;
 
-    private final DeviceMapper mapper;
-
     private final InterfaceService interfaceService;
 
-    private final DeviceValidationService validationService;
+    private final SerialDeviceValidationService validationService;
 
     private final DeviceGroupRepository deviceGroupRepository;
 
-    @Transactional
-    public DeviceCreateResponse create(Device device) {
-        validationService.validate(device);
-        return mapper.map(save(device));
-    }
-
     public List<Device> getDevicesForInterfaceConfig(long interfaceConfigId) {
         List<Device> byInterfaceConfigId = deviceRepository.findByInterfaceConfigId(interfaceConfigId);
-        for (Device device: byInterfaceConfigId) {
+        for (Device device : byInterfaceConfigId) {
             device.setModel(interfaceService.getDeviceNameByManufacturerAndDeviceId(device.getManufacturerId(), device.getDeviceId()));
         }
         return byInterfaceConfigId;

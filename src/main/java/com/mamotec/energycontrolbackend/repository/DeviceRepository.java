@@ -2,6 +2,7 @@ package com.mamotec.energycontrolbackend.repository;
 
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.DeviceType;
+import com.mamotec.energycontrolbackend.domain.device.SerialDevice;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -14,8 +15,6 @@ import java.util.List;
 public interface DeviceRepository extends JpaRepository<Device, Long> {
 
     List<Device> findByInterfaceConfigId(long interfaceConfigId);
-
-    boolean existsByUnitIdAndInterfaceConfig(long unitId, InterfaceConfig config);
 
     @Modifying
     @Query("update Device d set d.active = ?2 where d.id = ?1")
