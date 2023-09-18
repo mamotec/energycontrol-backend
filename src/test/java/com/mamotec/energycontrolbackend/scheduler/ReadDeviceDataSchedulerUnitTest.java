@@ -1,8 +1,7 @@
 package com.mamotec.energycontrolbackend.scheduler;
 
 import com.mamotec.energycontrolbackend.client.NodeRedClient;
-import com.mamotec.energycontrolbackend.cron.ReadDeviceScheduler;
-import com.mamotec.energycontrolbackend.factory.InterfaceConfigFactory;
+import com.mamotec.energycontrolbackend.cron.ReadDeviceDataScheduler;
 import com.mamotec.energycontrolbackend.service.device.DeviceDataService;
 import com.mamotec.energycontrolbackend.service.device.DeviceService;
 import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceConfigService;
@@ -18,10 +17,10 @@ import java.util.List;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class ReadDeviceSchedulerUnitTest {
+class ReadDeviceDataSchedulerUnitTest {
 
     @InjectMocks
-    private ReadDeviceScheduler sut;
+    private ReadDeviceDataScheduler sut;
 
     @Mock
     private InterfaceConfigService interfaceConfigService;
