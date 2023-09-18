@@ -1,9 +1,7 @@
 package com.mamotec.energycontrolbackend.reader;
 
 import com.mamotec.energycontrolbackend.client.ModbusTCPClient;
-import com.mamotec.energycontrolbackend.client.NodeRedClient;
 import com.mamotec.energycontrolbackend.domain.device.Device;
-import com.mamotec.energycontrolbackend.domain.device.SerialDevice;
 import com.mamotec.energycontrolbackend.domain.device.TcpDevice;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.DeviceYaml;
@@ -15,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.List;
 
 @Component
@@ -34,7 +31,7 @@ public class TcpDeviceDataReader {
         log.info("READ - Found {} devices for interface {}.", devices.size(), config.getType());
         for (Device device : devices) {
             boolean noError = true;
-            TcpDevice serialDevice = (SerialDevice) device;
+            TcpDevice serialDevice = (TcpDevice) device;
             DeviceYaml i = interfaceService.getDeviceInformationForManufactureAndDeviceId(serialDevice.getManufacturerId(), serialDevice.getDeviceId());
 
             // Which register mapping to use?
@@ -42,7 +39,7 @@ public class TcpDeviceDataReader {
                     .getPower();
 
             try {
-                doFetchPerDevice(config, serialDevice, i, mapping);
+                doFetchPerDevice(serialDevice, mapping);
             } catch (Exception e) {
                 noError = false;
                 log.error("READ - Error while fetching data for device {}.", serialDevice.getId(), e);
@@ -51,9 +48,12 @@ public class TcpDeviceDataReader {
         }
     }
 
-    private void doFetchPerDevice(InterfaceConfig config, TcpDevice d, DeviceYaml deviceYaml, RegisterMapping mapping) throws IOException, InterruptedException {
-        // Fetch data from node-red
+    private void doFetchPerDevice(TcpDevice d, RegisterMapping mapping) throws Exception {
         ModbusTCPClient client = new ModbusTCPClient(d.getHost(), Integer.parseInt(d.getPort()));
+
+        client.readHoldingRegisters(mapping.getRegister()
+                .get(0), mapping.getRegister()
+                .size(), 2);
 
         // Save data to influxdb
         //deviceDataService.writeDeviceData(d, res, mapping);

@@ -28,5 +28,6 @@ public class DeviceCreateRequest {
     private InterfaceType interfaceType;
     private long manufacturerId;
     private long deviceId;
+    private long unitId;
 
 }

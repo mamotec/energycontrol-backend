@@ -68,6 +68,8 @@ public abstract class Device extends BaseEntity {
 
     private boolean deleted = Boolean.FALSE;
 
+    private Integer unitId;
+
     public abstract InterfaceType getInterfaceType();
 
     // endregion

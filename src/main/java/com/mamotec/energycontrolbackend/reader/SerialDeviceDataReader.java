@@ -54,7 +54,6 @@ public class SerialDeviceDataReader {
     private void doFetchPerDevice(InterfaceConfig config, SerialDevice d, DeviceYaml deviceYaml, RegisterMapping mapping) throws IOException, InterruptedException {
         // Fetch data from node-red
         String res = nodeRedClient.fetchDeviceData(deviceYaml, config, d.getUnitId(), mapping);
-        log.info(res);
 
         // Save data to influxdb
         deviceDataService.writeDeviceData(d, res, mapping);

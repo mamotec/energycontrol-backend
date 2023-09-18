@@ -3,11 +3,13 @@ package com.mamotec.energycontrolbackend.client;
 import com.ghgande.j2mod.modbus.io.ModbusTCPTransaction;
 import com.ghgande.j2mod.modbus.msg.ReadInputRegistersRequest;
 import com.ghgande.j2mod.modbus.msg.ReadInputRegistersResponse;
+import com.ghgande.j2mod.modbus.msg.ReadMultipleRegistersRequest;
+import com.ghgande.j2mod.modbus.msg.ReadMultipleRegistersResponse;
 import com.ghgande.j2mod.modbus.net.TCPMasterConnection;
+import com.ghgande.j2mod.modbus.procimg.Register;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetAddress;
-import java.util.Arrays;
 
 @Slf4j
 public class ModbusTCPClient {
@@ -19,6 +21,7 @@ public class ModbusTCPClient {
             InetAddress serverAddress = InetAddress.getByName(host);
             connection = new TCPMasterConnection(serverAddress);
             connection.setPort(port);
+            connection.connect();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -59,5 +62,30 @@ public class ModbusTCPClient {
         } else {
             throw new Exception("Keine Antwort erhalten.");
         }
+    }
+
+    public ReadMultipleRegistersResponse readHoldingRegisters(int startAddress, int quantity, int unitID) throws Exception {
+        ModbusTCPTransaction transaction = new ModbusTCPTransaction(connection);
+
+        ReadMultipleRegistersRequest request = new ReadMultipleRegistersRequest(startAddress, quantity);
+        request.setUnitID(unitID);
+
+        transaction.setRequest(request);
+
+        transaction.execute();
+
+        ReadMultipleRegistersResponse response = (ReadMultipleRegistersResponse) transaction.getResponse();
+
+        if (response != null) {
+            Register[] registerValues = response.getRegisters();
+            for (int i = 0; i < registerValues.length; i++) {
+                log.info("Register " + (i) + ": " + registerValues[i]);
+            }
+        }
+
+        connection.close();
+
+        return null;
+
     }
 }

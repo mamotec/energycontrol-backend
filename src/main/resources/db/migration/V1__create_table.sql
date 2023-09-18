@@ -46,6 +46,7 @@ CREATE TABLE device
 (
     id                  SERIAL PRIMARY KEY,
     interface_config_id INTEGER,
+    unit_id INTEGER,
     name                TEXT,
     manufacturer_id INTEGER,
     device_id       INTEGER,
@@ -62,8 +63,7 @@ CREATE TABLE device
 
 CREATE TABLE serial_device
 (
-    id      SERIAL PRIMARY KEY,
-    unit_id INTEGER
+    id      SERIAL PRIMARY KEY
 );
 
 CREATE TABLE tcp_device
