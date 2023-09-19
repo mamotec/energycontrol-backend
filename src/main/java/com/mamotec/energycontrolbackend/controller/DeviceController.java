@@ -52,6 +52,13 @@ public class DeviceController {
         return ResponseEntity.ok(deviceService.getAllDevices());
     }
 
+    @GetMapping("/{id}")
+    @Operation(summary = "Lade ein Gerät")
+    public ResponseEntity<Device> fetchDevice(@PathVariable Long id) {
+        log.info("GET /device/{} is being called.", id);
+        return ResponseEntity.ok(deviceService.findById(id));
+    }
+
     @GetMapping("/group/{id}")
     @Operation(summary = "Lade alle validen Geräte für eine Gruppe")
     public ResponseEntity<List<Device>> fetchDevicesForGroup(@PathVariable Long id) {

@@ -13,8 +13,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,6 +33,13 @@ public class DeviceGroupController {
     public ResponseEntity<List<DeviceGroup>> getAllGroups() {
         log.info("GET /group is being called.");
         return ResponseEntity.ok(deviceGroupService.findAll());
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Liefere eine Gruppe")
+    public ResponseEntity<DeviceGroup> getGroup(@PathVariable Long id) {
+        log.info("GET /group/{} is being called.", id);
+        return ResponseEntity.ok(deviceGroupService.findById(id));
     }
 
     @PostMapping

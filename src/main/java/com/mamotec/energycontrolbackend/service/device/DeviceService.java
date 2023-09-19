@@ -52,6 +52,16 @@ public class DeviceService implements CrudOperations<Device> {
     }
 
     @Override
+    public Device findById(Long id) {
+        Device device = deviceRepository.findById(id)
+                .orElseThrow();
+
+        device.setModel(interfaceService.getDeviceNameByManufacturerAndDeviceId(device.getManufacturerId(), device.getDeviceId()));
+
+        return device;
+    }
+
+    @Override
     public Optional<JpaRepository<Device, Long>> getRepository() {
         return Optional.of(deviceRepository);
     }

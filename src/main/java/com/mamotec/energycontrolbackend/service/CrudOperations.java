@@ -34,4 +34,16 @@ public interface CrudOperations<T> {
         }
 
     }
+
+    default T findById(Long id) {
+        if (this.getRepository().isPresent()) {
+            JpaRepository<T, Long> repo = this.getRepository()
+                    .get();
+
+            return repo.findById(id)
+                    .orElseThrow();
+        } else {
+            throw new NotImplementedException("FindById not implemented!");
+        }
+    }
 }
