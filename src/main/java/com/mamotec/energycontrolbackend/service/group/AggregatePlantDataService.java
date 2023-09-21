@@ -26,6 +26,7 @@ public class AggregatePlantDataService implements AggregateService {
                 .activePower(aggregateActivePower(pg))
                 .directMarketing(pg.isDirectMarketing())
                 .feedInManagement(pg.isFeedInManagement())
+                .peakKilowatt(pg.getPeakKilowatt())
                 .build();
     }
 

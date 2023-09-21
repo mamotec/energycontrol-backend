@@ -15,4 +15,5 @@ public class PlantDataRepresentation extends DeviceGroupRepresentation {
     private long activePower;
     private boolean directMarketing;
     private boolean feedInManagement;
+    private long peakKilowatt;
 }

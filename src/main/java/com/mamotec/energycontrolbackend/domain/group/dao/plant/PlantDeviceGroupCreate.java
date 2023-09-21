@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PlantDeviceGroupCreate extends DeviceGroupCreate {
 
-    private boolean directMarketing;
+    private long peakKilowatt;
 
 }
 

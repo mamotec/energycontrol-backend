@@ -21,6 +21,9 @@ public class PlantDeviceGroup extends DeviceGroup {
     @Column(name = "feed_in_management")
     private boolean feedInManagement;
 
+    @Column(name = "peak_kilowatt")
+    private long peakKilowatt;
+
     @Override
     public DeviceGroupType getType() {
         return DeviceGroupType.PLANT;

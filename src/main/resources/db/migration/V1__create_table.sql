@@ -39,8 +39,9 @@ CREATE TABLE plant_device_group
 (
     id               SERIAL PRIMARY KEY,
     direct_marketing   BOOLEAN,
-    feed_in_management BOOLEAN
-);
+    feed_in_management BOOLEAN,
+    peak_kilowatt      INTEGER NOT NULL
+    );
 
 CREATE TABLE device
 (

@@ -1,6 +1,8 @@
 package com.mamotec.energycontrolbackend.mapper;
 
+import com.mamotec.energycontrolbackend.domain.group.DeviceGroupType;
 import com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroupCreate;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +25,15 @@ class DeviceGroupMapperTest {
             // given
             PlantDeviceGroupCreate create = new PlantDeviceGroupCreate();
             create.setName("PV - Rechte Seiete");
-            create.setDirectMarketing(true);
+            create.setPeakKilowatt(1);
+            create.setType(DeviceGroupType.PLANT);
 
             // when
             com.mamotec.energycontrolbackend.domain.group.PlantDeviceGroup group = (com.mamotec.energycontrolbackend.domain.group.PlantDeviceGroup) mapper.map(create);
 
             // then
-            assertEquals("PV - Rechte Seiete", group.getName());
-            assertTrue(group.isDirectMarketing());
+            Assertions.assertEquals("PV - Rechte Seiete", group.getName());
+            Assertions.assertEquals(1, group.getPeakKilowatt());
         }
     }
 
