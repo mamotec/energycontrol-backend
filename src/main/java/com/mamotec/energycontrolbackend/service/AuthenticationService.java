@@ -1,13 +1,15 @@
 package com.mamotec.energycontrolbackend.service;
 
 import com.mamotec.energycontrolbackend.config.JwtService;
-import com.mamotec.energycontrolbackend.domain.user.Role;
-import com.mamotec.energycontrolbackend.domain.user.User;
 import com.mamotec.energycontrolbackend.domain.auth.AuthenticationRequest;
 import com.mamotec.energycontrolbackend.domain.auth.AuthenticationResponse;
 import com.mamotec.energycontrolbackend.domain.auth.RegisterRequest;
+import com.mamotec.energycontrolbackend.domain.configuration.ApplicationMode;
+import com.mamotec.energycontrolbackend.domain.user.Role;
+import com.mamotec.energycontrolbackend.domain.user.User;
 import com.mamotec.energycontrolbackend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +25,9 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+
+    @Value("${application.mode}")
+    private String applicationMode;
 
     /**
      * Registers a user in the Application, default role is ADMIN.
@@ -43,8 +48,11 @@ public class AuthenticationService {
         userRepository.save(user);
 
         var jwtToken = jwtService.generateJwtToken(user);
+        AuthenticationResponse response = new AuthenticationResponse();
+        response.setToken(jwtToken);
+        response.setApplicationMode(ApplicationMode.valueOf(applicationMode));
 
-        return new AuthenticationResponse(jwtToken);
+        return response;
     }
 
     /**
@@ -59,7 +67,10 @@ public class AuthenticationService {
         var user = userRepository.findByUsername(request.getUsername()).orElseThrow();
 
         var jwtToken = jwtService.generateJwtToken(user);
+        AuthenticationResponse response = new AuthenticationResponse();
+        response.setToken(jwtToken);
+        response.setApplicationMode(ApplicationMode.valueOf(applicationMode));
 
-        return new AuthenticationResponse(jwtToken);
+        return response;
     }
 }
