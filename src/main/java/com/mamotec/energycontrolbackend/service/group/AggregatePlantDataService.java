@@ -2,7 +2,7 @@ package com.mamotec.energycontrolbackend.service.group;
 
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
-import com.mamotec.energycontrolbackend.domain.group.PlantDeviceGroup;
+import com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup;
 import com.mamotec.energycontrolbackend.domain.group.dao.DeviceGroupRepresentation;
 import com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDataRepresentation;
 import com.mamotec.energycontrolbackend.service.device.DeviceDataService;

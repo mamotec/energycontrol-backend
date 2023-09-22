@@ -3,14 +3,13 @@ package com.mamotec.energycontrolbackend.service.device;
 import com.mamotec.energycontrolbackend.base.SpringBootBaseTest;
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.DeviceType;
-import com.mamotec.energycontrolbackend.domain.device.SerialDevice;
-import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateResponse;
-import com.mamotec.energycontrolbackend.domain.group.PlantDeviceGroup;
+import com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.factory.DeviceFactory;
 import com.mamotec.energycontrolbackend.factory.DeviceGroupFactory;
 import com.mamotec.energycontrolbackend.factory.InterfaceConfigFactory;
 import com.mamotec.energycontrolbackend.repository.InterfaceConfigRepository;
+import com.mamotec.energycontrolbackend.service.device.plant.PlantDeviceService;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +19,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class DeviceServiceTest extends SpringBootBaseTest {
+class PlantDeviceServiceTest extends SpringBootBaseTest {
 
     @Autowired
-    private DeviceService deviceService;
+    private PlantDeviceService deviceService;
     @Autowired
     private InterfaceConfigRepository interfaceConfigRepository;
 

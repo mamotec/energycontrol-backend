@@ -43,6 +43,27 @@ CREATE TABLE plant_device_group
     peak_kilowatt      INTEGER NOT NULL
     );
 
+CREATE TABLE home_device_group
+(
+    id            SERIAL PRIMARY KEY,
+    peak_kilowatt INTEGER NOT NULL
+);
+
+CREATE TABLE battery_device_group
+(
+    id            SERIAL PRIMARY KEY
+);
+
+CREATE TABLE charging_station_device_group
+(
+    id            SERIAL PRIMARY KEY
+);
+
+CREATE TABLE heat_pump_device_group
+(
+    id            SERIAL PRIMARY KEY
+);
+
 CREATE TABLE device
 (
     id                  SERIAL PRIMARY KEY,

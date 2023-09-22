@@ -3,7 +3,7 @@ package com.mamotec.energycontrolbackend.scheduler;
 import com.mamotec.energycontrolbackend.client.NodeRedClient;
 import com.mamotec.energycontrolbackend.cron.ReadDeviceDataScheduler;
 import com.mamotec.energycontrolbackend.service.device.DeviceDataService;
-import com.mamotec.energycontrolbackend.service.device.DeviceService;
+import com.mamotec.energycontrolbackend.service.device.plant.PlantDeviceService;
 import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceConfigService;
 import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceService;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ class ReadDeviceDataSchedulerUnitTest {
     @Mock
     private InterfaceService interfaceService;
     @Mock
-    private DeviceService deviceService;
+    private PlantDeviceService deviceService;
     @Mock
     private NodeRedClient nodeRedClient;
     @Mock

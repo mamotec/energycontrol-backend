@@ -21,4 +21,7 @@ public interface DeviceRepository extends JpaRepository<Device, Long> {
     void markDeviceAsActive(long id, boolean active);
 
     List<Device> findAllByDeviceTypeInAndDeviceGroupNull(List<DeviceType> validDeviceTypes);
+
+    boolean existsByUnitIdAndInterfaceConfig(long unitId, InterfaceConfig config);
+
 }

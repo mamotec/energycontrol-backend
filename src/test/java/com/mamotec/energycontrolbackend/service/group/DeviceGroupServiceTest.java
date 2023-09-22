@@ -34,7 +34,7 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
             @Test
             void shouldCreateDeviceGroup() {
                 // given
-                com.mamotec.energycontrolbackend.domain.group.PlantDeviceGroup deviceGroup = DeviceGroupFactory.aPlantDeviceGroup();
+                com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup deviceGroup = DeviceGroupFactory.aPlantDeviceGroup();
 
                 // when
                 com.mamotec.energycontrolbackend.domain.group.DeviceGroup save = deviceGroupService.save(deviceGroup);
@@ -53,7 +53,7 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
             @Test
             void shouldDeleteDeviceGroup() {
                 // given
-                com.mamotec.energycontrolbackend.domain.group.PlantDeviceGroup deviceGroup = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
+                com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup deviceGroup = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
 
                 // when
                 deviceGroupService.deleteGroup(deviceGroup.getId());
@@ -68,7 +68,7 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
             @Test
             void shouldLinkOneDeviceToGroup() {
                 // given
-                com.mamotec.energycontrolbackend.domain.group.PlantDeviceGroup deviceGroup = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
+                com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup deviceGroup = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
                 InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
                 Device d1 = DeviceFactory.aTcpDevice(config, deviceRepository);
                 DeviceLinkRequest request = new DeviceLinkRequest(List.of(d1.getId()));
@@ -77,7 +77,7 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
                 deviceGroupService.addDevicesToGroup(deviceGroup.getId(), request);
 
                 // then
-                com.mamotec.energycontrolbackend.domain.group.PlantDeviceGroup loadedGroup = (com.mamotec.energycontrolbackend.domain.group.PlantDeviceGroup) deviceGroupService.findById(deviceGroup.getId());
+                com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup loadedGroup = (com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup) deviceGroupService.findById(deviceGroup.getId());
                 assertEquals(1, loadedGroup.getDevices()
                         .size());
             }
@@ -85,7 +85,7 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
             @Test
             void shouldLinkTwoDevicesToGroup() {
                 // given
-                com.mamotec.energycontrolbackend.domain.group.PlantDeviceGroup deviceGroup = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
+                com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup deviceGroup = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
                 InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
                 Device d1 = DeviceFactory.aTcpDevice(config, deviceRepository);
                 Device d2 = DeviceFactory.aTcpDevice(config, deviceRepository);
@@ -95,7 +95,7 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
                 deviceGroupService.addDevicesToGroup(deviceGroup.getId(), request);
 
                 // then
-                com.mamotec.energycontrolbackend.domain.group.PlantDeviceGroup loadedGroup = (com.mamotec.energycontrolbackend.domain.group.PlantDeviceGroup) deviceGroupService.findById(deviceGroup.getId());
+                com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup loadedGroup = (com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup) deviceGroupService.findById(deviceGroup.getId());
                 assertEquals(2, loadedGroup.getDevices()
                         .size());
             }
@@ -103,7 +103,7 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
             @Test
             void shouldThrowExceptionWhenLinkIsNotValid() {
                 // given
-                com.mamotec.energycontrolbackend.domain.group.PlantDeviceGroup deviceGroup = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
+                com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup deviceGroup = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
                 InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
                 Device d1 = DeviceFactory.aTcpDevice(config, deviceRepository);
                 d1.setDeviceType(DeviceType.BATTERY);
@@ -118,7 +118,7 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
             @Test
             void shouldUnlinkOneDeviceFromGroup() {
                 // given
-                com.mamotec.energycontrolbackend.domain.group.PlantDeviceGroup deviceGroup = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
+                com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup deviceGroup = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
                 InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
                 Device d1 = DeviceFactory.aTcpDevice(config, deviceGroup, deviceRepository);
                 DeviceLinkRequest request = new DeviceLinkRequest(List.of(d1.getId()));
@@ -127,7 +127,7 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
                 deviceGroupService.deleteDevicesFromGroup(request);
 
                 // then
-                com.mamotec.energycontrolbackend.domain.group.PlantDeviceGroup loadedGroup = (com.mamotec.energycontrolbackend.domain.group.PlantDeviceGroup) deviceGroupService.findById(deviceGroup.getId());
+                com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup loadedGroup = (com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup) deviceGroupService.findById(deviceGroup.getId());
                 assertEquals(0, loadedGroup.getDevices()
                         .size());
             }
@@ -135,7 +135,7 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
             @Test
             void shouldUnlinkTwoDevicesFromGroup() {
                 // given
-                com.mamotec.energycontrolbackend.domain.group.PlantDeviceGroup deviceGroup = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
+                com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup deviceGroup = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
                 InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
                 Device d1 = DeviceFactory.aTcpDevice(config, deviceRepository);
                 Device d2 = DeviceFactory.aTcpDevice(config, deviceRepository);
@@ -147,7 +147,7 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
                 deviceGroupService.deleteDevicesFromGroup(request);
 
                 // then
-                com.mamotec.energycontrolbackend.domain.group.PlantDeviceGroup loadedGroup = (com.mamotec.energycontrolbackend.domain.group.PlantDeviceGroup) deviceGroupService.findById(deviceGroup.getId());
+                com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup loadedGroup = (com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup) deviceGroupService.findById(deviceGroup.getId());
                 assertEquals(0, loadedGroup.getDevices()
                         .size());
 

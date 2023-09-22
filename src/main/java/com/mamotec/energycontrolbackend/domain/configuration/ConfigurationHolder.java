@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ConfigurationHolder {
 
-    @Value("${application-mode}")
+    @Value("${application.mode}")
     private String applicationMode;
 
     public ApplicationMode getApplicationMode() {

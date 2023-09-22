@@ -3,12 +3,9 @@ package com.mamotec.energycontrolbackend.domain.device.dao;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.mamotec.energycontrolbackend.domain.device.DeviceType;
-import com.mamotec.energycontrolbackend.domain.device.TcpDevice;
-import com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroupCreate;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceType;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -29,5 +26,6 @@ public class DeviceCreateRequest {
     private long manufacturerId;
     private long deviceId;
     private long unitId;
+    private long peakKilowatt;
 
 }

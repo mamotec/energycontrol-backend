@@ -7,14 +7,17 @@ import lombok.Getter;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.mamotec.energycontrolbackend.domain.device.DeviceType.HYBRID_INVERTER;
-import static com.mamotec.energycontrolbackend.domain.device.DeviceType.INVERTER;
+import static com.mamotec.energycontrolbackend.domain.device.DeviceType.*;
 
 @Schema(description = "Die Gruppen Typen")
 @Getter
 public enum DeviceGroupType {
 
-    PLANT(INVERTER, HYBRID_INVERTER);
+    PLANT(INVERTER, HYBRID_INVERTER),
+    CHARGING_STATION(DeviceType.CHARGING_STATION),
+    HEAT_PUMP(DeviceType.HEAT_PUMP),
+    BATTERY(DeviceType.BATTERY),
+    HOME(HYBRID_INVERTER);
 
     private final List<DeviceType> validDeviceTypes;
 

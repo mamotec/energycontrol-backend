@@ -1,5 +1,7 @@
-package com.mamotec.energycontrolbackend.domain.group;
+package com.mamotec.energycontrolbackend.domain.group.dao.plant;
 
+import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
+import com.mamotec.energycontrolbackend.domain.group.DeviceGroupType;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;

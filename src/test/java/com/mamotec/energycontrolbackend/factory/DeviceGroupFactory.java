@@ -1,6 +1,6 @@
 package com.mamotec.energycontrolbackend.factory;
 
-import com.mamotec.energycontrolbackend.domain.group.PlantDeviceGroup;
+import com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup;
 import com.mamotec.energycontrolbackend.repository.DeviceGroupRepository;
 
 public final class DeviceGroupFactory {

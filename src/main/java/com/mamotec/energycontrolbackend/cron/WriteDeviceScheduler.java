@@ -7,7 +7,7 @@ import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.DeviceYaml;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.RegisterMapping;
 import com.mamotec.energycontrolbackend.service.device.DeviceDataService;
-import com.mamotec.energycontrolbackend.service.device.DeviceService;
+import com.mamotec.energycontrolbackend.service.device.plant.PlantDeviceService;
 import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceConfigService;
 import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceService;
 import jakarta.transaction.Transactional;
@@ -24,7 +24,7 @@ public class WriteDeviceScheduler {
 
     private final InterfaceConfigService interfaceConfigService;
     private final InterfaceService interfaceService;
-    private final DeviceService deviceService;
+    private final PlantDeviceService deviceService;
     private final NodeRedClient nodeRedClient;
     private final DeviceDataService deviceDataService;
 
