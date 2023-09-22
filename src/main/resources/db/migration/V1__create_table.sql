@@ -31,6 +31,7 @@ CREATE TABLE device_group
     id               SERIAL PRIMARY KEY,
     name             TEXT,
     type             TEXT,
+    deleted BOOLEAN NOT NULL DEFAULT false,
     created_at       TIMESTAMP NOT NULL,
     updated_at       TIMESTAMP
 );

@@ -76,8 +76,11 @@ public class HomeDeviceService implements CrudOperations<Device>, DeviceService 
 
     @Override
     public void delete(Long id) {
-        // Delete group also
-        deviceRepository.deleteById(id);
+        Device d = deviceRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Device with id " + id + " not found."));
+
+        deviceGroupRepository.deleteById(d.getDeviceGroup().getId());
+
     }
 
     @Override

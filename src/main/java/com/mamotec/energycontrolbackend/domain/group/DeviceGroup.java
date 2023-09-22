@@ -11,6 +11,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.util.List;
 
@@ -20,6 +22,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
 @Table(name = "device_group")
+@SQLDelete(sql = "UPDATE device_group SET deleted = true WHERE id=?")
+@Where(clause = "deleted=false")
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "type")
 @JsonSubTypes({
@@ -29,8 +33,11 @@ public abstract class DeviceGroup extends BaseEntity {
 
     private String name;
 
-    @OneToMany(mappedBy = "deviceGroup", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "deviceGroup", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Device> devices;
+
+    private boolean deleted = Boolean.FALSE;
+
 
     public abstract DeviceGroupType getType();
 
