@@ -7,9 +7,11 @@ import com.ghgande.j2mod.modbus.msg.ReadMultipleRegistersRequest;
 import com.ghgande.j2mod.modbus.msg.ReadMultipleRegistersResponse;
 import com.ghgande.j2mod.modbus.net.TCPMasterConnection;
 import com.ghgande.j2mod.modbus.procimg.Register;
+import com.mamotec.energycontrolbackend.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetAddress;
+import java.util.Arrays;
 
 @Slf4j
 public class ModbusTCPClient {
@@ -64,7 +66,7 @@ public class ModbusTCPClient {
         }
     }
 
-    public long readHoldingRegisters(int startAddress, int quantity, int unitID) throws Exception {
+    public String readHoldingRegisters(int startAddress, int quantity, int unitID) throws Exception {
         ModbusTCPTransaction transaction = new ModbusTCPTransaction(connection);
 
         ReadMultipleRegistersRequest request = new ReadMultipleRegistersRequest(startAddress, quantity);
@@ -76,17 +78,19 @@ public class ModbusTCPClient {
 
         ReadMultipleRegistersResponse response = (ReadMultipleRegistersResponse) transaction.getResponse();
 
-        long result = 0;
         if (response != null) {
             Register[] registerValues = response.getRegisters();
-
+            int[] registerValuesInt = new int[registerValues.length];
             for (int i = 0; i < registerValues.length; i++) {
-                result += registerValues[i].getValue();
+                registerValuesInt[i] = registerValues[i].getValue();
             }
+            return StringUtils.toString(registerValuesInt);
+
         }
 
         connection.close();
-        return result;
+
+        return "[0]";
 
 
     }

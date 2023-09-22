@@ -1,6 +1,7 @@
 package com.mamotec.energycontrolbackend.service.group;
 
 import com.mamotec.energycontrolbackend.domain.device.Device;
+import com.mamotec.energycontrolbackend.domain.device.DeviceType;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.domain.group.dao.EnergyDataRepresentation;
 import com.mamotec.energycontrolbackend.service.device.DeviceDataService;
@@ -19,18 +20,14 @@ public class AggregateEnergyDataService implements AggregateService {
 
     @Override
     public EnergyDataRepresentation aggregate(DeviceGroup group) {
-        List<Long> devicesIds = group.getDevices()
+        List<Long> deviceIds = group.getDevicesByType(DeviceType.HYBRID_INVERTER)
                 .stream()
-                .filter(Device::isActive)
-                .filter(d -> group.getType()
-                        .getValidDeviceTypes()
-                        .contains(d.getDeviceType()))
                 .map(Device::getId)
                 .toList();
 
 
         return EnergyDataRepresentation.builder()
-                .activePower(aggregateMeasurement(devicesIds, "power"))
+                .activePower(aggregateMeasurement(deviceIds, "power"))
                 .build();
     }
 

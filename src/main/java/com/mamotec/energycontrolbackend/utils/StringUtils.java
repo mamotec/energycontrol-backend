@@ -13,4 +13,15 @@ public class StringUtils {
                 .toArray();
     }
 
+    public static String toString(int[] array) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        for (int i : array) {
+            sb.append(i);
+            sb.append(",");
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
 }

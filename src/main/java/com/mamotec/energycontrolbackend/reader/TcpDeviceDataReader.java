@@ -59,13 +59,11 @@ public class TcpDeviceDataReader {
     private void doFetchPerDevice(TcpDevice d, RegisterMapping mapping) throws Exception {
         ModbusTCPClient client = new ModbusTCPClient(d.getHost(), Integer.parseInt(d.getPort()));
 
-        long result = client.readHoldingRegisters(mapping.getRegister()
+        String result = client.readHoldingRegisters(mapping.getRegister()
                 .get(0), mapping.getRegister()
                 .size(), d.getUnitId());
 
         // Save data to influxdb
-        if (result > 1) {
-            deviceDataService.writeDeviceData(d, String.valueOf(result), mapping);
-        }
+        deviceDataService.writeDeviceData(d, String.valueOf(result), mapping);
     }
 }

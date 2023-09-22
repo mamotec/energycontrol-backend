@@ -22,7 +22,7 @@ public class ReadDeviceDataScheduler {
     private final SerialDeviceDataReader serialDeviceDataReader;
     private final TcpDeviceDataReader tcpDeviceDataReader;
 
-    @Scheduled(cron = "*/30 * * * * *")
+    @Scheduled(cron = "*/5 * * * * *")
     @Transactional
     public void fetchDeviceData() {
         List<InterfaceConfig> configs = interfaceConfigService.findAll();
