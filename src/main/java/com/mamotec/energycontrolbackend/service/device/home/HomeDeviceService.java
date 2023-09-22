@@ -1,6 +1,7 @@
 package com.mamotec.energycontrolbackend.service.device.home;
 
 import com.mamotec.energycontrolbackend.domain.device.Device;
+import com.mamotec.energycontrolbackend.domain.device.DeviceType;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateRequest;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.domain.group.dao.home.HomeDeviceGroup;
@@ -11,13 +12,13 @@ import com.mamotec.energycontrolbackend.repository.DeviceRepository;
 import com.mamotec.energycontrolbackend.service.CrudOperations;
 import com.mamotec.energycontrolbackend.service.device.DeviceService;
 import com.mamotec.energycontrolbackend.service.device.DeviceValidationService;
-import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -77,5 +78,16 @@ public class HomeDeviceService implements CrudOperations<Device>, DeviceService 
     public void delete(Long id) {
         // Delete group also
         deviceRepository.deleteById(id);
+    }
+
+    @Override
+    public List<DeviceType> getAllDeviceTypes() {
+        List<DeviceType> allowedTypes = new ArrayList<>();
+
+        allowedTypes.add(DeviceType.HYBRID_INVERTER);
+        allowedTypes.add(DeviceType.CHARGING_STATION);
+        allowedTypes.add(DeviceType.HEAT_PUMP);
+
+        return allowedTypes;
     }
 }

@@ -2,6 +2,7 @@ package com.mamotec.energycontrolbackend.controller;
 
 import com.mamotec.energycontrolbackend.client.NodeRedClient;
 import com.mamotec.energycontrolbackend.domain.device.Device;
+import com.mamotec.energycontrolbackend.domain.device.DeviceType;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateRequest;
 import com.mamotec.energycontrolbackend.service.device.DeviceService;
 import com.mamotec.energycontrolbackend.service.device.DeviceServiceFactory;
@@ -51,6 +52,14 @@ public class DeviceController {
     public ResponseEntity<List<Device>> fetchDevices() {
         log.info("GET /device is being called.");
         return ResponseEntity.ok(plantDeviceService.getAllDevices());
+    }
+
+    @GetMapping("/types")
+    @Operation(summary = "Lade alle verfügbaren Gerätetypen")
+    public ResponseEntity<List<DeviceType>> fetchDeviceTypes() {
+        log.info("GET /device is being called.");
+        DeviceService service = factory.createService();
+        return ResponseEntity.ok(service.getAllDeviceTypes());
     }
 
     @GetMapping("/{id}")

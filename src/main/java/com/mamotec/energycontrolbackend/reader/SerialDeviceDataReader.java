@@ -33,7 +33,7 @@ public class SerialDeviceDataReader {
         for (Device device : devices) {
             boolean noError = true;
             SerialDevice serialDevice = (SerialDevice) device;
-            DeviceYaml i = interfaceService.getDeviceInformationForManufactureAndDeviceId(serialDevice.getManufacturerId(), serialDevice.getDeviceId());
+            DeviceYaml i = interfaceService.getDeviceInformationForManufactureAndDeviceId(serialDevice);
 
             // Which register mapping to use?
             RegisterMapping mapping = i.getMapping()

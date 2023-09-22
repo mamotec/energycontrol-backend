@@ -31,16 +31,16 @@ public class InterfaceController {
 
     @GetMapping
     @Operation(summary = "Lade alle verfügbaren Schnittstellen")
-    public ResponseEntity<List<InterfaceYaml>> fetchInterfaces() {
+    public ResponseEntity<List<InterfaceYaml>> fetchInterfaces(@RequestParam(required = false) DeviceType deviceType) {
         log.info("GET /interface is being called.");
-        return ResponseEntity.ok(interfaceService.getAllInterfaces());
+        return ResponseEntity.ok(interfaceService.getAllInterfaces(deviceType));
     }
 
     @GetMapping("/manufacturer")
     @Operation(summary = "Lade alle verfügbaren Hersteller")
-    public ResponseEntity<List<ManufacturerYaml>> fetchManufactures() {
+    public ResponseEntity<List<ManufacturerYaml>> fetchManufactures(@RequestParam(required = false) DeviceType deviceType) {
         log.info("GET /interface/manufacturer is being called.");
-        return ResponseEntity.ok(interfaceService.getAllManufactures());
+        return ResponseEntity.ok(interfaceService.getAllManufactures(deviceType));
     }
 
     @GetMapping("/{manufacturerId}/devices/{deviceType}")

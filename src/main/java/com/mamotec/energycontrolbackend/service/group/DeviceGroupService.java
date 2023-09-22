@@ -40,7 +40,7 @@ public class DeviceGroupService implements CrudOperations<DeviceGroup> {
             for (Device d : g.getDevices()) {
                 if (d.getInterfaceConfig().getType().equals(InterfaceType.RS485)) {
                     SerialDevice serialDevice = (SerialDevice) d;
-                    serialDevice.setModel(interfaceService.getDeviceNameByManufacturerAndDeviceId(serialDevice.getManufacturerId(), serialDevice.getDeviceId()));
+                    serialDevice.setModel(interfaceService.getDeviceNameByManufacturerAndDeviceId(serialDevice));
                 }
             }
         }

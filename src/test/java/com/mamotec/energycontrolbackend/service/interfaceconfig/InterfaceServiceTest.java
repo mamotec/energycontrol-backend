@@ -22,7 +22,7 @@ class InterfaceServiceTest {
     @Test
     void shouldGetAllInterfaces() {
         // when
-        List<InterfaceYaml> interfaceConfigs = service.getAllInterfaces();
+        List<InterfaceYaml> interfaceConfigs = service.getAllInterfaces(deviceType);
         // then
         assertNotNull(interfaceConfigs);
         assertEquals(1, interfaceConfigs.size());

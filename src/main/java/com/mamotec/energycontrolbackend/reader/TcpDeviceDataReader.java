@@ -31,8 +31,8 @@ public class TcpDeviceDataReader {
         log.info("READ - Found {} devices for interface {}.", devices.size(), config.getType());
         for (Device device : devices) {
             boolean noError = true;
-            TcpDevice serialDevice = (TcpDevice) device;
-            DeviceYaml i = interfaceService.getDeviceInformationForManufactureAndDeviceId(serialDevice.getManufacturerId(), serialDevice.getDeviceId());
+            TcpDevice tcpDevice = (TcpDevice) device;
+            DeviceYaml i = interfaceService.getDeviceInformationForManufactureAndDeviceId(tcpDevice);
 
             // Which register mapping to use?
             RegisterMapping mapping = i.getMapping()
@@ -42,11 +42,11 @@ public class TcpDeviceDataReader {
                     .getBatterySoc();
 
             try {
-                doFetchPerDevice(serialDevice, mapping);
-                doFetchPerDevice(serialDevice, mapping1);
+                doFetchPerDevice(tcpDevice, mapping);
+                doFetchPerDevice(tcpDevice, mapping1);
             } catch (Exception e) {
                 noError = false;
-                log.error("READ - Error while fetching data for device {}.", serialDevice.getId(), e);
+                log.error("READ - Error while fetching data for device {}.", tcpDevice.getId(), e);
             }
             deviceDataService.markDeviceAsActive(device, noError);
         }

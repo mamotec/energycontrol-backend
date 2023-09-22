@@ -1,5 +1,6 @@
 package com.mamotec.energycontrolbackend.service.interfaceconfig;
 
+import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.DeviceType;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.DeviceYaml;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.InterfaceYaml;
@@ -17,22 +18,28 @@ public class InterfaceService {
 
     private final InterfaceReader reader;
 
-    public List<InterfaceYaml> getAllInterfaces() {
+    public List<InterfaceYaml> getAllInterfaces(DeviceType deviceType) {
         InputStream is = getClass().getResourceAsStream("/interfaceConfig.yaml");
 
-        return reader.readInterface(is);
+        List<InterfaceYaml> interfaceYamls = reader.readInterface(is);
+
+        return interfaceYamls.stream()
+                .filter(i -> i.getDevices()
+                        .stream()
+                        .anyMatch(d -> d.getDeviceType() == deviceType))
+                .toList();
 
     }
 
-    public DeviceYaml getDeviceInformationForManufactureAndDeviceId(long manufactureId, long deviceId) {
-        List<InterfaceYaml> allInterfaces = getAllInterfaces();
+    public DeviceYaml getDeviceInformationForManufactureAndDeviceId(Device device) {
+        List<InterfaceYaml> allInterfaces = getAllInterfaces(device.getDeviceType());
         for (InterfaceYaml i : allInterfaces) {
             if (i.getMetaData()
                     .getManufacturer()
-                    .getManufacturerId() == manufactureId) {
+                    .getManufacturerId() == device.getManufacturerId()) {
                 List<DeviceYaml> devices = i.getDevices();
                 for (DeviceYaml d : devices) {
-                    if (d.getDeviceId() == deviceId) {
+                    if (d.getDeviceId() == device.getDeviceId()) {
                         return d;
                     }
                 }
@@ -42,8 +49,8 @@ public class InterfaceService {
     }
 
 
-    public List<ManufacturerYaml> getAllManufactures() {
-        List<InterfaceYaml> allInterfaces = getAllInterfaces();
+    public List<ManufacturerYaml> getAllManufactures(DeviceType deviceType) {
+        List<InterfaceYaml> allInterfaces = getAllInterfaces(deviceType);
         List<ManufacturerYaml> manufactures = new ArrayList<>();
         for (InterfaceYaml i : allInterfaces) {
             manufactures.add(i.getMetaData()
@@ -54,7 +61,7 @@ public class InterfaceService {
     }
 
     public List<DeviceYaml> getAllDevicesByManufacturerAndDeviceType(Long manufacturerId, DeviceType deviceType) {
-        List<InterfaceYaml> allInterfaces = getAllInterfaces();
+        List<InterfaceYaml> allInterfaces = getAllInterfaces(deviceType);
         List<DeviceYaml> devices = new ArrayList<>();
         for (InterfaceYaml i : allInterfaces) {
             if (i.getMetaData()
@@ -70,14 +77,14 @@ public class InterfaceService {
         return devices;
     }
 
-    public String getDeviceNameByManufacturerAndDeviceId(Long manufacturerId, Long deviceId) {
-        List<InterfaceYaml> allInterfaces = getAllInterfaces();
+    public String getDeviceNameByManufacturerAndDeviceId(Device device) {
+        List<InterfaceYaml> allInterfaces = getAllInterfaces(device.getDeviceType());
         for (InterfaceYaml i : allInterfaces) {
             if (i.getMetaData()
                     .getManufacturer()
-                    .getManufacturerId() == manufacturerId) {
+                    .getManufacturerId() == device.getManufacturerId()) {
                 for (DeviceYaml d : i.getDevices()) {
-                    if (d.getDeviceId() == deviceId) {
+                    if (d.getDeviceId() == device.getDeviceId()) {
                         return d.getName();
                     }
                 }

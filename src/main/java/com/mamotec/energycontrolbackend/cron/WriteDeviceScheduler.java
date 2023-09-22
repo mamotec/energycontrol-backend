@@ -39,7 +39,7 @@ public class WriteDeviceScheduler {
             log.info("WRITE - Found {} devices for interface {}.", devices.size(), config.getType());
             for (Device device : devices) {
                 SerialDevice serialDevice = (SerialDevice) device;
-                DeviceYaml i = interfaceService.getDeviceInformationForManufactureAndDeviceId(serialDevice.getManufacturerId(), serialDevice.getDeviceId());
+                DeviceYaml i = interfaceService.getDeviceInformationForManufactureAndDeviceId(serialDevice);
 
                 // Which register mapping to use?
                 RegisterMapping mapping = i.getMapping()
