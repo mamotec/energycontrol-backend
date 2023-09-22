@@ -52,6 +52,12 @@ public class HomeDeviceService implements CrudOperations<Device>, DeviceService 
         Device saved = save(device);
 
         // Erstelle Gruppe für Gerät.
+        createDeviceGroup(request, device, saved);
+
+        return saved;
+    }
+
+    private void createDeviceGroup(DeviceCreateRequest request, Device device, Device saved) {
         if (!Objects.isNull(device.getDeviceType()
                 .getGroup())) {
             DeviceGroup deviceGroup = DeviceGroupFactory.getDeviceGroup(device.getDeviceType()
@@ -70,8 +76,6 @@ public class HomeDeviceService implements CrudOperations<Device>, DeviceService 
             saved.setDeviceGroup(deviceGroup);
             save(saved);
         }
-
-        return saved;
     }
 
     @Override

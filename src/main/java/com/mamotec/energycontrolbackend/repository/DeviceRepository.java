@@ -24,4 +24,6 @@ public interface DeviceRepository extends JpaRepository<Device, Long> {
 
     boolean existsByUnitIdAndInterfaceConfig(long unitId, InterfaceConfig config);
 
+    boolean existsByDeviceType(DeviceType deviceType);
+
 }
