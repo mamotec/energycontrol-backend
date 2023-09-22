@@ -121,6 +121,12 @@ interfaces:
             unit: PERCENT
             type: "Batterie SOC"
             fc: READ_HOLDING_REGISTERS
+          batteryPower:
+            register:
+              - 590
+            unit: W
+            type: "Batterie Power"
+            fc: READ_HOLDING_REGISTERS
           powerReduction:
             register:
               - 40

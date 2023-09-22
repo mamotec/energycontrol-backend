@@ -1,6 +1,8 @@
 package com.mamotec.energycontrolbackend.service.interfaceconfig;
 
+import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.DeviceType;
+import com.mamotec.energycontrolbackend.domain.device.TcpDevice;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.DeviceYaml;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.InterfaceYaml;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.ManufacturerYaml;
@@ -22,7 +24,7 @@ class InterfaceServiceTest {
     @Test
     void shouldGetAllInterfaces() {
         // when
-        List<InterfaceYaml> interfaceConfigs = service.getAllInterfaces(deviceType);
+        List<InterfaceYaml> interfaceConfigs = service.getAllInterfaces(DeviceType.HYBRID_INVERTER);
         // then
         assertNotNull(interfaceConfigs);
         assertEquals(1, interfaceConfigs.size());
@@ -31,7 +33,10 @@ class InterfaceServiceTest {
     @Test
     void shouldGetDeviceInformationForManufacturerAndDeviceId() {
         // when
-        DeviceYaml deviceInformation = service.getDeviceInformationForManufactureAndDeviceId(1L, 1L);
+        Device d = new TcpDevice();
+        d.setDeviceId(1L);
+        d.setManufacturerId(1L);
+        DeviceYaml deviceInformation = service.getDeviceInformationForManufactureAndDeviceId(d);
         // then
         assertNotNull(deviceInformation);
     }
@@ -39,7 +44,7 @@ class InterfaceServiceTest {
     @Test
     void shouldGetAllManufactures() {
         // when
-        List<ManufacturerYaml> manufactures = service.getAllManufactures();
+        List<ManufacturerYaml> manufactures = service.getAllManufactures(DeviceType.HYBRID_INVERTER);
         // then
         assertNotNull(manufactures);
         assertEquals(1, manufactures.size());
@@ -57,7 +62,10 @@ class InterfaceServiceTest {
     @Test
     void shouldGetDeviceNameByManufacturerAndDeviceId() {
         // when
-        String deviceName = service.getDeviceNameByManufacturerAndDeviceId(1L, 1L);
+        Device d = new TcpDevice();
+        d.setDeviceId(1L);
+        d.setManufacturerId(1L);
+        String deviceName = service.getDeviceNameByManufacturerAndDeviceId(d);
         // then
         assertNotNull(deviceName);
 

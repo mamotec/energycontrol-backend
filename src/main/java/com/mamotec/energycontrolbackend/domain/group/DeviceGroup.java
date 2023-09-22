@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.mamotec.energycontrolbackend.domain.BaseEntity;
 import com.mamotec.energycontrolbackend.domain.device.Device;
+import com.mamotec.energycontrolbackend.domain.device.DeviceType;
 import com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -32,5 +33,11 @@ public abstract class DeviceGroup extends BaseEntity {
     private List<Device> devices;
 
     public abstract DeviceGroupType getType();
+
+    public List<Device> getDevicesByType(DeviceType deviceType) {
+        return devices.stream()
+                .filter(d -> d.getDeviceType().equals(deviceType))
+                .toList();
+    }
 
 }

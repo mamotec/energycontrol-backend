@@ -64,7 +64,7 @@ public class ModbusTCPClient {
         }
     }
 
-    public ReadMultipleRegistersResponse readHoldingRegisters(int startAddress, int quantity, int unitID) throws Exception {
+    public long readHoldingRegisters(int startAddress, int quantity, int unitID) throws Exception {
         ModbusTCPTransaction transaction = new ModbusTCPTransaction(connection);
 
         ReadMultipleRegistersRequest request = new ReadMultipleRegistersRequest(startAddress, quantity);
@@ -76,16 +76,18 @@ public class ModbusTCPClient {
 
         ReadMultipleRegistersResponse response = (ReadMultipleRegistersResponse) transaction.getResponse();
 
+        long result = 0;
         if (response != null) {
             Register[] registerValues = response.getRegisters();
+
             for (int i = 0; i < registerValues.length; i++) {
-                log.info("Register " + (i) + ": " + registerValues[i]);
+                result += registerValues[i].getValue();
             }
         }
 
         connection.close();
+        return result;
 
-        return null;
 
     }
 }

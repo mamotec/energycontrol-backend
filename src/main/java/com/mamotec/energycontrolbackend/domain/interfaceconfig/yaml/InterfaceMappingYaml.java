@@ -7,6 +7,7 @@ public class InterfaceMappingYaml {
 
     private RegisterMapping power;
     private RegisterMapping batterySoc;
+    private RegisterMapping batteryPower;
     private RegisterMapping powerReduction;
 
 }

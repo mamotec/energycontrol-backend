@@ -35,15 +35,19 @@ public class TcpDeviceDataReader {
             DeviceYaml i = interfaceService.getDeviceInformationForManufactureAndDeviceId(tcpDevice);
 
             // Which register mapping to use?
-            RegisterMapping mapping = i.getMapping()
+            RegisterMapping inverterPower = i.getMapping()
                     .getPower();
 
-            RegisterMapping mapping1 = i.getMapping()
+            RegisterMapping batterySoc = i.getMapping()
                     .getBatterySoc();
 
+            RegisterMapping batteryPower = i.getMapping()
+                    .getBatteryPower();
+
             try {
-                doFetchPerDevice(tcpDevice, mapping);
-                doFetchPerDevice(tcpDevice, mapping1);
+                doFetchPerDevice(tcpDevice, inverterPower);
+                doFetchPerDevice(tcpDevice, batterySoc);
+                doFetchPerDevice(tcpDevice, batteryPower);
             } catch (Exception e) {
                 noError = false;
                 log.error("READ - Error while fetching data for device {}.", tcpDevice.getId(), e);
@@ -55,11 +59,13 @@ public class TcpDeviceDataReader {
     private void doFetchPerDevice(TcpDevice d, RegisterMapping mapping) throws Exception {
         ModbusTCPClient client = new ModbusTCPClient(d.getHost(), Integer.parseInt(d.getPort()));
 
-        client.readHoldingRegisters(mapping.getRegister()
+        long result = client.readHoldingRegisters(mapping.getRegister()
                 .get(0), mapping.getRegister()
                 .size(), d.getUnitId());
 
         // Save data to influxdb
-        //deviceDataService.writeDeviceData(d, res, mapping);
+        if (result > 1) {
+            deviceDataService.writeDeviceData(d, String.valueOf(result), mapping);
+        }
     }
 }

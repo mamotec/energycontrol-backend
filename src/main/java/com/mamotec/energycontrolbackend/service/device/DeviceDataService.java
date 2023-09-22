@@ -80,7 +80,7 @@ public class DeviceDataService {
         deviceString.append(")");
 
         String flux = format(new StringBuilder().append("from(bucket: \"%s\")")
-                .append("  |> range(start: -1d)")
+                .append("  |> range(start: -1h)")
                 .append("  |> filter(fn: (r) => r._measurement == \"%s\")")
                 .append(deviceString)
                 .append("  |> filter(fn: (r) => r[\"_field\"] == \"sum\")")

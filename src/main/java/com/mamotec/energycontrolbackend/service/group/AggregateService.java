@@ -6,4 +6,5 @@ import com.mamotec.energycontrolbackend.domain.group.dao.DeviceGroupRepresentati
 public interface AggregateService {
 
     DeviceGroupRepresentation aggregate(DeviceGroup deviceGroup);
+
 }

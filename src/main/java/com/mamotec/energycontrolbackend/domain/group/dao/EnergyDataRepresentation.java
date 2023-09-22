@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class EnergyDeviceGroupCreate extends DeviceGroupCreate {
+public class EnergyDataRepresentation extends DeviceGroupRepresentation {
 
+    private long activePower;
     private long peakKilowatt;
-
 }
-
