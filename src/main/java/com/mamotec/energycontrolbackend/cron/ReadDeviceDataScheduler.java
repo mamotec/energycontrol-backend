@@ -29,7 +29,6 @@ public class ReadDeviceDataScheduler {
         log.info("READ - Found {} interfaces in repository.", configs.size());
 
         for (InterfaceConfig config : configs) {
-
             if (config.getType().equals(InterfaceType.RS485)) {
                 serialDeviceDataReader.fetchDeviceData(config);
             } else if (config.getType().equals(InterfaceType.TCP)) {

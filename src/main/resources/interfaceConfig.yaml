@@ -21,6 +21,12 @@ interfaces:
             unit: W
             type: "power"
             fc: READ_HOLDING_REGISTERS
+          batterySoc:
+            register:
+              - 588
+            unit: PERCENT
+            type: "Batterie SOC"
+            fc: READ_HOLDING_REGISTERS
           powerReduction:
             register:
               - 40
@@ -108,6 +114,12 @@ interfaces:
               - 673
             unit: KW
             type: "power"
+            fc: READ_HOLDING_REGISTERS
+          batterySoc:
+            register:
+              - 588
+            unit: PERCENT
+            type: "Batterie SOC"
             fc: READ_HOLDING_REGISTERS
           powerReduction:
             register:

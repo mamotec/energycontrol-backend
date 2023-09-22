@@ -38,8 +38,12 @@ public class TcpDeviceDataReader {
             RegisterMapping mapping = i.getMapping()
                     .getPower();
 
+            RegisterMapping mapping1 = i.getMapping()
+                    .getBatterySoc();
+
             try {
                 doFetchPerDevice(serialDevice, mapping);
+                doFetchPerDevice(serialDevice, mapping1);
             } catch (Exception e) {
                 noError = false;
                 log.error("READ - Error while fetching data for device {}.", serialDevice.getId(), e);
@@ -53,7 +57,7 @@ public class TcpDeviceDataReader {
 
         client.readHoldingRegisters(mapping.getRegister()
                 .get(0), mapping.getRegister()
-                .size(), 2);
+                .size(), d.getUnitId());
 
         // Save data to influxdb
         //deviceDataService.writeDeviceData(d, res, mapping);
