@@ -83,11 +83,11 @@ public class DeviceGroupController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/data")
+    @GetMapping("/data/{id}")
     @Operation(summary = "Liefere die Daten für eine Gruppe")
-    public ResponseEntity<DeviceGroupRepresentation> fetchDashboardByMode() {
+    public ResponseEntity<DeviceGroupRepresentation> fetchDeviceGroupData(@PathVariable Long id) {
         log.info("GET /group/data is being called.");
-        return ResponseEntity.ok(aggregateDeviceGroupDataService.aggregate(1L));
+        return ResponseEntity.ok(aggregateDeviceGroupDataService.aggregate(id));
     }
 
     @GetMapping("/home/dashboard")
