@@ -1,5 +1,6 @@
 package com.mamotec.energycontrolbackend.controller;
 
+import com.mamotec.energycontrolbackend.domain.configuration.ApplicationMode;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceLinkRequest;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.domain.group.dao.DeviceGroupCreate;
@@ -80,11 +81,15 @@ public class DeviceGroupController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/data/{id}")
+    @GetMapping("/data")
     @Operation(summary = "Liefere die Daten für eine Gruppe")
-    public ResponseEntity<DeviceGroupRepresentation> fetchData(@PathVariable Long id) {
-        log.info("GET /group/data/{} is being called.", id);
-        return ResponseEntity.ok(aggregateDeviceGroupDataService.aggregate(id));
+    public ResponseEntity<DeviceGroupRepresentation> fetchDashboardByMode(@PathVariable String applicationMode) {
+        log.info("GET /group/data?{} is being called.", applicationMode);
+        return ResponseEntity.ok(aggregateDeviceGroupDataService.aggregate(1L));
     }
+
+    @GetMapping("/home/dashboard")
+    public ResponseEntity
+
 
 }
