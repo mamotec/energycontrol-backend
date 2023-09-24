@@ -24,7 +24,7 @@ public class AggregateDeviceGroupDataService {
 
         switch (group.getType()) {
             case  HOME:
-                return homeService.aggregate(group);
+                return homeService.aggregate();
             case PLANT:
                 return plantService.aggregate(group);
 

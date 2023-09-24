@@ -1,14 +1,15 @@
 package com.mamotec.energycontrolbackend.controller;
 
-import com.mamotec.energycontrolbackend.domain.configuration.ApplicationMode;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceLinkRequest;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.domain.group.dao.DeviceGroupCreate;
 import com.mamotec.energycontrolbackend.domain.group.dao.DeviceGroupRepresentation;
 import com.mamotec.energycontrolbackend.domain.group.dao.DeviceGroupUpdate;
+import com.mamotec.energycontrolbackend.domain.group.dao.home.HomeDataRepresentation;
 import com.mamotec.energycontrolbackend.mapper.DeviceGroupMapper;
 import com.mamotec.energycontrolbackend.service.group.AggregateDeviceGroupDataService;
 import com.mamotec.energycontrolbackend.service.group.DeviceGroupService;
+import com.mamotec.energycontrolbackend.service.group.home.HomeAggregateDeviceGroupDataService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class DeviceGroupController {
 
     private final DeviceGroupService deviceGroupService;
     private final AggregateDeviceGroupDataService aggregateDeviceGroupDataService;
+    private final HomeAggregateDeviceGroupDataService homeAggregateDeviceGroupDataService;
     private final DeviceGroupMapper deviceGroupMapper;
 
     @GetMapping
@@ -83,13 +85,16 @@ public class DeviceGroupController {
 
     @GetMapping("/data")
     @Operation(summary = "Liefere die Daten für eine Gruppe")
-    public ResponseEntity<DeviceGroupRepresentation> fetchDashboardByMode(@PathVariable String applicationMode) {
-        log.info("GET /group/data?{} is being called.", applicationMode);
+    public ResponseEntity<DeviceGroupRepresentation> fetchDashboardByMode() {
+        log.info("GET /group/data is being called.");
         return ResponseEntity.ok(aggregateDeviceGroupDataService.aggregate(1L));
     }
 
     @GetMapping("/home/dashboard")
-    public ResponseEntity
+    public ResponseEntity<HomeDataRepresentation> fetchHomeDashboard() {
+        log.info("GET /group/home/dashboard is being called.");
+        return ResponseEntity.ok(homeAggregateDeviceGroupDataService.aggregate());
+    }
 
 
 }
