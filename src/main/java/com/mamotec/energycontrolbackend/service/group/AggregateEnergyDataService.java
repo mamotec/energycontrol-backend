@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
@@ -27,12 +28,16 @@ public class AggregateEnergyDataService implements AggregateService {
 
 
         return EnergyDataRepresentation.builder()
-                .activePower(aggregateMeasurement(deviceIds, "power"))
+                .activePower(aggregateMeasurement(deviceIds, "power", null))
                 .build();
     }
 
-    public long aggregateMeasurement(List<Long> deviceIds, String measurement) {
-        return deviceDataService.readLastDeviceData(deviceIds, measurement);
+    public long aggregateMeasurement(List<Long> deviceIds, String measurement, Function<Long, Long> conversionMethod) {
+        long data = deviceDataService.readLastDeviceData(deviceIds, measurement);
+        if (conversionMethod != null) {
+            data = conversionMethod.apply(data);
+        }
+        return data;
 
     }
 

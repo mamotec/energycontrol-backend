@@ -46,11 +46,11 @@ public class HomeAggregateDeviceGroupDataService {
                 .batterySoc(energyDataService.aggregateMeasurement(homeDeviceGroup.getDevicesByType(DeviceType.HYBRID_INVERTER)
                         .stream()
                         .map(Device::getId)
-                        .toList(), "batterySoc"))
+                        .toList(), "batterySoc", null))
                 .batteryPower(energyDataService.aggregateMeasurement(homeDeviceGroup.getDevicesByType(DeviceType.HYBRID_INVERTER)
                         .stream()
                         .map(Device::getId)
-                        .toList(), "batteryPower"))
+                        .toList(), "batteryPower", x -> x - 65536))
                 .build();
     }
 }
