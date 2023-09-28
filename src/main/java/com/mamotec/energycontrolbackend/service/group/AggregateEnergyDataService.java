@@ -4,6 +4,7 @@ import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.DeviceType;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.domain.group.dao.EnergyDataRepresentation;
+import com.mamotec.energycontrolbackend.domain.group.dao.home.BiDirectionalEnergy;
 import com.mamotec.energycontrolbackend.service.device.DeviceDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +39,18 @@ public class AggregateEnergyDataService implements AggregateService {
             data = conversionMethod.apply(data);
         }
         return data;
+    }
 
+    public BiDirectionalEnergy aggregateBiMeasurement(List<Long> deviceIds, String measurement, Function<Long, Long> conversionMethod) {
+        long data = deviceDataService.readLastDeviceData(deviceIds, measurement);
+        BiDirectionalEnergy.BiDirectionalEnergyBuilder builder = BiDirectionalEnergy.builder();
+
+        builder.consumption(data >= 65536);
+
+        if (conversionMethod != null) {
+            return builder.value(conversionMethod.apply(data)).build();
+        }
+        return builder.value(data).build();
     }
 
 

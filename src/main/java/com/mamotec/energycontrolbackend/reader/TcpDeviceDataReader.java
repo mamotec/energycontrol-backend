@@ -44,10 +44,13 @@ public class TcpDeviceDataReader {
             RegisterMapping batteryPower = i.getMapping()
                     .getBatteryPower();
 
+            RegisterMapping gridPower = i.getMapping().getGridPower();
+
             try {
                 doFetchPerDevice(tcpDevice, inverterPower);
                 doFetchPerDevice(tcpDevice, batterySoc);
                 doFetchPerDevice(tcpDevice, batteryPower);
+                doFetchPerDevice(tcpDevice, gridPower);
             } catch (Exception e) {
                 noError = false;
                 log.error("READ - Error while fetching data for device {}.", tcpDevice.getId(), e);

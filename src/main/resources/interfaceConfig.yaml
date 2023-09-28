@@ -27,12 +27,26 @@ interfaces:
             unit: PERCENT
             type: "batterySoc"
             fc: READ_HOLDING_REGISTERS
+          batteryPower:
+            register:
+              - 590
+            unit: W
+            type: "batteryPower"
+            fc: READ_HOLDING_REGISTERS
           powerReduction:
             register:
               - 40
             unit: PERCENT
             type: "powerReduction"
             fc: WRITE_SINGLE_REGISTER
+          gridPower:
+            register:
+              - 633
+              - 634
+              - 635
+            unit: W
+            type: "gridPower"
+            fc: READ_HOLDING_REGISTERS
       - deviceId: 2
         deviceType: HYBRID_INVERTER
         name: "DEYE SUN-6K-SG04LP3"
@@ -49,12 +63,32 @@ interfaces:
             unit: W
             type: "power"
             fc: READ_HOLDING_REGISTERS
+          batterySoc:
+            register:
+              - 588
+            unit: PERCENT
+            type: "batterySoc"
+            fc: READ_HOLDING_REGISTERS
+          batteryPower:
+            register:
+              - 590
+            unit: W
+            type: "batteryPower"
+            fc: READ_HOLDING_REGISTERS
           powerReduction:
             register:
               - 40
             unit: PERCENT
             type: "powerReduction"
             fc: WRITE_SINGLE_REGISTER
+          gridPower:
+            register:
+              - 633
+              - 634
+              - 635
+            unit: W
+            type: "gridPower"
+            fc: READ_HOLDING_REGISTERS
       - deviceId: 3
         deviceType: HYBRID_INVERTER
         name: "DEYE SUN-8K-SG04LP3"
@@ -71,12 +105,32 @@ interfaces:
             unit: W
             type: "power"
             fc: READ_HOLDING_REGISTERS
+          batterySoc:
+            register:
+              - 588
+            unit: PERCENT
+            type: "batterySoc"
+            fc: READ_HOLDING_REGISTERS
+          batteryPower:
+            register:
+              - 590
+            unit: W
+            type: "batteryPower"
+            fc: READ_HOLDING_REGISTERS
           powerReduction:
             register:
               - 40
             unit: PERCENT
             type: "powerReduction"
             fc: WRITE_SINGLE_REGISTER
+          gridPower:
+            register:
+              - 633
+              - 634
+              - 635
+            unit: W
+            type: "gridPower"
+            fc: READ_HOLDING_REGISTERS
       - deviceId: 4
         deviceType: HYBRID_INVERTER
         name: "DEYE SUN-10K-SG04LP3"
@@ -93,12 +147,32 @@ interfaces:
             unit: W
             type: "power"
             fc: READ_HOLDING_REGISTERS
+          batterySoc:
+            register:
+              - 588
+            unit: PERCENT
+            type: "batterySoc"
+            fc: READ_HOLDING_REGISTERS
+          batteryPower:
+            register:
+              - 590
+            unit: W
+            type: "batteryPower"
+            fc: READ_HOLDING_REGISTERS
           powerReduction:
             register:
               - 40
             unit: PERCENT
             type: "powerReduction"
             fc: WRITE_SINGLE_REGISTER
+          gridPower:
+            register:
+              - 633
+              - 634
+              - 635
+            unit: W
+            type: "gridPower"
+            fc: READ_HOLDING_REGISTERS
       - deviceId: 5
         deviceType: HYBRID_INVERTER
         name: "DEYE SUN-12K-SG04LP3"
@@ -133,3 +207,9 @@ interfaces:
             unit: PERCENT
             type: "powerReduction"
             fc: WRITE_SINGLE_REGISTER
+          gridPower:
+            register:
+              - 608
+            unit: W
+            type: "gridPower"
+            fc: READ_HOLDING_REGISTERS

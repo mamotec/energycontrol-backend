@@ -5,12 +5,14 @@ import com.mamotec.energycontrolbackend.domain.group.dao.DeviceGroupRepresentati
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.function.Function;
+
 @Data
 @Builder
 public class HomeDataRepresentation extends DeviceGroupRepresentation {
     // Grid
     @JsonProperty(required = true)
-    private long gridPower;
+    private BiDirectionalEnergy grid;
     // Inverter
     @JsonProperty(required = true)
     private long peakKilowatt;
@@ -20,7 +22,7 @@ public class HomeDataRepresentation extends DeviceGroupRepresentation {
     @JsonProperty(required = true)
     private long batterySoc;
     @JsonProperty(required = true)
-    private long batteryPower;
+    private BiDirectionalEnergy batteryPower;
     // Houshold
     @JsonProperty(required = true)
     private long houseHoldPower;
@@ -29,6 +31,6 @@ public class HomeDataRepresentation extends DeviceGroupRepresentation {
     private boolean heatPumpActive;
     // Charging station
     @JsonProperty(required = true)
-    private long chargingStationPower;
+    private BiDirectionalEnergy chargingStation;
 
 }
