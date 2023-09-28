@@ -18,4 +18,7 @@ public class RegisterMapping {
 
     @Enumerated(EnumType.STRING)
     private FunctionCode fc;
+
+    @Enumerated(EnumType.STRING)
+    private ConversionMethod conversionMethod;
 }
