@@ -4,6 +4,7 @@ import com.mamotec.energycontrolbackend.domain.configuration.ApplicationMode;
 import com.mamotec.energycontrolbackend.mapper.DeviceMapper;
 import com.mamotec.energycontrolbackend.repository.DeviceGroupRepository;
 import com.mamotec.energycontrolbackend.repository.DeviceRepository;
+import com.mamotec.energycontrolbackend.repository.InterfaceConfigRepository;
 import com.mamotec.energycontrolbackend.service.device.home.HomeDeviceService;
 import com.mamotec.energycontrolbackend.service.device.plant.PlantDeviceService;
 import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceService;
@@ -25,6 +26,8 @@ public class DeviceServiceFactory {
 
     private final DeviceMapper deviceMapper;
 
+    private final InterfaceConfigRepository interfaceConfigRepository;
+
     @Value("${application.mode}")
     private String applicationMode;
 
@@ -32,7 +35,7 @@ public class DeviceServiceFactory {
         ApplicationMode mode = ApplicationMode.valueOf(applicationMode);
 
         if (mode.equals(ApplicationMode.HOME)) {
-            return new HomeDeviceService(deviceRepository, validationService, deviceGroupRepository, deviceMapper);
+            return new HomeDeviceService(deviceRepository, validationService, deviceGroupRepository, deviceMapper, interfaceConfigRepository);
         } else {
             return new PlantDeviceService(deviceRepository, interfaceService, validationService, deviceGroupRepository, deviceMapper);
         }

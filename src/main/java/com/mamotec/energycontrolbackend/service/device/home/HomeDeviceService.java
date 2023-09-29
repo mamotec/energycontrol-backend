@@ -7,9 +7,12 @@ import com.mamotec.energycontrolbackend.domain.device.dao.DeviceTypeResponse;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.domain.group.dao.home.HomeDeviceGroup;
 import com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup;
+import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
+import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceType;
 import com.mamotec.energycontrolbackend.mapper.DeviceMapper;
 import com.mamotec.energycontrolbackend.repository.DeviceGroupRepository;
 import com.mamotec.energycontrolbackend.repository.DeviceRepository;
+import com.mamotec.energycontrolbackend.repository.InterfaceConfigRepository;
 import com.mamotec.energycontrolbackend.service.CrudOperations;
 import com.mamotec.energycontrolbackend.service.device.DeviceService;
 import com.mamotec.energycontrolbackend.service.device.DeviceValidationService;
@@ -39,6 +42,8 @@ public class HomeDeviceService implements CrudOperations<Device>, DeviceService 
 
     private final DeviceMapper deviceMapper;
 
+    private final InterfaceConfigRepository interfaceConfigRepository;
+
 
     @Override
     public Optional<JpaRepository<Device, Long>> getRepository() {
@@ -47,8 +52,10 @@ public class HomeDeviceService implements CrudOperations<Device>, DeviceService 
 
     @Override
     public Device create(DeviceCreateRequest request) {
-        Device device = deviceMapper.map(request);
+        InterfaceConfig c = createInterfaceConfig(request);
 
+        Device device = deviceMapper.map(request);
+        device.setInterfaceConfig(c);
         validationService.validate(device);
         Device saved = save(device);
 
@@ -56,6 +63,20 @@ public class HomeDeviceService implements CrudOperations<Device>, DeviceService 
         createDeviceGroup(request, device, saved);
 
         return saved;
+    }
+
+    private InterfaceConfig createInterfaceConfig(DeviceCreateRequest request) {
+        // Check if there is a TCP interface
+        Optional<InterfaceConfig> byType = interfaceConfigRepository.findByType(InterfaceType.TCP);
+        if (byType.isEmpty()) {
+            InterfaceConfig config = new InterfaceConfig();
+            config.setType(InterfaceType.TCP);
+            config.setDescription("TCP Schnittstelle");
+            return interfaceConfigRepository.save(config);
+        } else {
+            return byType.get();
+        }
+
     }
 
     private void createDeviceGroup(DeviceCreateRequest request, Device device, Device saved) {
@@ -83,6 +104,8 @@ public class HomeDeviceService implements CrudOperations<Device>, DeviceService 
     public void delete(Long id) {
         Device d = deviceRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Device with id " + id + " not found."));
+        d.setInterfaceConfig(null);
+        deviceRepository.save(d);
 
         deviceGroupRepository.deleteById(d.getDeviceGroup().getId());
 
@@ -90,8 +113,8 @@ public class HomeDeviceService implements CrudOperations<Device>, DeviceService 
 
     @Override
     public List<DeviceTypeResponse> getAllDeviceTypes() {
-       DeviceTypeResponse hybridInverter = new DeviceTypeResponse(DeviceType.HYBRID_INVERTER, "Hybrid Wechselrichter");
-       DeviceTypeResponse chargingStation = new DeviceTypeResponse(DeviceType.CHARGING_STATION, "Ladestation");
+        DeviceTypeResponse hybridInverter = new DeviceTypeResponse(DeviceType.HYBRID_INVERTER, "Hybrid Wechselrichter");
+        DeviceTypeResponse chargingStation = new DeviceTypeResponse(DeviceType.CHARGING_STATION, "Ladestation");
         return new ArrayList<>(List.of(hybridInverter, chargingStation));
 
     }
