@@ -62,18 +62,21 @@ public class HomeAggregateDeviceGroupDataService {
                 .map(Device::getId)
                 .toList();
 
-        return HomeDataRepresentation.builder()
+        HomeDataRepresentation.HomeDataRepresentationBuilder homeDataRepresentationBuilder = HomeDataRepresentation.builder()
                 .activePower(rep.getActivePower())
                 .peakKilowatt(homeDeviceGroup.getPeakKilowatt())
                 .heatPumpActive(true)
-                .houseHoldPower(877)
                 .chargingStation(BiDirectionalEnergy.builder()
                         .consumption(false)
-                        .value(33)
+                        .value(0)
                         .build())
-                .grid(energyDataService.aggregateBiMeasurement(deviceIds, "gridPower", null))
+                .grid(energyDataService.aggregateBiMeasurement(deviceIds, "gridPower", conversionMethodBatteryPower()))
                 .batterySoc(energyDataService.aggregateMeasurement(deviceIds, "batterySoc", null))
-                .batteryPower(energyDataService.aggregateBiMeasurement(deviceIds, "batteryPower", conversionMethodBatteryPower()))
-                .build();
+                .batteryPower(energyDataService.aggregateBiMeasurement(deviceIds, "batteryPower", conversionMethodBatteryPower()));
+
+        homeDataRepresentationBuilder.houseHoldPower((homeDataRepresentationBuilder.build().getActivePower()
+                + homeDataRepresentationBuilder.build().getBatteryPower().getValue()
+                + homeDataRepresentationBuilder.build().getGrid().getValue()) - homeDataRepresentationBuilder.build().getChargingStation().getValue());
+        return homeDataRepresentationBuilder.build();
     }
 }

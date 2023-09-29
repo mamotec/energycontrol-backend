@@ -6,7 +6,7 @@ public final class ConversionUtils {
 
     public static Function<Long, Long> conversionMethodBatteryPower() {
         return (x) -> {
-            if (x >= 65536) {
+            if (x > 32768) {
                 return x - 65536;
             }
             return x;
