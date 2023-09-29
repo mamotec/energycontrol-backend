@@ -92,8 +92,7 @@ public class HomeDeviceService implements CrudOperations<Device>, DeviceService 
     public List<DeviceTypeResponse> getAllDeviceTypes() {
        DeviceTypeResponse hybridInverter = new DeviceTypeResponse(DeviceType.HYBRID_INVERTER, "Hybrid Wechselrichter");
        DeviceTypeResponse chargingStation = new DeviceTypeResponse(DeviceType.CHARGING_STATION, "Ladestation");
-       DeviceTypeResponse heatPump = new DeviceTypeResponse(DeviceType.HEAT_PUMP, "Wärmepumpe");
-        return new ArrayList<>(List.of(hybridInverter, chargingStation, heatPump));
+        return new ArrayList<>(List.of(hybridInverter, chargingStation));
 
     }
 }
