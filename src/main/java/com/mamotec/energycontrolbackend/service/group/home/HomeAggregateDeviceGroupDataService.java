@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.mamotec.energycontrolbackend.utils.ConversionUtils.conversionMethodBatteryPower;
@@ -56,6 +57,11 @@ public class HomeAggregateDeviceGroupDataService {
 
         EnergyDataRepresentation rep = energyDataService.aggregate(homeDeviceGroup);
 
+        List<Long> deviceIds = homeDeviceGroup.getDevicesByType(DeviceType.HYBRID_INVERTER)
+                .stream()
+                .map(Device::getId)
+                .toList();
+
         return HomeDataRepresentation.builder()
                 .activePower(rep.getActivePower())
                 .peakKilowatt(homeDeviceGroup.getPeakKilowatt())
@@ -65,18 +71,9 @@ public class HomeAggregateDeviceGroupDataService {
                         .consumption(false)
                         .value(33)
                         .build())
-                .grid(energyDataService.aggregateBiMeasurement(homeDeviceGroup.getDevicesByType(DeviceType.HYBRID_INVERTER)
-                        .stream()
-                        .map(Device::getId)
-                        .toList(), "gridPower", null))
-                .batterySoc(energyDataService.aggregateMeasurement(homeDeviceGroup.getDevicesByType(DeviceType.HYBRID_INVERTER)
-                        .stream()
-                        .map(Device::getId)
-                        .toList(), "batterySoc", null))
-                .batteryPower(energyDataService.aggregateBiMeasurement(homeDeviceGroup.getDevicesByType(DeviceType.HYBRID_INVERTER)
-                        .stream()
-                        .map(Device::getId)
-                        .toList(), "batteryPower", conversionMethodBatteryPower()))
+                .grid(energyDataService.aggregateBiMeasurement(deviceIds, "gridPower", null))
+                .batterySoc(energyDataService.aggregateMeasurement(deviceIds, "batterySoc", null))
+                .batteryPower(energyDataService.aggregateBiMeasurement(deviceIds, "batteryPower", conversionMethodBatteryPower()))
                 .build();
     }
 }

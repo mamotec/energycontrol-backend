@@ -209,7 +209,7 @@ interfaces:
             fc: WRITE_SINGLE_REGISTER
           gridPower:
             register:
-              - 608
+              - 625
             unit: W
             type: "gridPower"
             fc: READ_HOLDING_REGISTERS

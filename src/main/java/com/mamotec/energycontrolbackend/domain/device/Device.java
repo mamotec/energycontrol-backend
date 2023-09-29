@@ -1,6 +1,7 @@
 package com.mamotec.energycontrolbackend.domain.device;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.mamotec.energycontrolbackend.domain.BaseEntity;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
@@ -43,6 +44,7 @@ public abstract class Device extends BaseEntity {
     private DeviceType deviceType;
 
     @NotNull
+    @JsonProperty(required = true)
     private boolean active = false;
 
     @Transient
