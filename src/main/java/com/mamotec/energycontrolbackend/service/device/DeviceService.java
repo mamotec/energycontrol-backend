@@ -1,8 +1,8 @@
 package com.mamotec.energycontrolbackend.service.device;
 
 import com.mamotec.energycontrolbackend.domain.device.Device;
-import com.mamotec.energycontrolbackend.domain.device.DeviceType;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateRequest;
+import com.mamotec.energycontrolbackend.domain.device.dao.DeviceTypeResponse;
 
 import java.util.List;
 
@@ -12,5 +12,5 @@ public interface DeviceService {
 
     void delete(Long id);
 
-    List<DeviceType> getAllDeviceTypes();
+    List<DeviceTypeResponse> getAllDeviceTypes();
 }

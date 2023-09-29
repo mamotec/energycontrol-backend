@@ -3,6 +3,7 @@ package com.mamotec.energycontrolbackend.service.device.home;
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.DeviceType;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateRequest;
+import com.mamotec.energycontrolbackend.domain.device.dao.DeviceTypeResponse;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.domain.group.dao.home.HomeDeviceGroup;
 import com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup;
@@ -88,13 +89,11 @@ public class HomeDeviceService implements CrudOperations<Device>, DeviceService 
     }
 
     @Override
-    public List<DeviceType> getAllDeviceTypes() {
-        List<DeviceType> allowedTypes = new ArrayList<>();
+    public List<DeviceTypeResponse> getAllDeviceTypes() {
+       DeviceTypeResponse hybridInverter = new DeviceTypeResponse(DeviceType.HYBRID_INVERTER, "Hybrid Wechselrichter");
+       DeviceTypeResponse chargingStation = new DeviceTypeResponse(DeviceType.CHARGING_STATION, "Ladestation");
+       DeviceTypeResponse heatPump = new DeviceTypeResponse(DeviceType.HEAT_PUMP, "Wärmepumpe");
+        return new ArrayList<>(List.of(hybridInverter, chargingStation, heatPump));
 
-        allowedTypes.add(DeviceType.HYBRID_INVERTER);
-        allowedTypes.add(DeviceType.CHARGING_STATION);
-        allowedTypes.add(DeviceType.HEAT_PUMP);
-
-        return allowedTypes;
     }
 }
