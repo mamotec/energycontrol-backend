@@ -27,5 +27,5 @@ public class DeviceCreateRequest {
     private long deviceId;
     private long unitId;
     private long peakKilowatt;
-
+    private long deviceIdCharger;
 }

@@ -96,6 +96,12 @@ CREATE TABLE tcp_device
     port TEXT
 );
 
+CREATE TABLE charging_station_device
+(
+    id   SERIAL PRIMARY KEY,
+    device_id_charger INTEGER
+);
+
 CREATE TABLE system_configuration
 (
     id               SERIAL PRIMARY KEY,

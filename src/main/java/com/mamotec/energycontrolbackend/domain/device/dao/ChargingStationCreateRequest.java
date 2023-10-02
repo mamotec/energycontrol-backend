@@ -6,11 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TcpDeviceCreateRequest extends DeviceCreateRequest {
+public class ChargingStationCreateRequest extends TcpDeviceCreateRequest {
 
-    private String host;
-    private String port;
+    private long deviceIdCharger;
 
 }

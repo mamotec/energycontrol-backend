@@ -1,12 +1,10 @@
 package com.mamotec.energycontrolbackend.mapper;
 
+import com.mamotec.energycontrolbackend.domain.device.ChargingStationDevice;
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.SerialDevice;
 import com.mamotec.energycontrolbackend.domain.device.TcpDevice;
-import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateRequest;
-import com.mamotec.energycontrolbackend.domain.device.dao.SerialDeviceCreateRequest;
-import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateResponse;
-import com.mamotec.energycontrolbackend.domain.device.dao.TcpDeviceCreateRequest;
+import com.mamotec.energycontrolbackend.domain.device.dao.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.SubclassExhaustiveStrategy;
 import org.mapstruct.SubclassMapping;
@@ -16,6 +14,7 @@ public interface DeviceMapper {
 
     @SubclassMapping(source = SerialDeviceCreateRequest.class, target = SerialDevice.class)
     @SubclassMapping(source = TcpDeviceCreateRequest.class, target = TcpDevice.class)
+    @SubclassMapping(source = ChargingStationCreateRequest.class, target = ChargingStationDevice.class)
     Device map(DeviceCreateRequest request);
 
     DeviceCreateResponse map(Device device);
