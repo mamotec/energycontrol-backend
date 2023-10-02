@@ -4,7 +4,6 @@ package com.mamotec.energycontrolbackend.service.device;
 import com.mamotec.energycontrolbackend.domain.configuration.ApplicationMode;
 import com.mamotec.energycontrolbackend.domain.configuration.ConfigurationHolder;
 import com.mamotec.energycontrolbackend.domain.device.Device;
-import com.mamotec.energycontrolbackend.domain.device.SerialDevice;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.repository.DeviceRepository;
 import jakarta.validation.ConstraintViolationException;

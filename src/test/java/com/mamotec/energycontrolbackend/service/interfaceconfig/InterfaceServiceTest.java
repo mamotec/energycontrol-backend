@@ -2,7 +2,6 @@ package com.mamotec.energycontrolbackend.service.interfaceconfig;
 
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.DeviceType;
-import com.mamotec.energycontrolbackend.domain.device.TcpDevice;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.DeviceYaml;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.InterfaceYaml;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.ManufacturerYaml;
@@ -33,7 +32,7 @@ class InterfaceServiceTest {
     @Test
     void shouldGetDeviceInformationForManufacturerAndDeviceId() {
         // when
-        Device d = new TcpDevice();
+        Device d = new Device();
         d.setDeviceId(1L);
         d.setManufacturerId(1L);
         DeviceYaml deviceInformation = service.getDeviceInformationForManufactureAndDeviceId(d);
@@ -62,7 +61,7 @@ class InterfaceServiceTest {
     @Test
     void shouldGetDeviceNameByManufacturerAndDeviceId() {
         // when
-        Device d = new TcpDevice();
+        Device d = new Device();
         d.setDeviceId(1L);
         d.setManufacturerId(1L);
         String deviceName = service.getDeviceNameByManufacturerAndDeviceId(d);

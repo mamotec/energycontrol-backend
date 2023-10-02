@@ -2,7 +2,6 @@ package com.mamotec.energycontrolbackend.cron;
 
 import com.mamotec.energycontrolbackend.client.NodeRedClient;
 import com.mamotec.energycontrolbackend.domain.device.Device;
-import com.mamotec.energycontrolbackend.domain.device.SerialDevice;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.DeviceYaml;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.RegisterMapping;
@@ -38,8 +37,7 @@ public class WriteDeviceScheduler {
             List<Device> devices = deviceService.getDevicesForInterfaceConfig(config.getId());
             log.info("WRITE - Found {} devices for interface {}.", devices.size(), config.getType());
             for (Device device : devices) {
-                SerialDevice serialDevice = (SerialDevice) device;
-                DeviceYaml i = interfaceService.getDeviceInformationForManufactureAndDeviceId(serialDevice);
+                DeviceYaml i = interfaceService.getDeviceInformationForManufactureAndDeviceId(device);
 
                 // Which register mapping to use?
                 RegisterMapping mapping = i.getMapping()

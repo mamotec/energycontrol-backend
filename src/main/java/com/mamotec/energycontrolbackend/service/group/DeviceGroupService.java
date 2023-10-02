@@ -1,7 +1,6 @@
 package com.mamotec.energycontrolbackend.service.group;
 
 import com.mamotec.energycontrolbackend.domain.device.Device;
-import com.mamotec.energycontrolbackend.domain.device.SerialDevice;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceLinkRequest;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceType;
@@ -39,8 +38,7 @@ public class DeviceGroupService implements CrudOperations<DeviceGroup> {
         for (DeviceGroup g : all) {
             for (Device d : g.getDevices()) {
                 if (d.getInterfaceConfig().getType().equals(InterfaceType.RS485)) {
-                    SerialDevice serialDevice = (SerialDevice) d;
-                    serialDevice.setModel(interfaceService.getDeviceNameByManufacturerAndDeviceId(serialDevice));
+                    d.setModel(interfaceService.getDeviceNameByManufacturerAndDeviceId(d));
                 }
             }
         }

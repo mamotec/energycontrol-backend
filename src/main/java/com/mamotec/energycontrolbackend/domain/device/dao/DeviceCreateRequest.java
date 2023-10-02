@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "interfaceType")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "deviceType")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = SerialDeviceCreateRequest.class, name = "RS485"),
-        @JsonSubTypes.Type(value = TcpDeviceCreateRequest.class, name = "TCP"),
+        @JsonSubTypes.Type(value = HybridInverterDeviceCreateRequest.class, name = "HYBRID_INVERTER"),
+        @JsonSubTypes.Type(value = ChargingStationDeviceCreateRequest.class, name = "CHARGING_STATION"),
 })
 public class DeviceCreateRequest {
 
@@ -28,4 +28,9 @@ public class DeviceCreateRequest {
     private long unitId;
     private long peakKilowatt;
     private long deviceIdCharger;
+
+    // TCP
+    private String host;
+    private String port;
+
 }

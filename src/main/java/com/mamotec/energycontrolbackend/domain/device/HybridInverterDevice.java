@@ -11,10 +11,8 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @AllArgsConstructor
-@NoArgsConstructor(force = true)
-@Table(name = "charging_station_device")
-public class ChargingStationDevice extends Device {
+@Table(name = "hybrid_inverter_device")
+public class HybridInverterDevice extends Device {
 
-    private long deviceIdCharger;
 
 }

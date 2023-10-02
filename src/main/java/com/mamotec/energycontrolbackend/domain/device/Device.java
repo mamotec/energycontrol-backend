@@ -26,12 +26,12 @@ import org.hibernate.annotations.Where;
 @SQLDelete(sql = "UPDATE device SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "interfaceType")
+@DiscriminatorColumn(name = "deviceType")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = SerialDevice.class, name = "SerialDevice"),
-        @JsonSubTypes.Type(value = TcpDevice.class, name = "TcpDevice"),
+        @JsonSubTypes.Type(value = HybridInverterDevice.class, name = "HybridInverterDevice"),
+        @JsonSubTypes.Type(value = ChargingStationDevice.class, name = "ChargingStationDevice"),
 })
-public abstract class Device extends BaseEntity {
+public class Device extends BaseEntity {
 
     // region Fields
     private String name;
@@ -41,6 +41,7 @@ public abstract class Device extends BaseEntity {
     private InterfaceConfig interfaceConfig;
 
     @Enumerated(EnumType.STRING)
+    @Column(insertable=false, updatable=false)
     private DeviceType deviceType;
 
     @NotNull
@@ -73,7 +74,8 @@ public abstract class Device extends BaseEntity {
 
     private Integer unitId;
 
-    public abstract InterfaceType getInterfaceType();
+    private String host;
+    private String port;
 
     // endregion
 }

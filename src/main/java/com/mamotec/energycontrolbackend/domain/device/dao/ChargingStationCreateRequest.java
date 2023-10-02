@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChargingStationCreateRequest extends TcpDeviceCreateRequest {
+public class ChargingStationCreateRequest extends ChargingStationDeviceCreateRequest {
 
     private long deviceIdCharger;
 

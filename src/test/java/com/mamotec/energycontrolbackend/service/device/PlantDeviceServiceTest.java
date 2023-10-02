@@ -35,7 +35,7 @@ class PlantDeviceServiceTest extends SpringBootBaseTest {
             InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
 
             // when
-            Device deviceCreateResponse = deviceService.save(DeviceFactory.aTcpDevice(config));
+            Device deviceCreateResponse = deviceService.save(DeviceFactory.aDevice(config));
 
             // then
             assertNotNull(deviceCreateResponse);
@@ -50,7 +50,7 @@ class PlantDeviceServiceTest extends SpringBootBaseTest {
         void shouldReturnDevicesForInterfaceConfig() {
             // given
             InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
-            deviceService.save(DeviceFactory.aTcpDevice(config));
+            deviceService.save(DeviceFactory.aDevice(config));
 
             // when
             List<Device> devicesForInterfaceConfig = deviceService.getDevicesForInterfaceConfig(config.getId());
@@ -68,9 +68,9 @@ class PlantDeviceServiceTest extends SpringBootBaseTest {
         void shouldReturnAllDevices() {
             // given
             InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
-            deviceService.save(DeviceFactory.aTcpDevice(config));
-            deviceService.save(DeviceFactory.aTcpDevice(config));
-            deviceService.save(DeviceFactory.aTcpDevice(config));
+            deviceService.save(DeviceFactory.aDevice(config));
+            deviceService.save(DeviceFactory.aDevice(config));
+            deviceService.save(DeviceFactory.aDevice(config));
 
             // when
             List<Device> allDevices = deviceService.getAllDevices();
@@ -85,10 +85,10 @@ class PlantDeviceServiceTest extends SpringBootBaseTest {
             InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
             PlantDeviceGroup group = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
             // Inverter
-            DeviceFactory.aTcpDevice(config, deviceRepository);
-            DeviceFactory.aTcpDevice(config, deviceRepository);
+            DeviceFactory.aDevice(config, deviceRepository);
+            DeviceFactory.aDevice(config, deviceRepository);
             // Battery
-            Device battery = DeviceFactory.aTcpDevice(config, deviceRepository);
+            Device battery = DeviceFactory.aDevice(config, deviceRepository);
             battery.setDeviceType(DeviceType.BATTERY);
             deviceRepository.save(battery);
 

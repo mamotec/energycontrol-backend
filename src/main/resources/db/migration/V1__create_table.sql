@@ -77,6 +77,8 @@ CREATE TABLE device
     interface_type  TEXT,
     active              BOOLEAN   NOT NULL DEFAULT false,
     deleted BOOLEAN NOT NULL DEFAULT false,
+    host TEXT,
+    port TEXT,
     created_at          TIMESTAMP NOT NULL,
     updated_at          TIMESTAMP,
     device_group_id     INTEGER,
@@ -84,22 +86,15 @@ CREATE TABLE device
     CONSTRAINT fk_device_group_id FOREIGN KEY (device_group_id) REFERENCES device_group (id)
 );
 
-CREATE TABLE serial_device
-(
-    id      SERIAL PRIMARY KEY
-);
-
-CREATE TABLE tcp_device
-(
-    id   SERIAL PRIMARY KEY,
-    host TEXT,
-    port TEXT
-);
-
 CREATE TABLE charging_station_device
 (
-    id   SERIAL PRIMARY KEY,
+    id      SERIAL PRIMARY KEY,
     device_id_charger INTEGER
+);
+
+CREATE TABLE hybrid_inverter_device
+(
+    id      SERIAL PRIMARY KEY
 );
 
 CREATE TABLE system_configuration

@@ -70,7 +70,7 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
                 // given
                 com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup deviceGroup = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
                 InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
-                Device d1 = DeviceFactory.aTcpDevice(config, deviceRepository);
+                Device d1 = DeviceFactory.aDevice(config, deviceRepository);
                 DeviceLinkRequest request = new DeviceLinkRequest(List.of(d1.getId()));
 
                 // when
@@ -87,8 +87,8 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
                 // given
                 com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup deviceGroup = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
                 InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
-                Device d1 = DeviceFactory.aTcpDevice(config, deviceRepository);
-                Device d2 = DeviceFactory.aTcpDevice(config, deviceRepository);
+                Device d1 = DeviceFactory.aDevice(config, deviceRepository);
+                Device d2 = DeviceFactory.aDevice(config, deviceRepository);
                 DeviceLinkRequest request = new DeviceLinkRequest(List.of(d1.getId(), d2.getId()));
 
                 // when
@@ -105,7 +105,7 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
                 // given
                 com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup deviceGroup = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
                 InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
-                Device d1 = DeviceFactory.aTcpDevice(config, deviceRepository);
+                Device d1 = DeviceFactory.aDevice(config, deviceRepository);
                 d1.setDeviceType(DeviceType.BATTERY);
                 deviceRepository.save(d1);
                 DeviceLinkRequest request = new DeviceLinkRequest(List.of(d1.getId()));
@@ -120,7 +120,7 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
                 // given
                 com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup deviceGroup = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
                 InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
-                Device d1 = DeviceFactory.aTcpDevice(config, deviceGroup, deviceRepository);
+                Device d1 = DeviceFactory.aDevice(config, deviceGroup, deviceRepository);
                 DeviceLinkRequest request = new DeviceLinkRequest(List.of(d1.getId()));
 
                 // when
@@ -137,8 +137,8 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
                 // given
                 com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup deviceGroup = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
                 InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
-                Device d1 = DeviceFactory.aTcpDevice(config, deviceRepository);
-                Device d2 = DeviceFactory.aTcpDevice(config, deviceRepository);
+                Device d1 = DeviceFactory.aDevice(config, deviceRepository);
+                Device d2 = DeviceFactory.aDevice(config, deviceRepository);
                 DeviceLinkRequest request = new DeviceLinkRequest(List.of(d1.getId(), d2.getId()));
 
                 deviceGroupService.addDevicesToGroup(deviceGroup.getId(), request);

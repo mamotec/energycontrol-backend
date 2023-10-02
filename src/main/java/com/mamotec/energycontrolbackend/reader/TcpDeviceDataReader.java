@@ -2,7 +2,6 @@ package com.mamotec.energycontrolbackend.reader;
 
 import com.mamotec.energycontrolbackend.client.ModbusTCPClient;
 import com.mamotec.energycontrolbackend.domain.device.Device;
-import com.mamotec.energycontrolbackend.domain.device.TcpDevice;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.DeviceYaml;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.RegisterMapping;
@@ -31,8 +30,7 @@ public class TcpDeviceDataReader {
         log.info("READ - Found {} devices for interface {}.", devices.size(), config.getType());
         for (Device device : devices) {
             boolean noError = true;
-            TcpDevice tcpDevice = (TcpDevice) device;
-            DeviceYaml i = interfaceService.getDeviceInformationForManufactureAndDeviceId(tcpDevice);
+            DeviceYaml i = interfaceService.getDeviceInformationForManufactureAndDeviceId(device);
 
             // Which register mapping to use?
             RegisterMapping inverterPower = i.getMapping()
@@ -47,19 +45,19 @@ public class TcpDeviceDataReader {
             RegisterMapping gridPower = i.getMapping().getGridPower();
 
             try {
-                doFetchPerDevice(tcpDevice, inverterPower);
-                doFetchPerDevice(tcpDevice, batterySoc);
-                doFetchPerDevice(tcpDevice, batteryPower);
-                doFetchPerDevice(tcpDevice, gridPower);
+                doFetchPerDevice(device, inverterPower);
+                doFetchPerDevice(device, batterySoc);
+                doFetchPerDevice(device, batteryPower);
+                doFetchPerDevice(device, gridPower);
             } catch (Exception e) {
                 noError = false;
-                log.error("READ - Error while fetching data for device {}.", tcpDevice.getId(), e);
+                log.error("READ - Error while fetching data for device {}.", device.getId(), e);
             }
             deviceDataService.markDeviceAsActive(device, noError);
         }
     }
 
-    private void doFetchPerDevice(TcpDevice d, RegisterMapping mapping) throws Exception {
+    private void doFetchPerDevice(Device d, RegisterMapping mapping) throws Exception {
         ModbusTCPClient client = new ModbusTCPClient(d.getHost(), Integer.parseInt(d.getPort()));
 
         String result = client.readHoldingRegisters(mapping.getRegister()
