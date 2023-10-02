@@ -14,6 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 public class DeviceScanDao {
 
-    List<HybridInverterDeviceCreateRequest> alreadyExistingDevices = new ArrayList<>();
-    List<HybridInverterDeviceCreateRequest> newDevices = new ArrayList<>();
+    List<HybridInverterCreateRequest> alreadyExistingDevices = new ArrayList<>();
+    List<HybridInverterCreateRequest> newDevices = new ArrayList<>();
 }

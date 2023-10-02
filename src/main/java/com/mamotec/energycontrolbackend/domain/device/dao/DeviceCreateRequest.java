@@ -14,8 +14,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "deviceType")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = HybridInverterDeviceCreateRequest.class, name = "HYBRID_INVERTER"),
-        @JsonSubTypes.Type(value = ChargingStationDeviceCreateRequest.class, name = "CHARGING_STATION"),
+        @JsonSubTypes.Type(value = HybridInverterCreateRequest.class, name = "HYBRID_INVERTER"),
+        @JsonSubTypes.Type(value = ChargingStationCreateRequest.class, name = "CHARGING_STATION"),
 })
 public class DeviceCreateRequest {
 
@@ -27,7 +27,6 @@ public class DeviceCreateRequest {
     private long deviceId;
     private long unitId;
     private long peakKilowatt;
-    private long deviceIdCharger;
 
     // TCP
     private String host;

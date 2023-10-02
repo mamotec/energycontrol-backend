@@ -18,7 +18,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex, WebRequest request) {
-        log.error(ex.getMessage());
+        log.error(String.valueOf(ex));
         String bodyOfResponse = ex.getMessage();
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
 
@@ -26,14 +26,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ExternalServiceNotAvailableException.class)
     public ResponseEntity<Object> handleGeneralRestAPIException(EntityNotFoundException ex, WebRequest request) {
-        log.error(ex.getMessage());
+        log.error(String.valueOf(ex));
         String bodyOfResponse = ex.getMessage();
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.SERVICE_UNAVAILABLE, request);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleMethodArgumentNotValidException(Exception ex, WebRequest request) {
-        log.error(ex.getMessage());
+        log.error(String.valueOf(ex));
         String bodyOfResponse = ex.getMessage();
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }

@@ -10,6 +10,8 @@ import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class DeviceValidationService {
@@ -28,7 +30,11 @@ public class DeviceValidationService {
 
     private void validateForMode(Device device) {
         if (holder.getApplicationMode().equals(ApplicationMode.HOME)) {
-            if (repository.existsByDeviceType(device.getDeviceType())) {
+            List<Device> devices = repository.findAll();
+            boolean deviceAvailable = devices.stream()
+                    .anyMatch(d -> d.getDeviceType()
+                            .equals(device.getDeviceType()));
+            if (deviceAvailable) {
                 throw new ConstraintViolationException("Es existiert bereits ein Gerät dieses Typs.", null);
             }
 

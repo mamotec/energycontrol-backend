@@ -87,10 +87,6 @@ class PlantDeviceServiceTest extends SpringBootBaseTest {
             // Inverter
             DeviceFactory.aDevice(config, deviceRepository);
             DeviceFactory.aDevice(config, deviceRepository);
-            // Battery
-            Device battery = DeviceFactory.aDevice(config, deviceRepository);
-            battery.setDeviceType(DeviceType.BATTERY);
-            deviceRepository.save(battery);
 
             // when
             List<Device> allDevices = deviceService.getValidDevicesForGroup(group.getId());

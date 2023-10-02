@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 @NoArgsConstructor
-public class HybridInverterDeviceCreateRequest extends DeviceCreateRequest {
+public class HybridInverterCreateRequest extends DeviceCreateRequest {
 
 
 }

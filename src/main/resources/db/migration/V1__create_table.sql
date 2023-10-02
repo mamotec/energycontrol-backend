@@ -74,7 +74,6 @@ CREATE TABLE device
     manufacturer_id INTEGER,
     device_id       INTEGER,
     device_type     TEXT,
-    interface_type  TEXT,
     active              BOOLEAN   NOT NULL DEFAULT false,
     deleted BOOLEAN NOT NULL DEFAULT false,
     host TEXT,

@@ -16,6 +16,7 @@ import com.mamotec.energycontrolbackend.repository.InterfaceConfigRepository;
 import com.mamotec.energycontrolbackend.service.CrudOperations;
 import com.mamotec.energycontrolbackend.service.device.DeviceService;
 import com.mamotec.energycontrolbackend.service.device.DeviceValidationService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -51,6 +52,7 @@ public class HomeDeviceService implements CrudOperations<Device>, DeviceService 
     }
 
     @Override
+    @Transactional
     public Device create(DeviceCreateRequest request) {
         InterfaceConfig c = createInterfaceConfig(request);
 
@@ -101,17 +103,24 @@ public class HomeDeviceService implements CrudOperations<Device>, DeviceService 
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         Device d = deviceRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Device with id " + id + " not found."));
         d.setInterfaceConfig(null);
         deviceRepository.save(d);
 
-        deviceGroupRepository.deleteById(d.getDeviceGroup().getId());
+        if (Objects.isNull(d.getDeviceGroup())) {
+            deviceRepository.deleteById(id);
+        } else {
+            deviceGroupRepository.deleteById(d.getDeviceGroup()
+                    .getId());
+        }
 
     }
 
     @Override
+    @Transactional
     public List<DeviceTypeResponse> getAllDeviceTypes() {
         DeviceTypeResponse hybridInverter = new DeviceTypeResponse(DeviceType.HYBRID_INVERTER, "Hybrid Wechselrichter");
         DeviceTypeResponse chargingStation = new DeviceTypeResponse(DeviceType.CHARGING_STATION, "Ladestation");

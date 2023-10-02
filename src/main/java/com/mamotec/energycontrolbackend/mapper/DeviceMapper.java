@@ -11,8 +11,8 @@ import org.mapstruct.SubclassMapping;
 @Mapper(componentModel = "spring", subclassExhaustiveStrategy = SubclassExhaustiveStrategy.RUNTIME_EXCEPTION)
 public interface DeviceMapper {
 
-    @SubclassMapping(source = HybridInverterDeviceCreateRequest.class, target = HybridInverterDevice.class)
-    @SubclassMapping(source = ChargingStationDeviceCreateRequest.class, target = ChargingStationDevice.class)
+    @SubclassMapping(source = HybridInverterCreateRequest.class, target = HybridInverterDevice.class)
+    @SubclassMapping(source = ChargingStationCreateRequest.class, target = ChargingStationDevice.class)
     Device map(DeviceCreateRequest request);
 
     DeviceCreateResponse map(Device device);

@@ -12,6 +12,7 @@ import com.mamotec.energycontrolbackend.service.CrudOperations;
 import com.mamotec.energycontrolbackend.service.device.DeviceService;
 import com.mamotec.energycontrolbackend.service.device.DeviceValidationService;
 import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -88,6 +89,7 @@ public class PlantDeviceService implements CrudOperations<Device>, DeviceService
     }
 
     @Override
+    @Transactional
     public Device create(DeviceCreateRequest request) {
         Device device = deviceMapper.map(request);
         validationService.validate(device);
@@ -96,11 +98,13 @@ public class PlantDeviceService implements CrudOperations<Device>, DeviceService
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         deviceRepository.deleteById(id);
     }
 
     @Override
+    @Transactional
     public List<DeviceTypeResponse> getAllDeviceTypes() {
         DeviceTypeResponse hybridInverter = new DeviceTypeResponse(DeviceType.HYBRID_INVERTER, "Hybrid Wechselrichter");
         DeviceTypeResponse chargingStation = new DeviceTypeResponse(DeviceType.CHARGING_STATION, "Ladestation");

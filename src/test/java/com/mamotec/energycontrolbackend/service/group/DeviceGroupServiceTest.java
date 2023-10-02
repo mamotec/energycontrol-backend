@@ -3,6 +3,7 @@ package com.mamotec.energycontrolbackend.service.group;
 import com.mamotec.energycontrolbackend.base.SpringBootBaseTest;
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.DeviceType;
+import com.mamotec.energycontrolbackend.domain.device.HybridInverterDevice;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceLinkRequest;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.exception.AddDeviceToGroupException;
@@ -106,7 +107,6 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
                 com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup deviceGroup = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
                 InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
                 Device d1 = DeviceFactory.aDevice(config, deviceRepository);
-                d1.setDeviceType(DeviceType.BATTERY);
                 deviceRepository.save(d1);
                 DeviceLinkRequest request = new DeviceLinkRequest(List.of(d1.getId()));
 
