@@ -2,6 +2,7 @@ package com.mamotec.energycontrolbackend.reader;
 
 import com.mamotec.energycontrolbackend.client.ModbusTCPClient;
 import com.mamotec.energycontrolbackend.domain.device.Device;
+import com.mamotec.energycontrolbackend.domain.device.HybridInverterDevice;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.DeviceYaml;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.RegisterMapping;
@@ -32,28 +33,31 @@ public class TcpDeviceDataReader {
             boolean noError = true;
             DeviceYaml i = interfaceService.getDeviceInformationForManufactureAndDeviceId(device);
 
-            // Which register mapping to use?
-            RegisterMapping inverterPower = i.getMapping()
-                    .getPower();
+            if (device instanceof HybridInverterDevice) {
+                // Which register mapping to use?
+                RegisterMapping inverterPower = i.getMapping()
+                        .getPower();
 
-            RegisterMapping batterySoc = i.getMapping()
-                    .getBatterySoc();
+                RegisterMapping batterySoc = i.getMapping()
+                        .getBatterySoc();
 
-            RegisterMapping batteryPower = i.getMapping()
-                    .getBatteryPower();
+                RegisterMapping batteryPower = i.getMapping()
+                        .getBatteryPower();
 
-            RegisterMapping gridPower = i.getMapping().getGridPower();
+                RegisterMapping gridPower = i.getMapping().getGridPower();
 
-            try {
-                doFetchPerDevice(device, inverterPower);
-                doFetchPerDevice(device, batterySoc);
-                doFetchPerDevice(device, batteryPower);
-                doFetchPerDevice(device, gridPower);
-            } catch (Exception e) {
-                noError = false;
-                log.error("READ - Error while fetching data for device {}.", device.getId(), e);
+                try {
+                    doFetchPerDevice(device, inverterPower);
+                    doFetchPerDevice(device, batterySoc);
+                    doFetchPerDevice(device, batteryPower);
+                    doFetchPerDevice(device, gridPower);
+                } catch (Exception e) {
+                    noError = false;
+                    log.error("READ - Error while fetching data for device {}.", device.getId(), e);
+                }
+                deviceDataService.markDeviceAsActive(device, noError);
             }
-            deviceDataService.markDeviceAsActive(device, noError);
+
         }
     }
 

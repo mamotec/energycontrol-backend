@@ -25,6 +25,8 @@ public class ChargingStationDevice extends Device {
     // UUID from charging station
     private UUID uuid;
 
+    private boolean ocppAvailable;
+
     @Override
     public DeviceType getDeviceType() {
         return CHARGING_STATION;

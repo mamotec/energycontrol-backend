@@ -68,7 +68,7 @@ public abstract class Device extends BaseEntity {
 
     private boolean deleted = Boolean.FALSE;
 
-    private Integer unitId;
+    private Integer unitId = null;
 
     private String host;
     private String port;

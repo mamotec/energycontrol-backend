@@ -89,6 +89,7 @@ CREATE TABLE charging_station_device
 (
     id      SERIAL PRIMARY KEY,
     device_id_charger INTEGER,
+    ocpp_available BOOLEAN NOT NULL DEFAULT false,
     uuid uuid
 );
 

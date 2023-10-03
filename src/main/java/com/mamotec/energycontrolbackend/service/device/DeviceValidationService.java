@@ -21,7 +21,7 @@ public class DeviceValidationService {
     private final ConfigurationHolder holder;
 
     public void validate(Device device) {
-        if (existsByUnitIdAndInterfaceConfig(device.getUnitId(), device.getInterfaceConfig())) {
+        if (existsByUnitIdAndInterfaceConfig(device.getUnitId(), device.getInterfaceConfig()) && device.getUnitId() > 0) {
             throw new ConstraintViolationException("Gerät existiert bereits mit dieser Slave-Id für die Konfiguration.", null);
         }
 

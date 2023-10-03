@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 public class ChargingStationCreateRequest extends DeviceCreateRequest {
 
     private long deviceIdCharger;
+    private boolean ocppAvailable;
 
 }
