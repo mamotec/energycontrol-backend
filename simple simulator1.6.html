@@ -128,7 +128,7 @@
             id="CP"
             type="text"
             placeholder="Id Station"
-            value="ws://localhost:3000/EVB-P20261797"
+            value="ws://localhost:8887/1"
           />
           <label>Tag</label
           ><input
@@ -190,13 +190,13 @@
               id="meterInterval"
               type="text"
               placeholder="meterInterval"
-              value="1000"
+              value="5000"
             />
             <input
               id="meterSendTimes"
               type="text"
               placeholder="meterSendTimes"
-              value="60"
+              value="5"
             />
           </div>
           <button id="mvp">Send Meter Values loop</button>
@@ -263,7 +263,7 @@
             if (c == 1) {
               var hb_interval = handleData(ddata);
               sessionStorage.setItem("Configuration", hb_interval);
-              startHB(hb_interval * 1000);
+              startHB(5000);
             }
 
             if (ddata[0] === 3) {

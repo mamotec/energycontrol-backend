@@ -22,7 +22,7 @@ public class ChargingStationService {
         Optional<ChargingStationDevice> deviceToUpdate = repository.findFirstByDeviceIdCharger(parseLong(identifier.replace("/", "")));
 
         if (deviceToUpdate.isEmpty()) {
-            log.info("Charging Station with identifier: " + identifier + " not found");
+            log.info("Charging Station with identifier: %s not found".formatted(identifier));
             return;
         }
 
@@ -31,6 +31,27 @@ public class ChargingStationService {
         chargingStationDevice.setUuid(uuid);
 
         repository.save(chargingStationDevice);
+    }
+
+    public void updateStatus(UUID uuid, boolean status) {
+        ChargingStationDevice chargingStationDevice = getByUUID(uuid);
+
+        if (chargingStationDevice == null) return;
+
+        chargingStationDevice.setActive(status);
+
+        repository.save(chargingStationDevice);
+    }
+
+    private ChargingStationDevice getByUUID(UUID uuid) throws RuntimeException {
+        Optional<ChargingStationDevice> deviceToUpdate = repository.findFirstByUuid(uuid);
+
+        if (deviceToUpdate.isEmpty()) {
+            log.error("Charging Station with uuid: " + uuid + " not found");
+            return null;
+        }
+
+        return deviceToUpdate.get();
     }
 
 }

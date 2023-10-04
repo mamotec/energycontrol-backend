@@ -88,7 +88,8 @@ CREATE TABLE device
 CREATE TABLE charging_station_device
 (
     id      SERIAL PRIMARY KEY,
-    device_id_charger INTEGER
+    device_id_charger INTEGER,
+    uuid uuid
 );
 
 CREATE TABLE hybrid_inverter_device

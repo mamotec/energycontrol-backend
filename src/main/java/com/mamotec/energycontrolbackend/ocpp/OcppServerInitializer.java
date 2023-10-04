@@ -1,6 +1,7 @@
 package com.mamotec.energycontrolbackend.ocpp;
 
 import com.mamotec.energycontrolbackend.ocpp.config.OcppServerConfig;
+import com.mamotec.energycontrolbackend.service.device.ChargingStationService;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
@@ -13,11 +14,12 @@ import java.util.Collections;
 public class OcppServerInitializer {
 
     private final OcppServerConfig config;
+    private final ChargingStationService service;
 
 
     @EventListener(ApplicationReadyEvent.class)
     public void startOcppServer() {
-        OcppServer server = new OcppServer("localhost", config.ocppServerPort(), null, Collections.emptySet(), Collections.emptySet());
-        server.activate();
+        OcppServer server = new OcppServer("localhost", config.ocppServerPort(), null, Collections.emptySet(), Collections.emptySet(), service);
+        server.activate(service);
     }
 }

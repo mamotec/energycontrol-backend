@@ -1,5 +1,6 @@
 package com.mamotec.energycontrolbackend.ocpp;
 
+import com.mamotec.energycontrolbackend.service.device.ChargingStationService;
 import eu.chargetime.ocpp.feature.profile.ServerCoreEventHandler;
 import eu.chargetime.ocpp.model.Request;
 import eu.chargetime.ocpp.model.core.*;
@@ -16,6 +17,7 @@ public class OcppServerCoreEventHandler implements ServerCoreEventHandler {
     private OcppRequestListener<Request> listener;
     private final Set<String> identifiers;
     private final Set<String> tags;
+    private final ChargingStationService service;
 
     @Override
     public AuthorizeConfirmation handleAuthorizeRequest(UUID uuid, AuthorizeRequest authorizeRequest) {
@@ -34,6 +36,7 @@ public class OcppServerCoreEventHandler implements ServerCoreEventHandler {
 
     @Override
     public HeartbeatConfirmation handleHeartbeatRequest(UUID uuid, HeartbeatRequest heartbeatRequest) {
+        service.updateStatus(uuid, heartbeatRequest.validate());
         return new HeartbeatConfirmation(ZonedDateTime.now());
     }
 
