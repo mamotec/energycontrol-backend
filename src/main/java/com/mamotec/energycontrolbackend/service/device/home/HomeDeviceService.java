@@ -1,10 +1,13 @@
 package com.mamotec.energycontrolbackend.service.device.home;
 
+import com.mamotec.energycontrolbackend.domain.device.ChargingStationDevice;
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.DeviceType;
+import com.mamotec.energycontrolbackend.domain.device.HybridInverterDevice;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateRequest;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceTypeResponse;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
+import com.mamotec.energycontrolbackend.domain.group.DeviceGroupType;
 import com.mamotec.energycontrolbackend.domain.group.dao.home.HomeDeviceGroup;
 import com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
@@ -82,23 +85,30 @@ public class HomeDeviceService implements CrudOperations<Device>, DeviceService 
     }
 
     private void createDeviceGroup(DeviceCreateRequest request, Device device, Device saved) {
-        if (!Objects.isNull(device.getDeviceType()
-                .getGroup())) {
-            DeviceGroup deviceGroup = DeviceGroupFactory.getDeviceGroup(device.getDeviceType()
-                    .getGroup());
 
-            if (deviceGroup instanceof HomeDeviceGroup group) {
-                group.setPeakKilowatt(request.getPeakKilowatt());
-            } else if (deviceGroup instanceof PlantDeviceGroup group) {
-                group.setPeakKilowatt(request.getPeakKilowatt());
-            }
+        DeviceGroup deviceGroup = DeviceGroupFactory.getDeviceGroup(this.getDeviceGroupForType(device));
 
-            deviceGroup.setName(device.getName());
-            deviceGroup.setDevices(List.of(device));
-            deviceGroupRepository.save(deviceGroup);
+        if (deviceGroup instanceof HomeDeviceGroup group) {
+            group.setPeakKilowatt(request.getPeakKilowatt());
+        } else if (deviceGroup instanceof PlantDeviceGroup group) {
+            group.setPeakKilowatt(request.getPeakKilowatt());
+        }
 
-            saved.setDeviceGroup(deviceGroup);
-            save(saved);
+        deviceGroup.setName(device.getName());
+        deviceGroup.setDevices(List.of(device));
+        deviceGroupRepository.save(deviceGroup);
+
+        saved.setDeviceGroup(deviceGroup);
+        save(saved);
+    }
+
+    private DeviceGroupType getDeviceGroupForType(Device device) {
+        if (device instanceof HybridInverterDevice) {
+            return DeviceType.HYBRID_INVERTER.getGroup();
+        } else if (device instanceof ChargingStationDevice) {
+            return DeviceType.CHARGING_STATION.getGroup();
+        } else {
+            throw new IllegalArgumentException("Device type not supported.");
         }
     }
 

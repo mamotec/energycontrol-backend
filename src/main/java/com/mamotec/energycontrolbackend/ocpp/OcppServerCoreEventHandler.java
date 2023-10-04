@@ -47,7 +47,7 @@ public class OcppServerCoreEventHandler implements ServerCoreEventHandler {
 
     @Override
     public StartTransactionConfirmation handleStartTransactionRequest(UUID uuid, StartTransactionRequest startTransactionRequest) {
-        return null;
+        return new StartTransactionConfirmation(new IdTagInfo(AuthorizationStatus.Accepted), 1);
     }
 
     @Override

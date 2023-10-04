@@ -18,6 +18,7 @@ public class OcppServerEvents implements ServerEvents {
 
     @Override
     public void authenticateSession(SessionInformation sessionInformation, String s, byte[] bytes) {
+        log.info("Authenticate Session");
     }
 
     @Override
