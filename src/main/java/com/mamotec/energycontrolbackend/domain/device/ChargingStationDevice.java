@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 import static com.mamotec.energycontrolbackend.domain.device.DeviceType.CHARGING_STATION;
 
 @EqualsAndHashCode(callSuper = true)
@@ -20,6 +22,8 @@ import static com.mamotec.energycontrolbackend.domain.device.DeviceType.CHARGING
 public class ChargingStationDevice extends Device {
 
     private long deviceIdCharger;
+    // UUID from charging station
+    private UUID uuid;
 
     @Override
     public DeviceType getDeviceType() {
