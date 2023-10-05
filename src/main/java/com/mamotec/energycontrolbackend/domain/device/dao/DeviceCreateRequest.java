@@ -27,6 +27,7 @@ public class DeviceCreateRequest {
     private long deviceId;
     private long unitId;
     private long peakKilowatt;
+    private boolean active;
 
     // TCP
     private String host;

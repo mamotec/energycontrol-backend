@@ -1,9 +1,12 @@
 package com.mamotec.energycontrolbackend.domain.device.dao;
 
+import eu.chargetime.ocpp.model.core.ChargePointStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 @Data
 @Builder
@@ -13,5 +16,7 @@ public class ChargingStationCreateRequest extends DeviceCreateRequest {
 
     private long deviceIdCharger;
     private boolean ocppAvailable;
+    private UUID uuid;
+    private ChargePointStatus chargePointStatus;
 
 }

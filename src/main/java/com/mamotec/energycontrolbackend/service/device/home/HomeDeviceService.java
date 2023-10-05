@@ -65,7 +65,7 @@ public class HomeDeviceService implements CrudOperations<Device>, DeviceService 
         Device saved = save(device);
 
         // Erstelle Gruppe für Gerät.
-        createDeviceGroup(request, device, saved);
+        createDeviceGroup(request, saved);
 
         return saved;
     }
@@ -84,9 +84,9 @@ public class HomeDeviceService implements CrudOperations<Device>, DeviceService 
 
     }
 
-    private void createDeviceGroup(DeviceCreateRequest request, Device device, Device saved) {
+    private void createDeviceGroup(DeviceCreateRequest request, Device saved) {
 
-        DeviceGroup deviceGroup = DeviceGroupFactory.getDeviceGroup(this.getDeviceGroupForType(device));
+        DeviceGroup deviceGroup = DeviceGroupFactory.getDeviceGroup(this.getDeviceGroupForType(saved));
 
         if (deviceGroup instanceof HomeDeviceGroup group) {
             group.setPeakKilowatt(request.getPeakKilowatt());
@@ -94,8 +94,8 @@ public class HomeDeviceService implements CrudOperations<Device>, DeviceService 
             group.setPeakKilowatt(request.getPeakKilowatt());
         }
 
-        deviceGroup.setName(device.getName());
-        deviceGroup.setDevices(List.of(device));
+        deviceGroup.setName(saved.getName());
+        deviceGroup.setDevices(List.of(saved));
         deviceGroupRepository.save(deviceGroup);
 
         saved.setDeviceGroup(deviceGroup);

@@ -1,8 +1,7 @@
 package com.mamotec.energycontrolbackend.domain.device;
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import eu.chargetime.ocpp.model.core.ChargePointStatus;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,10 +21,11 @@ import static com.mamotec.energycontrolbackend.domain.device.DeviceType.CHARGING
 public class ChargingStationDevice extends Device {
 
     private long deviceIdCharger;
-    // UUID from charging station
+    // Session UUID
     private UUID uuid;
-
     private boolean ocppAvailable;
+    @Enumerated(EnumType.STRING)
+    private ChargePointStatus chargePointStatus;
 
     @Override
     public DeviceType getDeviceType() {

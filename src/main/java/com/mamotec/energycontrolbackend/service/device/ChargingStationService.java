@@ -1,7 +1,10 @@
 package com.mamotec.energycontrolbackend.service.device;
 
 import com.mamotec.energycontrolbackend.domain.device.ChargingStationDevice;
+import com.mamotec.energycontrolbackend.domain.device.dao.ChargingStationCreateRequest;
 import com.mamotec.energycontrolbackend.repository.ChargingStationRepository;
+import eu.chargetime.ocpp.model.core.ChargePointStatus;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,28 +20,53 @@ import static java.lang.Long.parseLong;
 public class ChargingStationService {
 
     private final ChargingStationRepository repository;
+    private final DeviceServiceFactory factory;
 
+    @Transactional
     public void updateChargingStationUUID(String identifier, UUID uuid) {
-        Optional<ChargingStationDevice> deviceToUpdate = repository.findFirstByDeviceIdCharger(parseLong(identifier.replace("/", "")));
+        Optional<ChargingStationDevice> firstByDeviceIdCharger = repository.findFirstByDeviceIdCharger(parseLong(identifier.replace("/", "")));
+        if (firstByDeviceIdCharger.isPresent()) {
+            log.info("Charging Station with identifier: " + identifier + " already exists - updating UUID");
 
-        if (deviceToUpdate.isEmpty()) {
-            log.info("Charging Station with identifier: %s not found".formatted(identifier));
-            return;
+            ChargingStationDevice chargingStationDevice = firstByDeviceIdCharger.get();
+
+            chargingStationDevice.setUuid(uuid);
+
+            repository.save(chargingStationDevice);
+        } else {
+            log.info("Charging Station with identifier: " + identifier + " does not exist - creating new Charging Station");
+            DeviceService service = factory.createService();
+            ChargingStationCreateRequest request = new ChargingStationCreateRequest();
+            request.setDeviceIdCharger(parseLong(identifier.replace("/", "")));
+            request.setUuid(uuid);
+            request.setChargePointStatus(ChargePointStatus.Available);
+            request.setActive(true);
+            request.setOcppAvailable(true);
+            request.setName("Ladestation " + identifier.replace("/", ""));
+
+            service.create(request);
         }
 
-        ChargingStationDevice chargingStationDevice = deviceToUpdate.get();
-
-        chargingStationDevice.setUuid(uuid);
-
-        repository.save(chargingStationDevice);
     }
 
-    public void updateStatus(UUID uuid, boolean status) {
+    @Transactional
+    public void updateActiveStatus(UUID uuid, boolean status) {
         ChargingStationDevice chargingStationDevice = getByUUID(uuid);
 
         if (chargingStationDevice == null) return;
 
         chargingStationDevice.setActive(status);
+
+        repository.save(chargingStationDevice);
+    }
+
+    @Transactional
+    public void updateChargePointStatus(UUID uuid, ChargePointStatus status) {
+        ChargingStationDevice chargingStationDevice = getByUUID(uuid);
+
+        if (chargingStationDevice == null) return;
+
+        chargingStationDevice.setChargePointStatus(status);
 
         repository.save(chargingStationDevice);
     }

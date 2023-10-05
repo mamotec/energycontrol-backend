@@ -36,7 +36,7 @@ public class OcppServerCoreEventHandler implements ServerCoreEventHandler {
 
     @Override
     public HeartbeatConfirmation handleHeartbeatRequest(UUID uuid, HeartbeatRequest heartbeatRequest) {
-        service.updateStatus(uuid, heartbeatRequest.validate());
+        service.updateActiveStatus(uuid, heartbeatRequest.validate());
         return new HeartbeatConfirmation(ZonedDateTime.now());
     }
 
@@ -52,6 +52,7 @@ public class OcppServerCoreEventHandler implements ServerCoreEventHandler {
 
     @Override
     public StatusNotificationConfirmation handleStatusNotificationRequest(UUID uuid, StatusNotificationRequest statusNotificationRequest) {
+        service.updateChargePointStatus(uuid, statusNotificationRequest.getStatus());
         return new StatusNotificationConfirmation();
     }
 

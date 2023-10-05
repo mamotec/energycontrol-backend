@@ -29,7 +29,7 @@ public class OcppServerEvents implements ServerEvents {
 
     @Override
     public void lostSession(UUID uuid) {
-        chargingStationService.updateStatus(uuid, false);
+        chargingStationService.updateActiveStatus(uuid, false);
         log.info("Charging Station with UUID: " + uuid + " disconnected");
     }
 }
