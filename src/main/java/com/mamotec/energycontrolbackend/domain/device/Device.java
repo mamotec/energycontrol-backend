@@ -73,6 +73,8 @@ public abstract class Device extends BaseEntity {
     private String host;
     private String port;
 
+    private int priority;
+
     public abstract DeviceType getDeviceType();
 
     // endregion

@@ -6,7 +6,6 @@ import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -24,5 +23,12 @@ public interface DeviceRepository extends JpaRepository<Device, Long> {
     List<Device> findAllByDeviceTypeInAndDeviceGroupNull(List<DeviceType> validDeviceTypes);
 
     boolean existsByUnitIdAndInterfaceConfig(long unitId, InterfaceConfig config);
+
+    // Find device with the biggest priority
+    @Query(nativeQuery = true, value = "select device.priority from device where deleted = false order by priority desc limit 1")
+    int findDeviceWithBiggestPriority();
+
+    Device findFirstByPriority(int priority);
+
 
 }

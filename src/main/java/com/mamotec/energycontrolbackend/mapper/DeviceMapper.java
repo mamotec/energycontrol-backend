@@ -17,4 +17,9 @@ public interface DeviceMapper {
 
     DeviceCreateResponse map(Device device);
 
+    default void update(DeviceUpdateRequest request, final Device device) {
+        device.setName(request.getName());
+        device.setPriority(request.getPriority());
+    }
+
 }

@@ -4,6 +4,7 @@ import com.mamotec.energycontrolbackend.client.NodeRedClient;
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateRequest;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceTypeResponse;
+import com.mamotec.energycontrolbackend.domain.device.dao.DeviceUpdateRequest;
 import com.mamotec.energycontrolbackend.service.device.DeviceService;
 import com.mamotec.energycontrolbackend.service.device.DeviceServiceFactory;
 import com.mamotec.energycontrolbackend.service.device.plant.PlantDeviceService;
@@ -35,6 +36,15 @@ public class DeviceController {
         log.info("POST /device is being called.");
         DeviceService service = factory.createService();
         service.create(request);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Aktualisiere ein Gerät")
+    public ResponseEntity<Void> updateDevice(@PathVariable Long id, @RequestBody DeviceUpdateRequest request) {
+        log.info("PUT /device/{} is being called.", id);
+        DeviceService service = factory.createService();
+        service.update(id, request);
         return ResponseEntity.ok().build();
     }
 

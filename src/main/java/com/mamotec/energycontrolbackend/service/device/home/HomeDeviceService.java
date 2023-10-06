@@ -6,6 +6,7 @@ import com.mamotec.energycontrolbackend.domain.device.DeviceType;
 import com.mamotec.energycontrolbackend.domain.device.HybridInverterDevice;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateRequest;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceTypeResponse;
+import com.mamotec.energycontrolbackend.domain.device.dao.DeviceUpdateRequest;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroupType;
 import com.mamotec.energycontrolbackend.domain.group.dao.home.HomeDeviceGroup;
@@ -60,6 +61,7 @@ public class HomeDeviceService implements CrudOperations<Device>, DeviceService 
         InterfaceConfig c = createInterfaceConfig(request);
 
         Device device = deviceMapper.map(request);
+        device.setPriority(deviceRepository.findDeviceWithBiggestPriority() + 1);
         device.setInterfaceConfig(c);
         validationService.validate(device);
         Device saved = save(device);
@@ -68,6 +70,30 @@ public class HomeDeviceService implements CrudOperations<Device>, DeviceService 
         createDeviceGroup(request, saved);
 
         return saved;
+    }
+
+    @Override
+    public Device update(Long id, DeviceUpdateRequest request) {
+        Device d = deviceRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Device with id " + id + " not found."));
+
+        if (request.getPriority() != d.getPriority()) {
+            doPriorityUpdate(request, d);
+        }
+
+        deviceMapper.update(request, d);
+        return save(d);
+    }
+
+    private void doPriorityUpdate(DeviceUpdateRequest request, Device d) {
+        Device deviceToAdjust = deviceRepository.findFirstByPriority(request.getPriority());
+        if (request.getPriority() > d.getPriority()) {
+            deviceToAdjust.setPriority(deviceToAdjust.getPriority() - 1);
+        } else if (request.getPriority() < d.getPriority()) {
+            deviceToAdjust.setPriority(deviceToAdjust.getPriority() + 1);
+        }
+
+        save(deviceToAdjust);
     }
 
     private InterfaceConfig createInterfaceConfig(DeviceCreateRequest request) {

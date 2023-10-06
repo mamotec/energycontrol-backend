@@ -4,6 +4,7 @@ import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.DeviceType;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateRequest;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceTypeResponse;
+import com.mamotec.energycontrolbackend.domain.device.dao.DeviceUpdateRequest;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.mapper.DeviceMapper;
 import com.mamotec.energycontrolbackend.repository.DeviceGroupRepository;
@@ -65,6 +66,13 @@ public class PlantDeviceService implements CrudOperations<Device>, DeviceService
         for (Device device : all) {
             device.setModel(interfaceService.getDeviceNameByManufacturerAndDeviceId(device));
         }
+        // Sort by priority
+        all.sort((o1, o2) -> {
+            if (o1.getPriority() == o2.getPriority()) {
+                return 0;
+            }
+            return o1.getPriority() < o2.getPriority() ? -1 : 1;
+        });
         return all;
     }
 
@@ -95,6 +103,11 @@ public class PlantDeviceService implements CrudOperations<Device>, DeviceService
         validationService.validate(device);
 
         return save(device);
+    }
+
+    @Override
+    public Device update(Long id, DeviceUpdateRequest request) {
+        return null;
     }
 
     @Override

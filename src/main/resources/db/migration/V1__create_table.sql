@@ -70,6 +70,7 @@ CREATE TABLE device
     id                  SERIAL PRIMARY KEY,
     interface_config_id INTEGER,
     unit_id INTEGER,
+    priority INTEGER,
     name                TEXT,
     manufacturer_id INTEGER,
     device_id       INTEGER,
