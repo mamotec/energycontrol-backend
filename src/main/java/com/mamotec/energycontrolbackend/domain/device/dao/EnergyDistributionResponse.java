@@ -14,4 +14,5 @@ public class EnergyDistributionResponse {
 
     private EnergyDistributionEvent event;
     private String description;
+    private String name;
 }

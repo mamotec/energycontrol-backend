@@ -50,6 +50,15 @@ public class PlantDeviceService implements CrudOperations<Device>, DeviceService
                 .orElseThrow();
 
         device.setModel(interfaceService.getDeviceNameByManufacturerAndDeviceId(device));
+        device.setEventName(device.getEnergyDistributionEvent()
+                .getName());
+        device.setEventDescription(device.getEnergyDistributionEvent()
+                .getDescription());
+        device.setValidEnergyDistributionEvents(Arrays.stream(EnergyDistributionEvent.values())
+                .filter(e -> e.getDeviceTypes()
+                        .contains(device.getDeviceType()))
+                .map(e -> new EnergyDistributionResponse(e, e.getDescription(), e.getName()))
+                .toList());
 
         return device;
     }
@@ -68,6 +77,15 @@ public class PlantDeviceService implements CrudOperations<Device>, DeviceService
 
         for (Device device : all) {
             device.setModel(interfaceService.getDeviceNameByManufacturerAndDeviceId(device));
+            device.setEventName(device.getEnergyDistributionEvent()
+                    .getName());
+            device.setEventDescription(device.getEnergyDistributionEvent()
+                    .getDescription());
+            device.setValidEnergyDistributionEvents(Arrays.stream(EnergyDistributionEvent.values())
+                    .filter(e -> e.getDeviceTypes()
+                            .contains(device.getDeviceType()))
+                    .map(e -> new EnergyDistributionResponse(e, e.getDescription(), e.getName()))
+                    .toList());
         }
         // Sort by priority
         all.sort((o1, o2) -> {
@@ -133,10 +151,9 @@ public class PlantDeviceService implements CrudOperations<Device>, DeviceService
     @Override
     public List<EnergyDistributionResponse> getAllEnergyDistributionEvents(DeviceType deviceType) {
         EnergyDistributionEvent[] values = EnergyDistributionEvent.values();
-        List<EnergyDistributionResponse> list = Arrays.stream(values)
+        return Arrays.stream(values)
                 .filter(e -> e.getDeviceTypes().contains(deviceType))
-                .map(e -> new EnergyDistributionResponse(e, e.getDescription()))
+                .map(e -> new EnergyDistributionResponse(e, e.getDescription(), e.getName()))
                 .toList();
-        return list;
     }
 }

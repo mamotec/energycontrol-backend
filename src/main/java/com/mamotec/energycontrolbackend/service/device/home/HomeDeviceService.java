@@ -168,7 +168,7 @@ public class HomeDeviceService implements CrudOperations<Device>, DeviceService 
         EnergyDistributionEvent[] values = EnergyDistributionEvent.values();
         return Arrays.stream(values)
                 .filter(e -> e.getDeviceTypes().contains(deviceType))
-                .map(e -> new EnergyDistributionResponse(e, e.getDescription()))
+                .map(e -> new EnergyDistributionResponse(e, e.getDescription(), e.getName()))
                 .toList();
     }
 }

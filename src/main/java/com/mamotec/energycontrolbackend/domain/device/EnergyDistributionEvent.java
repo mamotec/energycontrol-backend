@@ -7,16 +7,17 @@ import java.util.List;
 @Getter
 public enum EnergyDistributionEvent {
 
-    SOLAR("Verbraucher wird nur mit Solarenergie geladen.", DeviceType.BATTERY, DeviceType.CHARGING_STATION, DeviceType.HEAT_PUMP),
-    SOLAR_BATTERY("Verbraucher wird mit Solarenergie und Batterie geladen.", DeviceType.BATTERY, DeviceType.CHARGING_STATION, DeviceType.HEAT_PUMP),
+    RENEWABLE_ENERGY("Erneuerbare Energie", "Verbraucher wird nur mit erneuerbarer Energie geladen.", DeviceType.BATTERY, DeviceType.CHARGING_STATION, DeviceType.HEAT_PUMP),
+    UNMANAGED("Immer laden", "Verbraucher wird kontinuierlich geladen, ohne Regulierung durch das Energiemanagementsystem.", DeviceType.BATTERY, DeviceType.CHARGING_STATION, DeviceType.HEAT_PUMP);
 
     private final List<DeviceType> deviceTypes;
     private final String description;
+    private final String name;
 
-    EnergyDistributionEvent(String description, DeviceType... deviceType) {
+    EnergyDistributionEvent(String name, String description, DeviceType... deviceType) {
         this.deviceTypes = List.of(deviceType);
         this.description = description;
+        this.name = name;
     }
-
 
 }

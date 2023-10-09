@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.mamotec.energycontrolbackend.domain.BaseEntity;
 import com.mamotec.energycontrolbackend.domain.device.chargingstation.ChargingStationDevice;
+import com.mamotec.energycontrolbackend.domain.device.dao.EnergyDistributionResponse;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import jakarta.persistence.*;
@@ -16,7 +17,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -48,15 +48,9 @@ public abstract class Device extends BaseEntity {
     @JsonProperty(required = true)
     private boolean active = false;
 
-    @Transient
-    private Integer groupId;
-
     @JsonIgnore
     @ManyToOne
     private DeviceGroup deviceGroup;
-
-    @Transient
-    private String model;
 
     /**
      * The manufacturer id in the YAML file.
@@ -80,7 +74,22 @@ public abstract class Device extends BaseEntity {
     private int priority;
 
     @Enumerated(EnumType.STRING)
-    private EnergyDistributionEvent energyDistributionEvent;
+    private EnergyDistributionEvent energyDistributionEvent = EnergyDistributionEvent.UNMANAGED;
+
+    @Transient
+    private Integer groupId;
+
+    @Transient
+    private String model;
+
+    @Transient
+    private String eventName;
+
+    @Transient
+    private String eventDescription;
+
+    @Transient
+    private List<EnergyDistributionResponse> validEnergyDistributionEvents;
 
     public abstract DeviceType getDeviceType();
 
