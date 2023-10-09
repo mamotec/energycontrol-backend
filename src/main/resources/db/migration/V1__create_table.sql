@@ -75,6 +75,7 @@ CREATE TABLE device
     manufacturer_id INTEGER,
     device_id       INTEGER,
     device_type     TEXT,
+    energy_distribution_event TEXT,
     active              BOOLEAN   NOT NULL DEFAULT false,
     deleted BOOLEAN NOT NULL DEFAULT false,
     host TEXT,

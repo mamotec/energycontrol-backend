@@ -1,5 +1,7 @@
-package com.mamotec.energycontrolbackend.domain.device;
+package com.mamotec.energycontrolbackend.domain.device.chargingstation;
 
+import com.mamotec.energycontrolbackend.domain.device.Device;
+import com.mamotec.energycontrolbackend.domain.device.DeviceType;
 import eu.chargetime.ocpp.model.core.ChargePointStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -1,12 +1,14 @@
 package com.mamotec.energycontrolbackend.service.device.home;
 
-import com.mamotec.energycontrolbackend.domain.device.ChargingStationDevice;
+import com.mamotec.energycontrolbackend.domain.device.EnergyDistributionEvent;
+import com.mamotec.energycontrolbackend.domain.device.chargingstation.ChargingStationDevice;
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.DeviceType;
 import com.mamotec.energycontrolbackend.domain.device.HybridInverterDevice;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateRequest;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceTypeResponse;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceUpdateRequest;
+import com.mamotec.energycontrolbackend.domain.device.dao.EnergyDistributionResponse;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroupType;
 import com.mamotec.energycontrolbackend.domain.group.dao.home.HomeDeviceGroup;
@@ -27,10 +29,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -61,7 +60,7 @@ public class HomeDeviceService implements CrudOperations<Device>, DeviceService 
         InterfaceConfig c = createInterfaceConfig(request);
 
         Device device = deviceMapper.map(request);
-        device.setPriority(deviceRepository.findDeviceWithBiggestPriority() + 1);
+        device.setPriority(Objects.isNull(deviceRepository.findDeviceWithBiggestPriority()) ? 0 : deviceRepository.findDeviceWithBiggestPriority() + 1);
         device.setInterfaceConfig(c);
         validationService.validate(device);
         Device saved = save(device);
@@ -162,5 +161,14 @@ public class HomeDeviceService implements CrudOperations<Device>, DeviceService 
         DeviceTypeResponse chargingStation = new DeviceTypeResponse(DeviceType.CHARGING_STATION, "Ladestation");
         return new ArrayList<>(List.of(hybridInverter, chargingStation));
 
+    }
+
+    @Override
+    public List<EnergyDistributionResponse> getAllEnergyDistributionEvents(DeviceType deviceType) {
+        EnergyDistributionEvent[] values = EnergyDistributionEvent.values();
+        return Arrays.stream(values)
+                .filter(e -> e.getDeviceTypes().contains(deviceType))
+                .map(e -> new EnergyDistributionResponse(e, e.getDescription()))
+                .toList();
     }
 }

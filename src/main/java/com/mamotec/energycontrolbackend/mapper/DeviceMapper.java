@@ -1,6 +1,6 @@
 package com.mamotec.energycontrolbackend.mapper;
 
-import com.mamotec.energycontrolbackend.domain.device.ChargingStationDevice;
+import com.mamotec.energycontrolbackend.domain.device.chargingstation.ChargingStationDevice;
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.HybridInverterDevice;
 import com.mamotec.energycontrolbackend.domain.device.dao.*;

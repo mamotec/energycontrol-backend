@@ -1,6 +1,6 @@
 package com.mamotec.energycontrolbackend.service.device;
 
-import com.mamotec.energycontrolbackend.domain.device.ChargingStationDevice;
+import com.mamotec.energycontrolbackend.domain.device.chargingstation.ChargingStationDevice;
 import com.mamotec.energycontrolbackend.domain.device.dao.ChargingStationCreateRequest;
 import com.mamotec.energycontrolbackend.repository.ChargingStationRepository;
 import eu.chargetime.ocpp.model.core.ChargePointStatus;

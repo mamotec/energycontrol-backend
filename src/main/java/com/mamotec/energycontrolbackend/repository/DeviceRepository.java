@@ -26,7 +26,7 @@ public interface DeviceRepository extends JpaRepository<Device, Long> {
 
     // Find device with the biggest priority
     @Query(nativeQuery = true, value = "select device.priority from device where deleted = false order by priority desc limit 1")
-    int findDeviceWithBiggestPriority();
+    Integer findDeviceWithBiggestPriority();
 
     Device findFirstByPriority(int priority);
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.mamotec.energycontrolbackend.domain.BaseEntity;
+import com.mamotec.energycontrolbackend.domain.device.chargingstation.ChargingStationDevice;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import jakarta.persistence.*;
@@ -14,6 +15,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @EqualsAndHashCode(callSuper = true)
@@ -74,6 +78,9 @@ public abstract class Device extends BaseEntity {
     private String port;
 
     private int priority;
+
+    @Enumerated(EnumType.STRING)
+    private EnergyDistributionEvent energyDistributionEvent;
 
     public abstract DeviceType getDeviceType();
 

@@ -2,9 +2,11 @@ package com.mamotec.energycontrolbackend.service.device.plant;
 
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.DeviceType;
+import com.mamotec.energycontrolbackend.domain.device.EnergyDistributionEvent;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateRequest;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceTypeResponse;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceUpdateRequest;
+import com.mamotec.energycontrolbackend.domain.device.dao.EnergyDistributionResponse;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.mapper.DeviceMapper;
 import com.mamotec.energycontrolbackend.repository.DeviceGroupRepository;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -125,5 +128,15 @@ public class PlantDeviceService implements CrudOperations<Device>, DeviceService
         DeviceTypeResponse battery = new DeviceTypeResponse(DeviceType.BATTERY, "Batterie");
 
         return new ArrayList<>(List.of(hybridInverter, chargingStation, heatPump, battery));
+    }
+
+    @Override
+    public List<EnergyDistributionResponse> getAllEnergyDistributionEvents(DeviceType deviceType) {
+        EnergyDistributionEvent[] values = EnergyDistributionEvent.values();
+        List<EnergyDistributionResponse> list = Arrays.stream(values)
+                .filter(e -> e.getDeviceTypes().contains(deviceType))
+                .map(e -> new EnergyDistributionResponse(e, e.getDescription()))
+                .toList();
+        return list;
     }
 }

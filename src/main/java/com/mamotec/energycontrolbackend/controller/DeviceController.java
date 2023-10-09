@@ -2,9 +2,11 @@ package com.mamotec.energycontrolbackend.controller;
 
 import com.mamotec.energycontrolbackend.client.NodeRedClient;
 import com.mamotec.energycontrolbackend.domain.device.Device;
+import com.mamotec.energycontrolbackend.domain.device.DeviceType;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateRequest;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceTypeResponse;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceUpdateRequest;
+import com.mamotec.energycontrolbackend.domain.device.dao.EnergyDistributionResponse;
 import com.mamotec.energycontrolbackend.service.device.DeviceService;
 import com.mamotec.energycontrolbackend.service.device.DeviceServiceFactory;
 import com.mamotec.energycontrolbackend.service.device.plant.PlantDeviceService;
@@ -77,6 +79,13 @@ public class DeviceController {
     public ResponseEntity<Device> fetchDevice(@PathVariable Long id) {
         log.info("GET /device/{} is being called.", id);
         return ResponseEntity.ok(plantDeviceService.findById(id));
+    }
+
+    @GetMapping("/energyDistributionEvents")
+    @Operation(summary = "Lade alle verfügbaren Energieverteilungsereignisse")
+    public ResponseEntity<List<EnergyDistributionResponse>> fetchEnergyDistributionEvents(@RequestParam DeviceType deviceType) {
+        log.info("GET /device/energyDistributionEvents is being called.");
+        return ResponseEntity.ok(plantDeviceService.getAllEnergyDistributionEvents(deviceType));
     }
 
     @GetMapping("/group/{id}")

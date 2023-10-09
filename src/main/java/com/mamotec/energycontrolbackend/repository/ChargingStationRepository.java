@@ -1,6 +1,6 @@
 package com.mamotec.energycontrolbackend.repository;
 
-import com.mamotec.energycontrolbackend.domain.device.ChargingStationDevice;
+import com.mamotec.energycontrolbackend.domain.device.chargingstation.ChargingStationDevice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
