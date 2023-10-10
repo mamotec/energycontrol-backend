@@ -4,7 +4,7 @@ services:
   # Frontend
   ########################
   frontend-app:
-    image: mamotec/energycontrol-frontend
+    image: mamotec/energycontrol-frontend:main
     container_name: frontend-app
     restart: always
     ports:
@@ -16,7 +16,7 @@ services:
   # Backend
   ########################
   backend-app:
-    image: mamotec/energycontrol-backend
+    image: mamotec/energycontrol-backend:main
     container_name: backend-app
     restart: always
     ports:
@@ -25,6 +25,10 @@ services:
       - DB_SERVER=database
     links:
       - database
+      - influx
+    volumes:
+      #- /home/mamotec/docker/application.properties:/BOOT-INF/classes/application.properties
+      - /Users/moritzv/IdeaProjects/energycontrol-backend/src/main/resources/application.properties:/BOOT-INF/classes/application.properties
 
   ########################
   # Datenbank
@@ -41,17 +45,23 @@ services:
       - dbdata:/var/lib/postgresql/data
 
   ########################
-  # Node-red
+  # Influx-DB
   ########################
-  node-red:
-    image: nodered/node-red
-    container_name: node-red
+  influx:
+    image: influxdb:2.0
+    container_name: influx
     restart: always
     ports:
-      - '1880:1880'
+      - '8086:8086'
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=password
+      - DOCKER_INFLUXDB_INIT_ORG=energycontrol
+      - DOCKER_INFLUXDB_INIT_BUCKET=energycontrol
     volumes:
-      - nodereddata:/data
+      - influxdata:/var/lib/influxdb
 
 volumes:
   dbdata:
-  nodereddata:
+  influxdata:
