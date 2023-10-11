@@ -19,7 +19,7 @@ public class OcppServerInitializer {
 
     @EventListener(ApplicationReadyEvent.class)
     public void startOcppServer() {
-        OcppServer server = new OcppServer("localhost", config.ocppServerPort(), null, Collections.emptySet(), Collections.emptySet(), service);
+        OcppServer server = new OcppServer("", config.ocppServerPort(), null, Collections.emptySet(), Collections.emptySet(), service);
         server.activate(service);
     }
 }
