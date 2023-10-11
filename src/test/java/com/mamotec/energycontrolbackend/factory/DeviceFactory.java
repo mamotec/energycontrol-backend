@@ -31,7 +31,7 @@ public final class DeviceFactory {
     public static ChargingStationDevice aChargingStation() {
         ChargingStationDevice device = new ChargingStationDevice();
         device.setOcppAvailable(true);
-        device.setDeviceIdCharger(1);
+        device.setDeviceIdCharger("1");
         return device;
     }
 
