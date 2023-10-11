@@ -10,7 +10,7 @@ import java.util.UUID;
 @Repository
 public interface ChargingStationRepository extends JpaRepository<ChargingStationDevice, Long> {
 
-   Optional<ChargingStationDevice> findFirstByDeviceIdCharger(long deviceIdCharger);
+   Optional<ChargingStationDevice> findFirstByDeviceIdCharger(String deviceIdCharger);
 
     Optional<ChargingStationDevice> findFirstByUuid(UUID uuid);
 

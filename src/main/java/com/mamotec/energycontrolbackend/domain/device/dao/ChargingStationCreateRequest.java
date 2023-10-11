@@ -14,7 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class ChargingStationCreateRequest extends DeviceCreateRequest {
 
-    private long deviceIdCharger;
+    private String deviceIdCharger;
     private boolean ocppAvailable;
     private UUID uuid;
     private ChargePointStatus chargePointStatus;

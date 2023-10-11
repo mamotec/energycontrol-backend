@@ -24,7 +24,14 @@ public class ChargingStationService {
 
     @Transactional
     public void updateChargingStationUUID(String identifier, UUID uuid) {
-        Optional<ChargingStationDevice> firstByDeviceIdCharger = repository.findFirstByDeviceIdCharger(parseLong(identifier.replace("/", "")));
+        String result = "";
+        int lastSlashIndex = identifier.lastIndexOf('/');
+        if (lastSlashIndex >= 0 && lastSlashIndex < identifier.length() - 1) {  // Überprüfen, ob es ein letztes / gibt und es nicht das letzte Zeichen ist
+            result = identifier.substring(lastSlashIndex + 1);
+        } else {
+            log.error("Kein Slash gefunden oder Slash ist das letzte Zeichen!");
+        }
+        Optional<ChargingStationDevice> firstByDeviceIdCharger = repository.findFirstByDeviceIdCharger(result);
         if (firstByDeviceIdCharger.isPresent()) {
             log.info("Charging Station with identifier: " + identifier + " already exists - updating UUID");
 
@@ -37,7 +44,7 @@ public class ChargingStationService {
             log.info("Charging Station with identifier: " + identifier + " does not exist - creating new Charging Station");
             DeviceService service = factory.createService();
             ChargingStationCreateRequest request = new ChargingStationCreateRequest();
-            request.setDeviceIdCharger(parseLong(identifier.replace("/", "")));
+            request.setDeviceIdCharger(result);
             request.setUuid(uuid);
             request.setChargePointStatus(ChargePointStatus.Available);
             request.setActive(true);

@@ -22,7 +22,7 @@ import static com.mamotec.energycontrolbackend.domain.device.DeviceType.CHARGING
 @DiscriminatorValue("CHARGING_STATION")
 public class ChargingStationDevice extends Device {
 
-    private long deviceIdCharger;
+    private String deviceIdCharger;
     // Session UUID
     private UUID uuid;
     private boolean ocppAvailable;
