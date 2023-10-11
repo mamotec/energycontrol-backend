@@ -1,6 +1,5 @@
 package com.mamotec.energycontrolbackend.controller;
 
-import com.mamotec.energycontrolbackend.client.NodeRedClient;
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.DeviceType;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceCreateRequest;
@@ -29,8 +28,6 @@ public class DeviceController {
     private final PlantDeviceService plantDeviceService;
 
     private final DeviceServiceFactory factory;
-
-    private final NodeRedClient nodeRedClient;
 
     @PostMapping
     @Operation(summary = "Erstelle ein neues Gerät")
@@ -93,12 +90,5 @@ public class DeviceController {
     public ResponseEntity<List<Device>> fetchDevicesForGroup(@PathVariable Long id) {
         log.info("GET /device/group/{} is being called.", id);
         return ResponseEntity.ok(plantDeviceService.getValidDevicesForGroup(id));
-    }
-
-    @GetMapping("/service")
-    @Operation(summary = "Prüfe ob NodeRED verfügbar ist")
-    public ResponseEntity<Boolean> isServiceAvailable() {
-        log.info("GET /device/service is being called.");
-        return ResponseEntity.ok(nodeRedClient.isNodeRedAvailable(false));
     }
 }

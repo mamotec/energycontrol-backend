@@ -2,7 +2,6 @@ package com.mamotec.energycontrolbackend.cron;
 
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceType;
-import com.mamotec.energycontrolbackend.reader.SerialDeviceDataReader;
 import com.mamotec.energycontrolbackend.reader.TcpDeviceDataReader;
 import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceConfigService;
 import jakarta.transaction.Transactional;
@@ -19,7 +18,6 @@ import java.util.List;
 public class ReadDeviceDataScheduler {
 
     private final InterfaceConfigService interfaceConfigService;
-    private final SerialDeviceDataReader serialDeviceDataReader;
     private final TcpDeviceDataReader tcpDeviceDataReader;
 
     @Scheduled(cron = "*/5 * * * * *")
@@ -29,9 +27,8 @@ public class ReadDeviceDataScheduler {
         log.info("READ - Found {} interfaces in repository.", configs.size());
 
         for (InterfaceConfig config : configs) {
-            if (config.getType().equals(InterfaceType.RS485)) {
-                serialDeviceDataReader.fetchDeviceData(config);
-            } else if (config.getType().equals(InterfaceType.TCP)) {
+            if (config.getType()
+                    .equals(InterfaceType.TCP)) {
                 tcpDeviceDataReader.fetchDeviceData(config);
             }
         }

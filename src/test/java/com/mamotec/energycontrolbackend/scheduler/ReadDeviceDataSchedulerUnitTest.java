@@ -1,6 +1,5 @@
 package com.mamotec.energycontrolbackend.scheduler;
 
-import com.mamotec.energycontrolbackend.client.NodeRedClient;
 import com.mamotec.energycontrolbackend.cron.ReadDeviceDataScheduler;
 import com.mamotec.energycontrolbackend.service.device.DeviceDataService;
 import com.mamotec.energycontrolbackend.service.device.plant.PlantDeviceService;
@@ -29,8 +28,6 @@ class ReadDeviceDataSchedulerUnitTest {
     @Mock
     private PlantDeviceService deviceService;
     @Mock
-    private NodeRedClient nodeRedClient;
-    @Mock
     private DeviceDataService deviceDataService;
 
     @Test
@@ -44,7 +41,6 @@ class ReadDeviceDataSchedulerUnitTest {
         // then
         verifyNoInteractions(interfaceService);
         verifyNoInteractions(deviceService);
-        verifyNoInteractions(nodeRedClient);
         verifyNoInteractions(deviceDataService);
     }
 
