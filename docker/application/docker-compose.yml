@@ -43,6 +43,8 @@ services:
       - POSTGRES_DATABASE=energycontrol
     volumes:
       - dbdata:/var/lib/postgresql/data
+    networks:
+      - backend-network
 
   ########################
   # Influx-DB
@@ -61,7 +63,12 @@ services:
       - DOCKER_INFLUXDB_INIT_BUCKET=energycontrol
     volumes:
       - influxdata:/var/lib/influxdb
+    networks:
+      - backend-network
 
 volumes:
   dbdata:
   influxdata:
+
+networks:
+  backend-network:
