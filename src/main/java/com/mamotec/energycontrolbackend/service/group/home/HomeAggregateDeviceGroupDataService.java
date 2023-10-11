@@ -28,13 +28,14 @@ public class HomeAggregateDeviceGroupDataService {
     public HomeDataRepresentation aggregate() {
         Optional<HomeDeviceGroup> home = homeDeviceGroupRepository.findFirstByOrderByCreatedAtDesc();
 
-        if (!home.isPresent() || home.get()
+        if (home.isEmpty() || home.get()
                 .getDevices()
                 .isEmpty()) {
 
             return HomeDataRepresentation.builder()
                     .activePower(0)
-                    .peakKilowatt(0)
+                    .peakKilowatt(home.map(HomeDeviceGroup::getPeakKilowatt)
+                            .orElse(0L))
                     .batterySoc(0)
                     .batteryPower(BiDirectionalEnergy.builder()
                             .consumption(false)

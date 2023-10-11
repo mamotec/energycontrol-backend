@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.mamotec.energycontrolbackend.domain.BaseEntity;
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.DeviceType;
+import com.mamotec.energycontrolbackend.domain.group.dao.home.HomeDeviceGroup;
 import com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,6 +29,7 @@ import java.util.List;
 @DiscriminatorColumn(name = "type")
 @JsonSubTypes({
         @Type(value = PlantDeviceGroup.class, name = "PlantDeviceGroup"),
+        @Type(value = HomeDeviceGroup.class, name = "HomeDeviceGroup"),
 })
 public abstract class DeviceGroup extends BaseEntity {
 
