@@ -1,4 +1,4 @@
-package com.mamotec.energycontrolbackend.service.device.home;
+package com.mamotec.energycontrolbackend.service.device;
 
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroupType;

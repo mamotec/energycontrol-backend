@@ -38,7 +38,6 @@ public abstract class DeviceGroup extends BaseEntity {
 
     private boolean deleted = Boolean.FALSE;
 
-
     public abstract DeviceGroupType getType();
 
     public List<Device> getDevicesByType(DeviceType deviceType) {

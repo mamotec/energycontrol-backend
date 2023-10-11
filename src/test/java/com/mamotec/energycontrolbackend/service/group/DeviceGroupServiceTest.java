@@ -2,8 +2,6 @@ package com.mamotec.energycontrolbackend.service.group;
 
 import com.mamotec.energycontrolbackend.base.SpringBootBaseTest;
 import com.mamotec.energycontrolbackend.domain.device.Device;
-import com.mamotec.energycontrolbackend.domain.device.DeviceType;
-import com.mamotec.energycontrolbackend.domain.device.HybridInverterDevice;
 import com.mamotec.energycontrolbackend.domain.device.dao.DeviceLinkRequest;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.exception.AddDeviceToGroupException;
@@ -71,7 +69,7 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
                 // given
                 com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup deviceGroup = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
                 InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
-                Device d1 = DeviceFactory.aDevice(config, deviceRepository);
+                Device d1 = DeviceFactory.aHybridInverter(config, deviceRepository);
                 DeviceLinkRequest request = new DeviceLinkRequest(List.of(d1.getId()));
 
                 // when
@@ -88,8 +86,8 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
                 // given
                 com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup deviceGroup = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
                 InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
-                Device d1 = DeviceFactory.aDevice(config, deviceRepository);
-                Device d2 = DeviceFactory.aDevice(config, deviceRepository);
+                Device d1 = DeviceFactory.aHybridInverter(config, deviceRepository);
+                Device d2 = DeviceFactory.aHybridInverter(config, deviceRepository);
                 DeviceLinkRequest request = new DeviceLinkRequest(List.of(d1.getId(), d2.getId()));
 
                 // when
@@ -105,8 +103,7 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
             void shouldThrowExceptionWhenLinkIsNotValid() {
                 // given
                 com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup deviceGroup = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
-                InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
-                Device d1 = DeviceFactory.aDevice(config, deviceRepository);
+                Device d1 = DeviceFactory.aChargingStation(deviceRepository);
                 deviceRepository.save(d1);
                 DeviceLinkRequest request = new DeviceLinkRequest(List.of(d1.getId()));
 
@@ -120,7 +117,7 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
                 // given
                 com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup deviceGroup = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
                 InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
-                Device d1 = DeviceFactory.aDevice(config, deviceGroup, deviceRepository);
+                Device d1 = DeviceFactory.aHybridInverter(config, deviceGroup, deviceRepository);
                 DeviceLinkRequest request = new DeviceLinkRequest(List.of(d1.getId()));
 
                 // when
@@ -137,8 +134,8 @@ class DeviceGroupServiceTest extends SpringBootBaseTest {
                 // given
                 com.mamotec.energycontrolbackend.domain.group.dao.plant.PlantDeviceGroup deviceGroup = DeviceGroupFactory.aPlantDeviceGroup(deviceGroupRepository);
                 InterfaceConfig config = InterfaceConfigFactory.aInterfaceConfig(interfaceConfigRepository);
-                Device d1 = DeviceFactory.aDevice(config, deviceRepository);
-                Device d2 = DeviceFactory.aDevice(config, deviceRepository);
+                Device d1 = DeviceFactory.aHybridInverter(config, deviceRepository);
+                Device d2 = DeviceFactory.aHybridInverter(config, deviceRepository);
                 DeviceLinkRequest request = new DeviceLinkRequest(List.of(d1.getId(), d2.getId()));
 
                 deviceGroupService.addDevicesToGroup(deviceGroup.getId(), request);

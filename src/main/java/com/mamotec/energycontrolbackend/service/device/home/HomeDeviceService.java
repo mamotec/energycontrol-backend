@@ -20,6 +20,7 @@ import com.mamotec.energycontrolbackend.repository.DeviceGroupRepository;
 import com.mamotec.energycontrolbackend.repository.DeviceRepository;
 import com.mamotec.energycontrolbackend.repository.InterfaceConfigRepository;
 import com.mamotec.energycontrolbackend.service.CrudOperations;
+import com.mamotec.energycontrolbackend.service.device.DeviceGroupFactory;
 import com.mamotec.energycontrolbackend.service.device.DeviceService;
 import com.mamotec.energycontrolbackend.service.device.DeviceValidationService;
 import jakarta.transaction.Transactional;

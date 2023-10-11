@@ -22,10 +22,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -97,18 +94,24 @@ public class PlantDeviceService implements CrudOperations<Device>, DeviceService
         return all;
     }
 
-    public List<Device> getValidDevicesForGroup(Long groupId) {
+    public List<Device> fetchValidDeviceGroups(Long groupId) {
         DeviceGroup deviceGroup = deviceGroupRepository.findById(groupId)
                 .orElseThrow();
 
-        List<Device> allByDeviceTypeIn = deviceRepository.findAllByDeviceTypeInAndDeviceGroupNull(deviceGroup.getType()
-                .getValidDeviceTypes());
+        List<Device> all = deviceRepository.findAll();
 
-        for (Device device : allByDeviceTypeIn) {
+        List<Device> filteredList = all.stream()
+                .filter(d -> Objects.isNull(d.getDeviceGroup()))
+                .filter(d -> getDeviceGroupTypeByClass(deviceGroup).getValidDeviceTypes()
+                        .contains(d.getDeviceType()))
+                .toList();
+
+
+        for (Device device : filteredList) {
             device.setModel(interfaceService.getDeviceNameByManufacturerAndDeviceId(device));
         }
 
-        return allByDeviceTypeIn;
+        return filteredList;
     }
 
 

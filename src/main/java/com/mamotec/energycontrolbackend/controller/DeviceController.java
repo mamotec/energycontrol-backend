@@ -89,6 +89,6 @@ public class DeviceController {
     @Operation(summary = "Lade alle validen Geräte für eine Gruppe")
     public ResponseEntity<List<Device>> fetchDevicesForGroup(@PathVariable Long id) {
         log.info("GET /device/group/{} is being called.", id);
-        return ResponseEntity.ok(plantDeviceService.getValidDevicesForGroup(id));
+        return ResponseEntity.ok(plantDeviceService.fetchValidDeviceGroups(id));
     }
 }
