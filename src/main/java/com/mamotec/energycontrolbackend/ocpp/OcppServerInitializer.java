@@ -1,13 +1,15 @@
 package com.mamotec.energycontrolbackend.ocpp;
 
 import com.mamotec.energycontrolbackend.service.device.ChargingStationService;
-import lombok.AllArgsConstructor;
+import eu.chargetime.ocpp.FeatureRepository;
+import eu.chargetime.ocpp.feature.profile.ClientSmartChargingProfile;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class OcppServerInitializer {
 
     private final ChargingStationService service;
@@ -15,6 +17,7 @@ public class OcppServerInitializer {
 
     @EventListener(ApplicationReadyEvent.class)
     public void startOcppServer() {
-       OcppServer.getInstance(service);
+        FeatureRepository featureRepository = new FeatureRepository();
+        OcppServer.getInstance(service);
     }
 }

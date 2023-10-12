@@ -6,6 +6,7 @@ import eu.chargetime.ocpp.JSONServer;
 import eu.chargetime.ocpp.NotConnectedException;
 import eu.chargetime.ocpp.OccurenceConstraintException;
 import eu.chargetime.ocpp.UnsupportedFeatureException;
+import eu.chargetime.ocpp.feature.profile.ClientSmartChargingProfile;
 import eu.chargetime.ocpp.feature.profile.ServerCoreProfile;
 import eu.chargetime.ocpp.model.Confirmation;
 import eu.chargetime.ocpp.model.Request;
@@ -22,6 +23,7 @@ public class OcppServer implements OcppSender {
     public static JSONServer getInstance(ChargingStationService service) {
         if (server == null) {
             server = new JSONServer(new ServerCoreProfile(new OcppServerCoreEventHandler(service)));
+            server.addFeatureProfile(new ClientSmartChargingProfile(new OcppSmartChargeEventHandler()));
             server.open("0.0.0.0", 8887, new OcppServerEvents(service));
             log.info("OcppServer started on port: " + 8887);
         }

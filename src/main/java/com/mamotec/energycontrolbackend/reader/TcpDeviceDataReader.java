@@ -84,11 +84,9 @@ public class TcpDeviceDataReader {
         profile.setChargingProfileKind(ChargingProfileKindType.Absolute);  // Art des Ladeprofils setzen
         profile.setChargingSchedule(schedule);  // Zeitraum dem Ladeprofil hinzufügen
 
-
         SetChargingProfileRequest request = new SetChargingProfileRequest();
         request.setConnectorId(1);
         request.setCsChargingProfiles(profile);
-
 
         JSONServer instance = OcppServer.getInstance(chargingStationService);
         try {
@@ -101,7 +99,7 @@ public class TcpDeviceDataReader {
             });
 
         } catch (OccurenceConstraintException | UnsupportedFeatureException | NotConnectedException e) {
-            throw new RuntimeException(e);
+            log.error("ChargingProfileRequest: {}", e);
         }
     }
 
