@@ -11,7 +11,6 @@ import com.mamotec.energycontrolbackend.ocpp.OcppServer;
 import com.mamotec.energycontrolbackend.service.device.DeviceDataService;
 import com.mamotec.energycontrolbackend.service.device.plant.PlantDeviceService;
 import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceService;
-import eu.chargetime.ocpp.model.Confirmation;
 import eu.chargetime.ocpp.model.core.GetConfigurationConfirmation;
 import eu.chargetime.ocpp.model.core.GetConfigurationRequest;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.concurrent.CompletionStage;
 
 @Component
 @Slf4j
@@ -63,6 +61,7 @@ public class TcpDeviceDataReader {
         ChargingStationDevice chargingStationDevice = (ChargingStationDevice) device;
         GetConfigurationRequest request = new GetConfigurationRequest();
         request.setKey(new String[0]);
+        log.info("UUID: {}", chargingStationDevice.getUuid());
         ocppServer.send(chargingStationDevice.getUuid(), request).whenComplete((confirmation, throwable) -> {
             if (throwable != null) {
                 log.error("GetConfigurationRequest: {}", throwable.getMessage());

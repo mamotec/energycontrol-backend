@@ -60,7 +60,12 @@ public class ChargingStationService {
     public void updateActiveStatus(UUID uuid, boolean status) {
         ChargingStationDevice chargingStationDevice = getByUUID(uuid);
 
-        if (chargingStationDevice == null) return;
+        if (chargingStationDevice == null){
+            log.info("Charging Station with uuid: " + uuid + " not found");
+            return;
+        }
+
+        log.info("Charging Station with uuid: " + uuid + " found");
 
         chargingStationDevice.setActive(status);
 
