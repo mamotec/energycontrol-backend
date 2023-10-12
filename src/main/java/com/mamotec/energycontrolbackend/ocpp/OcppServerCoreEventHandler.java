@@ -30,7 +30,11 @@ public class OcppServerCoreEventHandler implements ServerCoreEventHandler {
     @Override
     public BootNotificationConfirmation handleBootNotificationRequest(UUID uuid, BootNotificationRequest bootNotificationRequest) {
         log.info("BootNotificationRequest: {}", bootNotificationRequest);
-        return null;
+        service.updateActiveStatus(uuid, bootNotificationRequest.validate());
+        if (bootNotificationRequest.validate())
+            return new BootNotificationConfirmation(ZonedDateTime.now(), 5, RegistrationStatus.Accepted);
+        else
+            return new BootNotificationConfirmation(ZonedDateTime.now(), 5, RegistrationStatus.Rejected);
     }
 
     @Override
