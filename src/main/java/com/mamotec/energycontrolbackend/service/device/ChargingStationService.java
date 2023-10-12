@@ -49,7 +49,7 @@ public class ChargingStationService {
             request.setChargePointStatus(ChargePointStatus.Available);
             request.setActive(true);
             request.setOcppAvailable(true);
-            request.setName("Ladestation " + identifier.replace("/", ""));
+            request.setName("Ladestation " + result);
 
             service.create(request);
         }
