@@ -9,30 +9,30 @@ import eu.chargetime.ocpp.UnsupportedFeatureException;
 import eu.chargetime.ocpp.feature.profile.ServerCoreProfile;
 import eu.chargetime.ocpp.model.Confirmation;
 import eu.chargetime.ocpp.model.Request;
+import eu.chargetime.ocpp.model.core.GetConfigurationConfirmation;
+import eu.chargetime.ocpp.model.core.GetConfigurationRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletionStage;
 
 @Slf4j
+@Component
 public class OcppServer implements OcppSender {
 
     private final JSONServer server;
-    private final String ip;
-    private final int port;
 
-    public OcppServer(String ip, int port, OcppRequestListener<Request> listener, Set<String> identifiers, Set<String> tags, ChargingStationService service) {
-        this.ip = ip;
-        this.port = port;
-        OcppServerCoreEventHandler eventHandler = new OcppServerCoreEventHandler(this, listener, identifiers, tags, service);
+    public OcppServer(ChargingStationService service) {
+        OcppServerCoreEventHandler eventHandler = new OcppServerCoreEventHandler(service);
         this.server = new JSONServer(new ServerCoreProfile(eventHandler));
     }
 
 
     public void activate(ChargingStationService service) {
-        server.open(ip, port, new OcppServerEvents(service));
-        log.info("OcppServer started on port: " + port);
+        server.open("0.0.0.0", 8887, new OcppServerEvents(service));
+        log.info("OcppServer started on port: " + 8887);
     }
 
 

@@ -3,17 +3,23 @@ package com.mamotec.energycontrolbackend.reader;
 import com.mamotec.energycontrolbackend.client.ModbusTCPClient;
 import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.HybridInverterDevice;
+import com.mamotec.energycontrolbackend.domain.device.chargingstation.ChargingStationDevice;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.DeviceYaml;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.RegisterMapping;
+import com.mamotec.energycontrolbackend.ocpp.OcppServer;
 import com.mamotec.energycontrolbackend.service.device.DeviceDataService;
 import com.mamotec.energycontrolbackend.service.device.plant.PlantDeviceService;
 import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceService;
+import eu.chargetime.ocpp.model.Confirmation;
+import eu.chargetime.ocpp.model.core.GetConfigurationConfirmation;
+import eu.chargetime.ocpp.model.core.GetConfigurationRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.CompletionStage;
 
 @Component
 @Slf4j
@@ -23,6 +29,7 @@ public class TcpDeviceDataReader {
     private final InterfaceService interfaceService;
     private final PlantDeviceService deviceService;
     private final DeviceDataService deviceDataService;
+    private final OcppServer ocppServer;
 
 
     public void fetchDeviceData(InterfaceConfig config) {
@@ -30,32 +37,12 @@ public class TcpDeviceDataReader {
 
         log.info("READ - Found {} devices for interface {}.", devices.size(), config.getType());
         for (Device device : devices) {
-            boolean noError = true;
-            DeviceYaml i = interfaceService.getDeviceInformationForManufactureAndDeviceId(device);
-
             if (device instanceof HybridInverterDevice) {
-                // Which register mapping to use?
-                RegisterMapping inverterPower = i.getMapping()
-                        .getPower();
-
-                RegisterMapping batterySoc = i.getMapping()
-                        .getBatterySoc();
-
-                RegisterMapping batteryPower = i.getMapping()
-                        .getBatteryPower();
-
-                RegisterMapping gridPower = i.getMapping().getGridPower();
-
-                try {
-                    doFetchPerDevice(device, inverterPower);
-                    doFetchPerDevice(device, batterySoc);
-                    doFetchPerDevice(device, batteryPower);
-                    doFetchPerDevice(device, gridPower);
-                } catch (Exception e) {
-                    noError = false;
-                    log.error("READ - Error while fetching data for device {}.", device.getId(), e);
-                }
-                deviceDataService.markDeviceAsActive(device, noError);
+                readHybridInverter(device);
+            } else if (device instanceof ChargingStationDevice) {
+                readChargingStation(device);
+            } else {
+                log.error("READ - Device {} is not supported.", device.getId());
             }
 
         }
@@ -70,5 +57,48 @@ public class TcpDeviceDataReader {
 
         // Save data to influxdb
         deviceDataService.writeDeviceData(d, String.valueOf(result), mapping);
+    }
+
+    private void readChargingStation(Device device) {
+        ChargingStationDevice chargingStationDevice = (ChargingStationDevice) device;
+        GetConfigurationRequest request = new GetConfigurationRequest();
+        request.setKey(new String[0]);
+        ocppServer.send(chargingStationDevice.getUuid(), request).whenComplete((confirmation, throwable) -> {
+            if (throwable != null) {
+                log.error("GetConfigurationRequest: {}", throwable.getMessage());
+            } else {
+                GetConfigurationConfirmation getConfigurationConfirmation = (GetConfigurationConfirmation) confirmation;
+                log.info("GetConfigurationRequest: {}", getConfigurationConfirmation);
+            }
+        });
+    }
+
+    private void readHybridInverter(Device device) {
+        boolean noError = true;
+        DeviceYaml i = interfaceService.getDeviceInformationForManufactureAndDeviceId(device);
+
+        // Which register mapping to use?
+        RegisterMapping inverterPower = i.getMapping()
+                .getPower();
+
+        RegisterMapping batterySoc = i.getMapping()
+                .getBatterySoc();
+
+        RegisterMapping batteryPower = i.getMapping()
+                .getBatteryPower();
+
+        RegisterMapping gridPower = i.getMapping()
+                .getGridPower();
+
+        try {
+            doFetchPerDevice(device, inverterPower);
+            doFetchPerDevice(device, batterySoc);
+            doFetchPerDevice(device, batteryPower);
+            doFetchPerDevice(device, gridPower);
+        } catch (Exception e) {
+            noError = false;
+            log.error("READ - Error while fetching data for device {}.", device.getId(), e);
+        }
+        deviceDataService.markDeviceAsActive(device, noError);
     }
 }

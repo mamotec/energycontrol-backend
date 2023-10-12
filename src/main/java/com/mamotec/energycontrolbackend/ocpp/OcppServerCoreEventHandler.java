@@ -15,10 +15,6 @@ import java.util.UUID;
 @Slf4j
 public class OcppServerCoreEventHandler implements ServerCoreEventHandler {
 
-    private OcppSender sender;
-    private OcppRequestListener<Request> listener;
-    private final Set<String> identifiers;
-    private final Set<String> tags;
     private final ChargingStationService service;
 
     @Override
