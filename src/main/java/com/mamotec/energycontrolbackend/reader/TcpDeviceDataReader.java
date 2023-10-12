@@ -16,9 +16,8 @@ import eu.chargetime.ocpp.JSONServer;
 import eu.chargetime.ocpp.NotConnectedException;
 import eu.chargetime.ocpp.OccurenceConstraintException;
 import eu.chargetime.ocpp.UnsupportedFeatureException;
-import eu.chargetime.ocpp.model.core.GetConfigurationConfirmation;
-import eu.chargetime.ocpp.model.core.GetConfigurationRequest;
-import eu.chargetime.ocpp.model.core.KeyValueType;
+import eu.chargetime.ocpp.model.core.*;
+import eu.chargetime.ocpp.model.smartcharging.SetChargingProfileRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -65,22 +64,42 @@ public class TcpDeviceDataReader {
 
     private void readChargingStation(Device device) {
         ChargingStationDevice chargingStationDevice = (ChargingStationDevice) device;
-        GetConfigurationRequest request = new GetConfigurationRequest();
-        request.setKey(new String[0]);
-        log.info("UUID: {}", chargingStationDevice.getUuid());
+
+        // Periode erstellen - hier wird das Limit gesetzt in Ampere
+        ChargingSchedulePeriod period = new ChargingSchedulePeriod();
+        period.setStartPeriod(0);  // Startzeit des Zeitraums in Sekunden
+        period.setLimit(1200d);  // Ladeleistungslimit in Ampere
+
+
+        ChargingSchedule schedule = new ChargingSchedule();
+        schedule.setChargingRateUnit(ChargingRateUnitType.W);  // Ladeleistungseinheit setzen
+        ChargingSchedulePeriod[] periods = new ChargingSchedulePeriod[1];  // Array für Perioden erstellen
+        periods[0] = period;  // Periode dem Array hinzufügen
+        schedule.setChargingSchedulePeriod(periods);  // Zeitraum zur Liste hinzufügen
+
+        ChargingProfile profile = new ChargingProfile();
+        profile.setChargingProfileId(1);  // ID des Ladeprofils setzen
+        profile.setStackLevel(1);  // Stacklevel setzen
+        profile.setChargingProfilePurpose(ChargingProfilePurposeType.ChargePointMaxProfile);  // Zweck des Ladeprofils setzen
+        profile.setChargingProfileKind(ChargingProfileKindType.Absolute);  // Art des Ladeprofils setzen
+        profile.setChargingSchedule(schedule);  // Zeitraum dem Ladeprofil hinzufügen
+
+
+        SetChargingProfileRequest request = new SetChargingProfileRequest();
+        request.setConnectorId(1);
+        request.setCsChargingProfiles(profile);
+
+
         JSONServer instance = OcppServer.getInstance(chargingStationService);
         try {
             instance.send(chargingStationDevice.getUuid(), request).whenComplete((confirmation, throwable) -> {
                 if (throwable != null) {
-                    log.error("GetConfigurationRequest: {}", throwable.getMessage());
+                    log.error("ChargingProfileRequest: {}", throwable.getMessage());
                 } else {
-                    GetConfigurationConfirmation getConfigurationConfirmation = (GetConfigurationConfirmation) confirmation;
-                    for (KeyValueType keyValuePair : getConfigurationConfirmation.getConfigurationKey()) {
-                        log.info("GetConfigurationRequest: {}", keyValuePair.getKey());
-                        log.info("GetConfigurationRequest: {}", keyValuePair.getValue());
-                    }
+                    log.info("ChargingProfileRequest: {}", confirmation);
                 }
             });
+
         } catch (OccurenceConstraintException | UnsupportedFeatureException | NotConnectedException e) {
             throw new RuntimeException(e);
         }

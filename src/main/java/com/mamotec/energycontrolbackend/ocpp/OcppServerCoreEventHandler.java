@@ -34,12 +34,6 @@ public class OcppServerCoreEventHandler implements ServerCoreEventHandler {
     }
 
     @Override
-    public DataTransferConfirmation handleDataTransferRequest(UUID uuid, DataTransferRequest dataTransferRequest) {
-        log.info("DataTransferRequest: {}", dataTransferRequest);
-        return null;
-    }
-
-    @Override
     public HeartbeatConfirmation handleHeartbeatRequest(UUID uuid, HeartbeatRequest heartbeatRequest) {
         log.info("HeartbeatRequest: {}", heartbeatRequest);
         service.updateActiveStatus(uuid, heartbeatRequest.validate());
@@ -48,14 +42,13 @@ public class OcppServerCoreEventHandler implements ServerCoreEventHandler {
 
     @Override
     public MeterValuesConfirmation handleMeterValuesRequest(UUID uuid, MeterValuesRequest meterValuesRequest) {
-        log.info("MeterValuesRequest: {}", meterValuesRequest);
-        return null;
-    }
+        for (MeterValue meterValue : meterValuesRequest.getMeterValue()) {
+            for (SampledValue sampledValue : meterValue.getSampledValue()) {
+                log.info("SampledValue: {}", sampledValue);
+            }
 
-    @Override
-    public StartTransactionConfirmation handleStartTransactionRequest(UUID uuid, StartTransactionRequest startTransactionRequest) {
-        log.info("StartTransactionRequest: {}", startTransactionRequest);
-        return new StartTransactionConfirmation(new IdTagInfo(AuthorizationStatus.Accepted), 1);
+            }
+        return new MeterValuesConfirmation();
     }
 
     @Override
@@ -66,8 +59,20 @@ public class OcppServerCoreEventHandler implements ServerCoreEventHandler {
     }
 
     @Override
+    public DataTransferConfirmation handleDataTransferRequest(UUID uuid, DataTransferRequest dataTransferRequest) {
+        log.info("DataTransferRequest: {}", dataTransferRequest);
+        return new DataTransferConfirmation(DataTransferStatus.Accepted);
+    }
+
+    @Override
     public StopTransactionConfirmation handleStopTransactionRequest(UUID uuid, StopTransactionRequest stopTransactionRequest) {
         log.info("StopTransactionRequest: {}", stopTransactionRequest);
         return null;
+    }
+
+    @Override
+    public StartTransactionConfirmation handleStartTransactionRequest(UUID uuid, StartTransactionRequest startTransactionRequest) {
+        log.info("StartTransactionRequest: {}", startTransactionRequest);
+        return new StartTransactionConfirmation(new IdTagInfo(AuthorizationStatus.Accepted), 1);
     }
 }
