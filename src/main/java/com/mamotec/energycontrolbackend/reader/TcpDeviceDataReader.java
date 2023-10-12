@@ -18,6 +18,7 @@ import eu.chargetime.ocpp.OccurenceConstraintException;
 import eu.chargetime.ocpp.UnsupportedFeatureException;
 import eu.chargetime.ocpp.model.core.GetConfigurationConfirmation;
 import eu.chargetime.ocpp.model.core.GetConfigurationRequest;
+import eu.chargetime.ocpp.model.core.KeyValueType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -74,7 +75,10 @@ public class TcpDeviceDataReader {
                     log.error("GetConfigurationRequest: {}", throwable.getMessage());
                 } else {
                     GetConfigurationConfirmation getConfigurationConfirmation = (GetConfigurationConfirmation) confirmation;
-                    log.info("GetConfigurationRequest: {}", getConfigurationConfirmation);
+                    for (KeyValueType keyValuePair : getConfigurationConfirmation.getConfigurationKey()) {
+                        log.info("GetConfigurationRequest: {}", keyValuePair.getKey());
+                        log.info("GetConfigurationRequest: {}", keyValuePair.getValue());
+                    }
                 }
             });
         } catch (OccurenceConstraintException | UnsupportedFeatureException | NotConnectedException e) {
