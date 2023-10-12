@@ -68,11 +68,11 @@ public class TcpDeviceDataReader {
         // Periode erstellen - hier wird das Limit gesetzt in Ampere
         ChargingSchedulePeriod period = new ChargingSchedulePeriod();
         period.setStartPeriod(0);  // Startzeit des Zeitraums in Sekunden
-        period.setLimit(1200d);  // Ladeleistungslimit in Ampere
+        period.setLimit(6d);  // Ladeleistungslimit in Ampere
 
 
         ChargingSchedule schedule = new ChargingSchedule();
-        schedule.setChargingRateUnit(ChargingRateUnitType.W);  // Ladeleistungseinheit setzen
+        schedule.setChargingRateUnit(ChargingRateUnitType.A);  // Ladeleistungseinheit setzen
         ChargingSchedulePeriod[] periods = new ChargingSchedulePeriod[1];  // Array für Perioden erstellen
         periods[0] = period;  // Periode dem Array hinzufügen
         schedule.setChargingSchedulePeriod(periods);  // Zeitraum zur Liste hinzufügen
@@ -84,22 +84,32 @@ public class TcpDeviceDataReader {
         profile.setChargingProfileKind(ChargingProfileKindType.Absolute);  // Art des Ladeprofils setzen
         profile.setChargingSchedule(schedule);  // Zeitraum dem Ladeprofil hinzufügen
 
-        SetChargingProfileRequest request = new SetChargingProfileRequest();
-        request.setConnectorId(0);
-        request.setCsChargingProfiles(profile);
+        SetChargingProfileRequest request = new SetChargingProfileRequest(0, profile);
+        SetChargingProfileRequest request1 = new SetChargingProfileRequest(1, profile);
 
         JSONServer instance = OcppServer.getInstance(chargingStationService);
         try {
             instance.send(chargingStationDevice.getUuid(), request).whenComplete((confirmation, throwable) -> {
                 if (throwable != null) {
-                    log.error("ChargingProfileRequest: {}", throwable.getMessage());
+                    log.error("ChargingProfileRequest 0: {}", throwable.getMessage());
                 } else {
-                    log.info("ChargingProfileRequest: {}", confirmation);
+                    log.info("ChargingProfileRequest 0: {}", confirmation);
                 }
             });
-
         } catch (OccurenceConstraintException | UnsupportedFeatureException | NotConnectedException e) {
             log.error("ChargingProfileRequest: {}", e);
+        }
+
+        try {
+            instance.send(chargingStationDevice.getUuid(), request1).whenComplete((confirmation, throwable) -> {
+                if (throwable != null) {
+                    log.error("ChargingProfileRequest 1: {}", throwable.getMessage());
+                } else {
+                    log.info("ChargingProfileRequest 1: {}", confirmation);
+                }
+            });
+        } catch (OccurenceConstraintException | UnsupportedFeatureException | NotConnectedException e) {
+            throw new RuntimeException(e);
         }
     }
 
