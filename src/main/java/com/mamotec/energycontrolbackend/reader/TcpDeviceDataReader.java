@@ -85,7 +85,7 @@ public class TcpDeviceDataReader {
         profile.setChargingSchedule(schedule);  // Zeitraum dem Ladeprofil hinzufügen
 
         SetChargingProfileRequest request = new SetChargingProfileRequest();
-        request.setConnectorId(1);
+        request.setConnectorId(0);
         request.setCsChargingProfiles(profile);
 
         JSONServer instance = OcppServer.getInstance(chargingStationService);

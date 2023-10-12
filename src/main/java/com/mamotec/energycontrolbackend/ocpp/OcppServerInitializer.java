@@ -17,7 +17,6 @@ public class OcppServerInitializer {
 
     @EventListener(ApplicationReadyEvent.class)
     public void startOcppServer() {
-        FeatureRepository featureRepository = new FeatureRepository();
         OcppServer.getInstance(service);
     }
 }
