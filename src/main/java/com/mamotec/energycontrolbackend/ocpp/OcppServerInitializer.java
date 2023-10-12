@@ -15,7 +15,6 @@ public class OcppServerInitializer {
 
     @EventListener(ApplicationReadyEvent.class)
     public void startOcppServer() {
-        OcppServer server = new OcppServer(service);
-        server.activate(service);
+       OcppServer.getInstance(service);
     }
 }

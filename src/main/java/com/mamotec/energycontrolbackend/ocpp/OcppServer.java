@@ -9,37 +9,29 @@ import eu.chargetime.ocpp.UnsupportedFeatureException;
 import eu.chargetime.ocpp.feature.profile.ServerCoreProfile;
 import eu.chargetime.ocpp.model.Confirmation;
 import eu.chargetime.ocpp.model.Request;
-import eu.chargetime.ocpp.model.core.GetConfigurationConfirmation;
-import eu.chargetime.ocpp.model.core.GetConfigurationRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletionStage;
 
 @Slf4j
-@Component
 public class OcppServer implements OcppSender {
 
-    private final JSONServer server;
+    private static JSONServer server;
 
-    public OcppServer(ChargingStationService service) {
-        OcppServerCoreEventHandler eventHandler = new OcppServerCoreEventHandler(service);
-        this.server = new JSONServer(new ServerCoreProfile(eventHandler));
+    public static JSONServer getInstance(ChargingStationService service) {
+        if (server == null) {
+            server = new JSONServer(new ServerCoreProfile(new OcppServerCoreEventHandler(service)));
+            server.open("0.0.0.0", 8887, new OcppServerEvents(service));
+            log.info("OcppServer started on port: " + 8887);
+        }
+        return server;
     }
-
-
-    public void activate(ChargingStationService service) {
-        server.open("0.0.0.0", 8887, new OcppServerEvents(service));
-        log.info("OcppServer started on port: " + 8887);
-    }
-
 
     @Override
     public CompletionStage<Confirmation> send(UUID sessionIndex, Request request) {
         try {
-            return this.server.send(sessionIndex, request);
+            return server.send(sessionIndex, request);
         } catch (OccurenceConstraintException | UnsupportedFeatureException | NotConnectedException e) {
             throw new RuntimeException(e);
         }

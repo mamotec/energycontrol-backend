@@ -8,9 +8,14 @@ import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.DeviceYaml;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.RegisterMapping;
 import com.mamotec.energycontrolbackend.ocpp.OcppServer;
+import com.mamotec.energycontrolbackend.service.device.ChargingStationService;
 import com.mamotec.energycontrolbackend.service.device.DeviceDataService;
 import com.mamotec.energycontrolbackend.service.device.plant.PlantDeviceService;
 import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceService;
+import eu.chargetime.ocpp.JSONServer;
+import eu.chargetime.ocpp.NotConnectedException;
+import eu.chargetime.ocpp.OccurenceConstraintException;
+import eu.chargetime.ocpp.UnsupportedFeatureException;
 import eu.chargetime.ocpp.model.core.GetConfigurationConfirmation;
 import eu.chargetime.ocpp.model.core.GetConfigurationRequest;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +32,7 @@ public class TcpDeviceDataReader {
     private final InterfaceService interfaceService;
     private final PlantDeviceService deviceService;
     private final DeviceDataService deviceDataService;
-    private final OcppServer ocppServer;
+    private final ChargingStationService chargingStationService;
 
 
     public void fetchDeviceData(InterfaceConfig config) {
@@ -62,14 +67,19 @@ public class TcpDeviceDataReader {
         GetConfigurationRequest request = new GetConfigurationRequest();
         request.setKey(new String[0]);
         log.info("UUID: {}", chargingStationDevice.getUuid());
-        ocppServer.send(chargingStationDevice.getUuid(), request).whenComplete((confirmation, throwable) -> {
-            if (throwable != null) {
-                log.error("GetConfigurationRequest: {}", throwable.getMessage());
-            } else {
-                GetConfigurationConfirmation getConfigurationConfirmation = (GetConfigurationConfirmation) confirmation;
-                log.info("GetConfigurationRequest: {}", getConfigurationConfirmation);
-            }
-        });
+        JSONServer instance = OcppServer.getInstance(chargingStationService);
+        try {
+            instance.send(chargingStationDevice.getUuid(), request).whenComplete((confirmation, throwable) -> {
+                if (throwable != null) {
+                    log.error("GetConfigurationRequest: {}", throwable.getMessage());
+                } else {
+                    GetConfigurationConfirmation getConfigurationConfirmation = (GetConfigurationConfirmation) confirmation;
+                    log.info("GetConfigurationRequest: {}", getConfigurationConfirmation);
+                }
+            });
+        } catch (OccurenceConstraintException | UnsupportedFeatureException | NotConnectedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void readHybridInverter(Device device) {
