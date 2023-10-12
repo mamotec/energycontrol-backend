@@ -2,13 +2,11 @@ package com.mamotec.energycontrolbackend.ocpp;
 
 import com.mamotec.energycontrolbackend.service.device.ChargingStationService;
 import eu.chargetime.ocpp.feature.profile.ServerCoreEventHandler;
-import eu.chargetime.ocpp.model.Request;
 import eu.chargetime.ocpp.model.core.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.ZonedDateTime;
-import java.util.Set;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -20,7 +18,9 @@ public class OcppServerCoreEventHandler implements ServerCoreEventHandler {
     @Override
     public AuthorizeConfirmation handleAuthorizeRequest(UUID uuid, AuthorizeRequest authorizeRequest) {
         log.info("AuthorizeRequest: {}", authorizeRequest);
-        return null;
+        log.info("idTag: {}", authorizeRequest.getIdTag());
+        IdTagInfo idTagInfo = new IdTagInfo(AuthorizationStatus.Accepted);
+        return new AuthorizeConfirmation(idTagInfo);
     }
 
     @Override
