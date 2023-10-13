@@ -20,6 +20,7 @@ import eu.chargetime.ocpp.model.core.*;
 import eu.chargetime.ocpp.model.smartcharging.SetChargingProfileRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.ZonedDateTime;
@@ -34,6 +35,12 @@ public class TcpDeviceDataReader {
     private final PlantDeviceService deviceService;
     private final DeviceDataService deviceDataService;
     private final ChargingStationService chargingStationService;
+
+    @Value("${chargingstation.unit}")
+    private String unit;
+
+    @Value("${chargingstation.value}")
+    private Double value;
 
 
     public void fetchDeviceData(InterfaceConfig config) {
@@ -68,13 +75,14 @@ public class TcpDeviceDataReader {
 
         // Periode erstellen - hier wird das Limit gesetzt in Ampere
         ChargingSchedulePeriod period = new ChargingSchedulePeriod(0, 11000d);
-        ChargingSchedulePeriod period1 = new ChargingSchedulePeriod(28800, 1000d);
+        ChargingSchedulePeriod period1 = new ChargingSchedulePeriod(28800, value);
         ChargingSchedulePeriod period2 = new ChargingSchedulePeriod(72000, 11000d);
+
 
         ChargingSchedule schedule = new ChargingSchedule();
         schedule.setDuration(86400);
         schedule.setStartSchedule(ZonedDateTime.now());
-        schedule.setChargingRateUnit(ChargingRateUnitType.W);  // Ladeleistungseinheit setzen
+        schedule.setChargingRateUnit(unit.equals("A") ? ChargingRateUnitType.A : ChargingRateUnitType.W);  // Ladeleistungseinheit setzen
         ChargingSchedulePeriod[] periods = new ChargingSchedulePeriod[3];  // Array für Perioden erstellen
         periods[0] = period;  // Perioden dem Array hinzufügen
         periods[1] = period1;
