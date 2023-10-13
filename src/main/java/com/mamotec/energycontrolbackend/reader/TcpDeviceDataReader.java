@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Component
@@ -66,26 +67,36 @@ public class TcpDeviceDataReader {
         ChargingStationDevice chargingStationDevice = (ChargingStationDevice) device;
 
         // Periode erstellen - hier wird das Limit gesetzt in Ampere
-        ChargingSchedulePeriod period = new ChargingSchedulePeriod();
-        period.setStartPeriod(0);  // Startzeit des Zeitraums in Sekunden
-        period.setLimit(6d);  // Ladeleistungslimit in Ampere
-
+        ChargingSchedulePeriod period = new ChargingSchedulePeriod(0, 11000d);
+        ChargingSchedulePeriod period1 = new ChargingSchedulePeriod(28800, 6000d);
+        ChargingSchedulePeriod period2 = new ChargingSchedulePeriod(72000, 11000d);
 
         ChargingSchedule schedule = new ChargingSchedule();
-        schedule.setChargingRateUnit(ChargingRateUnitType.A);  // Ladeleistungseinheit setzen
-        ChargingSchedulePeriod[] periods = new ChargingSchedulePeriod[1];  // Array für Perioden erstellen
-        periods[0] = period;  // Periode dem Array hinzufügen
+        schedule.setDuration(86400);
+        schedule.setStartSchedule(ZonedDateTime.now());
+        schedule.setChargingRateUnit(ChargingRateUnitType.W);  // Ladeleistungseinheit setzen
+        ChargingSchedulePeriod[] periods = new ChargingSchedulePeriod[3];  // Array für Perioden erstellen
+        periods[0] = period;  // Perioden dem Array hinzufügen
+        periods[1] = period1;
+        periods[2] = period2;
         schedule.setChargingSchedulePeriod(periods);  // Zeitraum zur Liste hinzufügen
 
         ChargingProfile profile = new ChargingProfile();
-        profile.setChargingProfileId(1);  // ID des Ladeprofils setzen
-        profile.setStackLevel(1);  // Stacklevel setzen
+        profile.setChargingProfileId(100);  // ID des Ladeprofils setzen
+        profile.setStackLevel(0);  // Stacklevel setzen
         profile.setChargingProfilePurpose(ChargingProfilePurposeType.TxDefaultProfile);  // Zweck des Ladeprofils setzen
-        profile.setChargingProfileKind(ChargingProfileKindType.Absolute);  // Art des Ladeprofils setzen
+        profile.setChargingProfileKind(ChargingProfileKindType.Recurring);  // Art des Ladeprofils setzen
+        profile.setRecurrencyKind(RecurrencyKindType.Daily);
         profile.setChargingSchedule(schedule);  // Zeitraum dem Ladeprofil hinzufügen
 
         SetChargingProfileRequest request = new SetChargingProfileRequest(0, profile);
         SetChargingProfileRequest request1 = new SetChargingProfileRequest(1, profile);
+
+        if (request.validate() && request1.validate()) {
+            log.info("ChargingProfileRequest is valid");
+        } else {
+            log.error("ChargingProfileRequest is not valid");
+        }
 
         JSONServer instance = OcppServer.getInstance(chargingStationService);
         try {
