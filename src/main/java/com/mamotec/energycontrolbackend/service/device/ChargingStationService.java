@@ -5,10 +5,8 @@ import com.mamotec.energycontrolbackend.domain.device.dao.ChargingStationCreateR
 import com.mamotec.energycontrolbackend.ocpp.OcppServer;
 import com.mamotec.energycontrolbackend.repository.ChargingStationRepository;
 import eu.chargetime.ocpp.JSONServer;
-import eu.chargetime.ocpp.NotConnectedException;
-import eu.chargetime.ocpp.OccurenceConstraintException;
-import eu.chargetime.ocpp.UnsupportedFeatureException;
-import eu.chargetime.ocpp.model.core.*;
+import eu.chargetime.ocpp.model.core.ChangeConfigurationRequest;
+import eu.chargetime.ocpp.model.core.ChargePointStatus;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.UUID;
-
-import static java.lang.Long.parseLong;
 
 @Service
 @RequiredArgsConstructor
@@ -103,10 +99,7 @@ public class ChargingStationService {
         JSONServer instance = OcppServer.getInstance(this);
 
         // Meter Interval
-        ChangeConfigurationRequest intervalData = new ChangeConfigurationRequest();
-        intervalData.setKey("MeterValueSampleInterval");
-        intervalData.setValue("5");
-
+        ChangeConfigurationRequest intervalData = new ChangeConfigurationRequest("MeterValueSampleInterval", "10");
 
         try {
             instance.send(uuid, intervalData).whenComplete((confirmation, throwable) -> {
@@ -121,9 +114,7 @@ public class ChargingStationService {
         }
 
         // MeterValuesSampledData
-        ChangeConfigurationRequest sampledData = new ChangeConfigurationRequest();
-        sampledData.setKey("MeterValuesSampledData");
-        sampledData.setValue("Power.Active.Export");
+        ChangeConfigurationRequest sampledData = new ChangeConfigurationRequest("MeterValuesSampledData", "Power.Active.Import,Temperature");
 
         try {
             instance.send(uuid, sampledData).whenComplete((confirmation, throwable) -> {
@@ -134,25 +125,6 @@ public class ChargingStationService {
                 }
             });
         } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        GetConfigurationRequest getConfigurationRequest = new GetConfigurationRequest();
-        getConfigurationRequest.setKey(new String[0]);
-
-        try {
-            instance.send(uuid, getConfigurationRequest).whenComplete((confirmation, throwable) -> {
-                if (throwable != null) {
-                    log.error("GetConfigurationRequest: {}", throwable.getMessage());
-                } else {
-                    GetConfigurationConfirmation getConfigurationConfirmation = (GetConfigurationConfirmation) confirmation;
-                    for (KeyValueType keyValuePair : getConfigurationConfirmation.getConfigurationKey()) {
-                        log.info("GetConfigurationRequest: {}", keyValuePair.getKey());
-                        log.info("GetConfigurationRequest: {}", keyValuePair.getValue());
-                    }
-                }
-            });
-        } catch (OccurenceConstraintException | UnsupportedFeatureException | NotConnectedException e) {
             throw new RuntimeException(e);
         }
 
