@@ -80,7 +80,7 @@ public class TcpDeviceDataReader {
         ChargingProfile profile = new ChargingProfile();
         profile.setChargingProfileId(1);  // ID des Ladeprofils setzen
         profile.setStackLevel(1);  // Stacklevel setzen
-        profile.setChargingProfilePurpose(ChargingProfilePurposeType.ChargePointMaxProfile);  // Zweck des Ladeprofils setzen
+        profile.setChargingProfilePurpose(ChargingProfilePurposeType.TxProfile);  // Zweck des Ladeprofils setzen
         profile.setChargingProfileKind(ChargingProfileKindType.Absolute);  // Art des Ladeprofils setzen
         profile.setChargingSchedule(schedule);  // Zeitraum dem Ladeprofil hinzufügen
 
