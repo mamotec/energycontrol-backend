@@ -2,8 +2,13 @@ package com.mamotec.energycontrolbackend.service.device;
 
 import com.mamotec.energycontrolbackend.domain.device.chargingstation.ChargingStationDevice;
 import com.mamotec.energycontrolbackend.domain.device.dao.ChargingStationCreateRequest;
+import com.mamotec.energycontrolbackend.ocpp.OcppServer;
 import com.mamotec.energycontrolbackend.repository.ChargingStationRepository;
-import eu.chargetime.ocpp.model.core.ChargePointStatus;
+import eu.chargetime.ocpp.JSONServer;
+import eu.chargetime.ocpp.NotConnectedException;
+import eu.chargetime.ocpp.OccurenceConstraintException;
+import eu.chargetime.ocpp.UnsupportedFeatureException;
+import eu.chargetime.ocpp.model.core.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -94,4 +99,63 @@ public class ChargingStationService {
         return deviceToUpdate.get();
     }
 
+    public void setConfiguration(UUID uuid) {
+        JSONServer instance = OcppServer.getInstance(this);
+
+        // Meter Interval
+        ChangeConfigurationRequest intervalData = new ChangeConfigurationRequest();
+        intervalData.setKey("MeterValueSampleInterval");
+        intervalData.setValue("5");
+
+
+        try {
+            instance.send(uuid, intervalData).whenComplete((confirmation, throwable) -> {
+                if (throwable != null) {
+                    log.error("ChangeConfigurationRequest: {}", throwable.getMessage());
+                } else {
+                    log.info("ChangeConfigurationRequest: {}", confirmation);
+                }
+            });
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        // MeterValuesSampledData
+        ChangeConfigurationRequest sampledData = new ChangeConfigurationRequest();
+        sampledData.setKey("MeterValuesSampledData");
+        sampledData.setValue("Power.Active.Export");
+
+        try {
+            instance.send(uuid, sampledData).whenComplete((confirmation, throwable) -> {
+                if (throwable != null) {
+                    log.error("ChangeConfigurationRequest: {}", throwable.getMessage());
+                } else {
+                    log.info("ChangeConfigurationRequest: {}", confirmation);
+                }
+            });
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        GetConfigurationRequest getConfigurationRequest = new GetConfigurationRequest();
+        getConfigurationRequest.setKey(new String[0]);
+
+        try {
+            instance.send(uuid, getConfigurationRequest).whenComplete((confirmation, throwable) -> {
+                if (throwable != null) {
+                    log.error("GetConfigurationRequest: {}", throwable.getMessage());
+                } else {
+                    GetConfigurationConfirmation getConfigurationConfirmation = (GetConfigurationConfirmation) confirmation;
+                    for (KeyValueType keyValuePair : getConfigurationConfirmation.getConfigurationKey()) {
+                        log.info("GetConfigurationRequest: {}", keyValuePair.getKey());
+                        log.info("GetConfigurationRequest: {}", keyValuePair.getValue());
+                    }
+                }
+            });
+        } catch (OccurenceConstraintException | UnsupportedFeatureException | NotConnectedException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
 }

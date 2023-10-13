@@ -26,6 +26,8 @@ public class OcppServerEvents implements ServerEvents {
         log.info("New Charging Station connected with UUID: " + uuid);
         log.info("Charging Station Identifier: " + sessionInformation);
         chargingStationService.updateChargingStationUUID(sessionInformation.getIdentifier(), uuid);
+        chargingStationService.setConfiguration(uuid);
+
     }
 
     @Override

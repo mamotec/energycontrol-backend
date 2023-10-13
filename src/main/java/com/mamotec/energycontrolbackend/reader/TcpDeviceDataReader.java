@@ -68,7 +68,7 @@ public class TcpDeviceDataReader {
 
         // Periode erstellen - hier wird das Limit gesetzt in Ampere
         ChargingSchedulePeriod period = new ChargingSchedulePeriod(0, 11000d);
-        ChargingSchedulePeriod period1 = new ChargingSchedulePeriod(28800, 6000d);
+        ChargingSchedulePeriod period1 = new ChargingSchedulePeriod(28800, 1000d);
         ChargingSchedulePeriod period2 = new ChargingSchedulePeriod(72000, 11000d);
 
         ChargingSchedule schedule = new ChargingSchedule();
