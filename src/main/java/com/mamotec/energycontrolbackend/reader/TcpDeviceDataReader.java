@@ -122,6 +122,7 @@ public class TcpDeviceDataReader {
         } catch (OccurenceConstraintException | UnsupportedFeatureException | NotConnectedException e) {
             throw new RuntimeException(e);
         }
+        chargingStationService.setConfiguration(chargingStationDevice.getUuid());
     }
 
     private void readHybridInverter(Device device) {
