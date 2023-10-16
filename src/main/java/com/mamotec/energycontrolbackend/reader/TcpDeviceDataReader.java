@@ -84,15 +84,17 @@ public class TcpDeviceDataReader {
         ChargingSchedule chargingSchedule = new ChargingSchedule();
         chargingSchedule.setDuration(0); // Keine Begrenzung der Dauer
         chargingSchedule.setStartSchedule(ZonedDateTime.now()); // Startzeitpunkt
-        chargingSchedule.setChargingRateUnit(ChargingRateUnitType.W); // Ladeleistungseinheit
+        chargingSchedule.setChargingRateUnit(unit.equals("W") ? ChargingRateUnitType.W : ChargingRateUnitType.A); // Ladeleistungseinheit
 
         // Erstelle eine ChargingSchedulePeriod mit der Begrenzung der Ladeleistung
         ChargingSchedulePeriod chargingSchedulePeriod = new ChargingSchedulePeriod();
         chargingSchedulePeriod.setStartPeriod(0); // Startperiode
-        chargingSchedulePeriod.setLimit(3000d); // Maximaler Ladewert in Watt (10 kW)
+        chargingSchedulePeriod.setLimit(value); // Maximaler Ladewert in Watt (10 kW)
 
         // Füge die ChargingSchedulePeriod zur ChargingSchedule hinzu
-        chargingSchedule.getChargingSchedulePeriod()[0] = chargingSchedulePeriod;
+        ChargingSchedulePeriod[] strings = new ChargingSchedulePeriod[1];
+        strings[0] = chargingSchedulePeriod;
+        chargingSchedule.setChargingSchedulePeriod(strings);
 
         // Setze die ChargingSchedule im ChargingProfile
         chargingProfile.setChargingSchedule(chargingSchedule);
