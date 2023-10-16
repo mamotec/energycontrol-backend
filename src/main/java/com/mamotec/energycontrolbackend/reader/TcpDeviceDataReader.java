@@ -73,34 +73,36 @@ public class TcpDeviceDataReader {
     private void readChargingStation(Device device) {
         ChargingStationDevice chargingStationDevice = (ChargingStationDevice) device;
 
-        // Periode erstellen - hier wird das Limit gesetzt in Ampere
-        ChargingSchedulePeriod period = new ChargingSchedulePeriod(0, 11000d);
-        ChargingSchedulePeriod period1 = new ChargingSchedulePeriod(28800, value);
-        ChargingSchedulePeriod period2 = new ChargingSchedulePeriod(72000, 11000d);
+        // Erstelle ein ChargingProfile
+        ChargingProfile chargingProfile = new ChargingProfile();
+        chargingProfile.setChargingProfileId(1); // Eindeutige ID für das Profil
+        chargingProfile.setStackLevel(1); // Prioritätsstufe des Profils
+        chargingProfile.setChargingProfilePurpose(ChargingProfilePurposeType.ChargePointMaxProfile);
+        chargingProfile.setChargingProfileKind(ChargingProfileKindType.Absolute);
 
+        // Erstelle ein ChargingSchedule
+        ChargingSchedule chargingSchedule = new ChargingSchedule();
+        chargingSchedule.setDuration(0); // Keine Begrenzung der Dauer
+        chargingSchedule.setStartSchedule(ZonedDateTime.now()); // Startzeitpunkt
+        chargingSchedule.setChargingRateUnit(ChargingRateUnitType.W); // Ladeleistungseinheit
 
-        ChargingSchedule schedule = new ChargingSchedule();
-        schedule.setDuration(86400);
-        schedule.setStartSchedule(ZonedDateTime.now());
-        schedule.setChargingRateUnit(unit.equals("A") ? ChargingRateUnitType.A : ChargingRateUnitType.W);  // Ladeleistungseinheit setzen
-        ChargingSchedulePeriod[] periods = new ChargingSchedulePeriod[3];  // Array für Perioden erstellen
-        periods[0] = period;  // Perioden dem Array hinzufügen
-        periods[1] = period1;
-        periods[2] = period2;
-        schedule.setChargingSchedulePeriod(periods);  // Zeitraum zur Liste hinzufügen
+        // Erstelle eine ChargingSchedulePeriod mit der Begrenzung der Ladeleistung
+        ChargingSchedulePeriod chargingSchedulePeriod = new ChargingSchedulePeriod();
+        chargingSchedulePeriod.setStartPeriod(0); // Startperiode
+        chargingSchedulePeriod.setLimit(3000d); // Maximaler Ladewert in Watt (10 kW)
 
-        ChargingProfile profile = new ChargingProfile();
-        profile.setChargingProfileId(100);  // ID des Ladeprofils setzen
-        profile.setStackLevel(0);  // Stacklevel setzen
-        profile.setChargingProfilePurpose(ChargingProfilePurposeType.TxDefaultProfile);  // Zweck des Ladeprofils setzen
-        profile.setChargingProfileKind(ChargingProfileKindType.Recurring);  // Art des Ladeprofils setzen
-        profile.setRecurrencyKind(RecurrencyKindType.Daily);
-        profile.setChargingSchedule(schedule);  // Zeitraum dem Ladeprofil hinzufügen
+        // Füge die ChargingSchedulePeriod zur ChargingSchedule hinzu
+        chargingSchedule.getChargingSchedulePeriod()[0] = chargingSchedulePeriod;
 
-        SetChargingProfileRequest request = new SetChargingProfileRequest(0, profile);
-        SetChargingProfileRequest request1 = new SetChargingProfileRequest(1, profile);
+        // Setze die ChargingSchedule im ChargingProfile
+        chargingProfile.setChargingSchedule(chargingSchedule);
 
-        if (request.validate() && request1.validate()) {
+        // Setze das ChargingProfile im SetChargingProfileRequest
+        SetChargingProfileRequest request = new SetChargingProfileRequest();
+        request.setConnectorId(0);
+        request.setCsChargingProfiles(chargingProfile);
+
+        if (request.validate()) {
             log.info("ChargingProfileRequest is valid");
         } else {
             log.error("ChargingProfileRequest is not valid");
@@ -119,17 +121,6 @@ public class TcpDeviceDataReader {
             log.error("ChargingProfileRequest: {}", e);
         }
 
-        try {
-            instance.send(chargingStationDevice.getUuid(), request1).whenComplete((confirmation, throwable) -> {
-                if (throwable != null) {
-                    log.error("ChargingProfileRequest 1: {}", throwable.getMessage());
-                } else {
-                    log.info("ChargingProfileRequest 1: {}", confirmation);
-                }
-            });
-        } catch (OccurenceConstraintException | UnsupportedFeatureException | NotConnectedException e) {
-            throw new RuntimeException(e);
-        }
         chargingStationService.setConfiguration(chargingStationDevice.getUuid());
     }
 
