@@ -115,6 +115,8 @@ public class TcpDeviceDataReader {
             instance.send(chargingStationDevice.getUuid(), request).whenComplete((confirmation, throwable) -> {
                 if (throwable != null) {
                     log.error("ChargingProfileRequest 0: {}", throwable.getMessage());
+                    log.error("ChargingProfileRequest 0: {}", throwable.getCause());
+                    log.error("ChargingProfileRequest 0: {}", throwable.getStackTrace());
                 } else {
                     log.info("ChargingProfileRequest 0: {}", confirmation);
                 }
