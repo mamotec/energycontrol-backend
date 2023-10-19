@@ -110,7 +110,7 @@ public class ChargingStationService {
                 }
             });
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            log.error(e.getMessage());
         }
 
         // MeterValuesSampledData
@@ -125,7 +125,7 @@ public class ChargingStationService {
                 }
             });
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            log.error(e.getMessage());
         }
 
 
