@@ -19,7 +19,7 @@ WORKDIR /app
 
 # Copy the JAR file from the build output to the container
 COPY --from=builder /app/target/energycontrol-backend.jar /app/energycontrol-backend.jar
-COPY docker/backend-application/keystore.jks /app/keystore.jks
+COPY ./keystore.jks /app/keystore.jks
 
 EXPOSE 443
 
