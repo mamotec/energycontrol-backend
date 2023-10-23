@@ -20,7 +20,5 @@ WORKDIR /app
 # Copy the JAR file from the build output to the container
 COPY --from=builder /app/target/energycontrol-backend.jar /app/energycontrol-backend.jar
 
-EXPOSE 443
-
 # Set the container entrypoint to execute the Spring Boot application
 ENTRYPOINT ["java", "-jar", "/app/energycontrol-backend.jar"]
