@@ -1,3 +1,4 @@
+version: '3.8'
 services:
   ########################
   # Frontend
@@ -46,7 +47,6 @@ services:
     networks:
       - backend-net
 
-
   ########################
   # Influx-DB
   ########################
@@ -67,8 +67,21 @@ services:
     networks:
       - backend-net
 
+  ########################
+  # Watchtower
+  ########################
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_POLL_INTERVAL=120  # Alle 2 Minuten
+
 volumes:
   dbdata:
   influxdata:
+
 networks:
   backend-net:
