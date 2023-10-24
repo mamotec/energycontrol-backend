@@ -1,3 +1,4 @@
+
 package com.mamotec.energycontrolbackend.config;
 
 import com.mamotec.energycontrolbackend.repository.UserRepository;
