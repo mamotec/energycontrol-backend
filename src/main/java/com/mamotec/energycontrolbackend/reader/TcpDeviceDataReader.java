@@ -76,14 +76,12 @@ public class TcpDeviceDataReader {
         // Erstelle ein ChargingProfile
         ChargingProfile chargingProfile = new ChargingProfile();
         chargingProfile.setChargingProfileId(1); // Eindeutige ID für das Profil
-        chargingProfile.setStackLevel(1); // Prioritätsstufe des Profils
+        chargingProfile.setStackLevel(0); // Prioritätsstufe des Profils
         chargingProfile.setChargingProfilePurpose(ChargingProfilePurposeType.ChargePointMaxProfile);
         chargingProfile.setChargingProfileKind(ChargingProfileKindType.Absolute);
 
         // Erstelle ein ChargingSchedule
         ChargingSchedule chargingSchedule = new ChargingSchedule();
-        chargingSchedule.setDuration(0); // Keine Begrenzung der Dauer
-        chargingSchedule.setStartSchedule(ZonedDateTime.now()); // Startzeitpunkt
         chargingSchedule.setChargingRateUnit(unit.equals("W") ? ChargingRateUnitType.W : ChargingRateUnitType.A); // Ladeleistungseinheit
 
         // Erstelle eine ChargingSchedulePeriod mit der Begrenzung der Ladeleistung
