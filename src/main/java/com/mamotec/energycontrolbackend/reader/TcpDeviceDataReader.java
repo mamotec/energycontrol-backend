@@ -79,6 +79,7 @@ public class TcpDeviceDataReader {
         chargingProfile.setStackLevel(0); // Prioritätsstufe des Profils
         chargingProfile.setChargingProfilePurpose(ChargingProfilePurposeType.ChargePointMaxProfile);
         chargingProfile.setChargingProfileKind(ChargingProfileKindType.Absolute);
+        chargingProfile.setRecurrencyKind(null);
 
         // Erstelle ein ChargingSchedule
         ChargingSchedule chargingSchedule = new ChargingSchedule();
