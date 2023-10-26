@@ -144,11 +144,15 @@ public class TcpDeviceDataReader {
         RegisterMapping gridPower = i.getMapping()
                 .getGridPower();
 
+        RegisterMapping genPower = i.getMapping()
+                .getGenPower();
+
         try {
             doFetchPerDevice(device, inverterPower);
             doFetchPerDevice(device, batterySoc);
             doFetchPerDevice(device, batteryPower);
             doFetchPerDevice(device, gridPower);
+            doFetchPerDevice(device, genPower);
         } catch (Exception e) {
             noError = false;
             log.error("READ - Error while fetching data for device {}.", device.getId(), e);

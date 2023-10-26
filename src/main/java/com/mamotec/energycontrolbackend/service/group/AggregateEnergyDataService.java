@@ -29,7 +29,7 @@ public class AggregateEnergyDataService implements AggregateService {
 
 
         return EnergyDataRepresentation.builder()
-                .activePower(aggregateMeasurement(deviceIds, "power", null))
+                .activePower(aggregateMeasurement(deviceIds, "power", null) + aggregateMeasurement(deviceIds, "genPower", null))
                 .build();
     }
 
