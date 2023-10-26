@@ -25,7 +25,7 @@ interfaces:
             register:
               - 668
             unit: W
-            type: "power"
+            type: "genPower"
             fc: READ_HOLDING_REGISTERS
           batterySoc:
             register:
@@ -73,7 +73,7 @@ interfaces:
             register:
               - 668
             unit: W
-            type: "power"
+            type: "genPower"
             fc: READ_HOLDING_REGISTERS
           batterySoc:
             register:
@@ -121,7 +121,7 @@ interfaces:
             register:
               - 668
             unit: W
-            type: "power"
+            type: "genPower"
             fc: READ_HOLDING_REGISTERS
           batterySoc:
             register:
@@ -169,7 +169,7 @@ interfaces:
             register:
               - 668
             unit: W
-            type: "power"
+            type: "genPower"
             fc: READ_HOLDING_REGISTERS
           batterySoc:
             register:
@@ -217,7 +217,7 @@ interfaces:
             register:
               - 668
             unit: W
-            type: "power"
+            type: "genPower"
             fc: READ_HOLDING_REGISTERS
           batterySoc:
             register:
