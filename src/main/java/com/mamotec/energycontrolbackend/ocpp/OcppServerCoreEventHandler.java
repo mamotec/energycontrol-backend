@@ -67,7 +67,7 @@ public class OcppServerCoreEventHandler implements ServerCoreEventHandler {
     @Override
     public StopTransactionConfirmation handleStopTransactionRequest(UUID uuid, StopTransactionRequest stopTransactionRequest) {
         log.info("StopTransactionRequest: {}", stopTransactionRequest);
-        return null;
+        return new StopTransactionConfirmation();
     }
 
     @Override
