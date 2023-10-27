@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.function.Function;
 
+import static com.mamotec.energycontrolbackend.utils.ConversionUtils.conversionMethodBatteryPower;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -29,7 +31,7 @@ public class AggregateEnergyDataService implements AggregateService {
 
 
         return EnergyDataRepresentation.builder()
-                .activePower(aggregateMeasurement(deviceIds, "power", null) + aggregateMeasurement(deviceIds, "genPower", null))
+                .activePower(aggregateMeasurement(deviceIds, "power", null) + aggregateMeasurement(deviceIds, "genPower", conversionMethodBatteryPower()))
                 .build();
     }
 
