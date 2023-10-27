@@ -23,7 +23,7 @@ interfaces:
             fc: READ_HOLDING_REGISTERS
           genPower:
             register:
-              - 668
+              - 667
             unit: W
             type: "genPower"
             fc: READ_HOLDING_REGISTERS
@@ -71,7 +71,7 @@ interfaces:
             fc: READ_HOLDING_REGISTERS
           genPower:
             register:
-              - 668
+              - 667
             unit: W
             type: "genPower"
             fc: READ_HOLDING_REGISTERS
@@ -119,7 +119,7 @@ interfaces:
             fc: READ_HOLDING_REGISTERS
           genPower:
             register:
-              - 668
+              - 667
             unit: W
             type: "genPower"
             fc: READ_HOLDING_REGISTERS
@@ -167,7 +167,7 @@ interfaces:
             fc: READ_HOLDING_REGISTERS
           genPower:
             register:
-              - 668
+              - 667
             unit: W
             type: "genPower"
             fc: READ_HOLDING_REGISTERS
@@ -215,7 +215,7 @@ interfaces:
             fc: READ_HOLDING_REGISTERS
           genPower:
             register:
-              - 668
+              - 667
             unit: W
             type: "genPower"
             fc: READ_HOLDING_REGISTERS
