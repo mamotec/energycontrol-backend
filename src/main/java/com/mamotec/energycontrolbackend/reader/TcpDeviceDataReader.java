@@ -51,7 +51,7 @@ public class TcpDeviceDataReader {
             if (device instanceof HybridInverterDevice) {
                 readHybridInverter(device);
             } else if (device instanceof ChargingStationDevice) {
-                readChargingStation(device);
+                // readChargingStation(device);
             } else {
                 log.error("READ - Device {} is not supported.", device.getId());
             }
@@ -124,7 +124,6 @@ public class TcpDeviceDataReader {
             log.error("ChargingProfileRequest: {}", e);
         }
 
-        chargingStationService.setConfiguration(chargingStationDevice.getUuid());
     }
 
     private void readHybridInverter(Device device) {

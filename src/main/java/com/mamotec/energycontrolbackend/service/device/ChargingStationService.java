@@ -1,11 +1,9 @@
 package com.mamotec.energycontrolbackend.service.device;
 
+import com.mamotec.energycontrolbackend.domain.device.EnergyDistributionEvent;
 import com.mamotec.energycontrolbackend.domain.device.chargingstation.ChargingStationDevice;
 import com.mamotec.energycontrolbackend.domain.device.dao.ChargingStationCreateRequest;
-import com.mamotec.energycontrolbackend.ocpp.OcppServer;
 import com.mamotec.energycontrolbackend.repository.ChargingStationRepository;
-import eu.chargetime.ocpp.JSONServer;
-import eu.chargetime.ocpp.model.core.ChangeConfigurationRequest;
 import eu.chargetime.ocpp.model.core.ChargePointStatus;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -95,39 +93,10 @@ public class ChargingStationService {
         return deviceToUpdate.get();
     }
 
-    public void setConfiguration(UUID uuid) {
-        JSONServer instance = OcppServer.getInstance(this);
-
-        // Meter Interval
-        ChangeConfigurationRequest intervalData = new ChangeConfigurationRequest("MeterValueSampleInterval", "10");
-
-        try {
-            instance.send(uuid, intervalData).whenComplete((confirmation, throwable) -> {
-                if (throwable != null) {
-                    log.error("ChangeConfigurationRequest: {}", throwable.getMessage());
-                } else {
-                    log.info("ChangeConfigurationRequest: {}", confirmation);
-                }
-            });
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
-
-        // MeterValuesSampledData
-        ChangeConfigurationRequest sampledData = new ChangeConfigurationRequest("MeterValuesSampledData", "Power.Active.Import,Temperature");
-
-        try {
-            instance.send(uuid, sampledData).whenComplete((confirmation, throwable) -> {
-                if (throwable != null) {
-                    log.error("ChangeConfigurationRequest: {}", throwable.getMessage());
-                } else {
-                    log.info("ChangeConfigurationRequest: {}", confirmation);
-                }
-            });
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
-
-
+    public boolean isChargingStationUnmanaged(UUID uuid) {
+        ChargingStationDevice chargingStationDevice = getByUUID(uuid);
+        return chargingStationDevice.getEnergyDistributionEvent()
+                .equals(EnergyDistributionEvent.UNMANAGED);
     }
+
 }

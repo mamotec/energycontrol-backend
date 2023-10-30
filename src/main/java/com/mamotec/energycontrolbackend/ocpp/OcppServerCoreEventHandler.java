@@ -65,14 +65,22 @@ public class OcppServerCoreEventHandler implements ServerCoreEventHandler {
     }
 
     @Override
+    public StartTransactionConfirmation handleStartTransactionRequest(UUID uuid, StartTransactionRequest startTransactionRequest) {
+        log.info("StartTransactionRequest: {}", startTransactionRequest);
+
+        if (service.isChargingStationUnmanaged(uuid)) {
+            return new StartTransactionConfirmation(new IdTagInfo(AuthorizationStatus.Accepted), 1);
+        }
+
+        return new StartTransactionConfirmation(new IdTagInfo(AuthorizationStatus.Invalid), 1);
+
+    }
+
+    @Override
     public StopTransactionConfirmation handleStopTransactionRequest(UUID uuid, StopTransactionRequest stopTransactionRequest) {
         log.info("StopTransactionRequest: {}", stopTransactionRequest);
         return new StopTransactionConfirmation();
     }
 
-    @Override
-    public StartTransactionConfirmation handleStartTransactionRequest(UUID uuid, StartTransactionRequest startTransactionRequest) {
-        log.info("StartTransactionRequest: {}", startTransactionRequest);
-        return new StartTransactionConfirmation(new IdTagInfo(AuthorizationStatus.Accepted), 1);
-    }
+
 }
