@@ -20,6 +20,7 @@ public class ChargingStationEnergyDistributionService {
         SetChargingProfileRequest req = createChargingProfileRequest(16d);
 
         try {
+            log.info("Sending SetChargingProfileRequest {} to {}", req, device.getUuid());
             getServer().send(device.getUuid(), req);
         } catch (Exception e) {
             log.error("Error while sending SetChargingProfileRequest", e);
@@ -43,6 +44,7 @@ public class ChargingStationEnergyDistributionService {
         request.setIdTag("voltpilot");
 
         try {
+            log.info("Sending RemoteStartTransactionRequest {} to {}", request, device.getUuid());
             getServer().send(device.getUuid(), request);
         } catch (Exception e) {
             log.error("Error while sending RemoteStartTransactionRequest", e);
