@@ -29,6 +29,10 @@ public class ChargingStationDevice extends Device {
     @Enumerated(EnumType.STRING)
     private ChargePointStatus chargePointStatus;
 
+    private int transactionId = 0;
+
+    private boolean transactionActive;
+
     @Override
     public DeviceType getDeviceType() {
         return CHARGING_STATION;

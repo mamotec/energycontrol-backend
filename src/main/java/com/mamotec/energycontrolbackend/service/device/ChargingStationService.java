@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -99,4 +100,36 @@ public class ChargingStationService {
                 .equals(EnergyDistributionEvent.UNMANAGED);
     }
 
+    public int startTransaction(UUID uuid) {
+        ChargingStationDevice cs = getByUUID(uuid);
+
+        // Check if a transaction is ongoing.
+        if (Objects.requireNonNull(cs)
+                .isTransactionActive()) {
+            return cs.getTransactionId();
+        }
+
+        cs.setTransactionId(cs.getTransactionId() + 1);
+        cs.setTransactionActive(true);
+        repository.save(cs);
+        return cs.getTransactionId();
+    }
+
+    public boolean stopTransaction(UUID uuid, int transactionId) {
+        ChargingStationDevice cs = getByUUID(uuid);
+
+        if (Objects.isNull(cs)) {
+            return true;
+        }
+
+        if (cs.isTransactionActive() && cs.getTransactionId() == transactionId) {
+            cs.setTransactionActive(false);
+            repository.save(cs);
+            return true;
+        } else {
+            log.error("Charging Station with uuid: " + uuid + " has no active transaction");
+            return false;
+        }
+
+    }
 }

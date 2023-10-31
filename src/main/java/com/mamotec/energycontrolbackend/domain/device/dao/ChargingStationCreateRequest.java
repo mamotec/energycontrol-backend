@@ -18,5 +18,7 @@ public class ChargingStationCreateRequest extends DeviceCreateRequest {
     private boolean ocppAvailable;
     private UUID uuid;
     private ChargePointStatus chargePointStatus;
+    private long transactionId;
+    private boolean transactionActive;
 
 }

@@ -20,7 +20,7 @@ public class ChargingStationEnergyDistributionScheduler {
     private final ChargingStationRepository chargingStationRepository;
     private final ChargingStationEnergyDistributionService distributionService;
 
-    @Scheduled(cron = "*/3 * * * * *")
+    @Scheduled(cron = "*/5 * * * * *")
     @Transactional
     public void run() {
         List<ChargingStationDevice> stationDeviceList = chargingStationRepository.findAllByActiveIsTrue();

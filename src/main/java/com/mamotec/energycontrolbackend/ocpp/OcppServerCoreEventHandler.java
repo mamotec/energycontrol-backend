@@ -9,6 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
+import static eu.chargetime.ocpp.model.core.AuthorizationStatus.Accepted;
+import static eu.chargetime.ocpp.model.core.AuthorizationStatus.Invalid;
+
 @AllArgsConstructor
 @Slf4j
 public class OcppServerCoreEventHandler implements ServerCoreEventHandler {
@@ -19,7 +22,7 @@ public class OcppServerCoreEventHandler implements ServerCoreEventHandler {
     public AuthorizeConfirmation handleAuthorizeRequest(UUID uuid, AuthorizeRequest authorizeRequest) {
         log.info("AuthorizeRequest: {}", authorizeRequest);
         log.info("idTag: {}", authorizeRequest.getIdTag());
-        IdTagInfo idTagInfo = new IdTagInfo(AuthorizationStatus.Accepted);
+        IdTagInfo idTagInfo = new IdTagInfo(Accepted);
         return new AuthorizeConfirmation(idTagInfo);
     }
 
@@ -68,18 +71,19 @@ public class OcppServerCoreEventHandler implements ServerCoreEventHandler {
     public StartTransactionConfirmation handleStartTransactionRequest(UUID uuid, StartTransactionRequest startTransactionRequest) {
         log.info("StartTransactionRequest: {}", startTransactionRequest);
 
-        if (service.isChargingStationUnmanaged(uuid)) {
-            return new StartTransactionConfirmation(new IdTagInfo(AuthorizationStatus.Accepted), 1);
-        }
-
-        return new StartTransactionConfirmation(new IdTagInfo(AuthorizationStatus.Invalid), 1);
+        int transactionId = service.startTransaction(uuid);
+        return new StartTransactionConfirmation(new IdTagInfo(transactionId == 0 ? Invalid : Accepted), transactionId);
 
     }
 
     @Override
     public StopTransactionConfirmation handleStopTransactionRequest(UUID uuid, StopTransactionRequest stopTransactionRequest) {
         log.info("StopTransactionRequest: {}", stopTransactionRequest);
-        return new StopTransactionConfirmation();
+        boolean canStop = service.stopTransaction(uuid, stopTransactionRequest.getTransactionId());
+
+        StopTransactionConfirmation stopTransactionConfirmation = new StopTransactionConfirmation();
+        stopTransactionConfirmation.setIdTagInfo(new IdTagInfo(canStop ? Accepted : Invalid));
+        return stopTransactionConfirmation;
     }
 
 

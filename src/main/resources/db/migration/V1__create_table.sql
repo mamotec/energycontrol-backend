@@ -93,7 +93,9 @@ CREATE TABLE charging_station_device
     device_id_charger TEXT,
     ocpp_available BOOLEAN NOT NULL DEFAULT false,
     uuid uuid,
-    charge_point_status TEXT
+    charge_point_status TEXT,
+    transaction_id INTEGER,
+    transaction_active BOOLEAN NOT NULL DEFAULT false
 );
 
 CREATE TABLE hybrid_inverter_device
