@@ -4,6 +4,8 @@ import com.mamotec.energycontrolbackend.domain.device.Device;
 import com.mamotec.energycontrolbackend.domain.device.DeviceType;
 import eu.chargetime.ocpp.model.core.ChargePointStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,6 +34,10 @@ public class ChargingStationDevice extends Device {
     private int transactionId = 0;
 
     private boolean transactionActive;
+
+    @Min(1)
+    @Max(16)
+    private int managedStrength = 16;
 
     @Override
     public DeviceType getDeviceType() {

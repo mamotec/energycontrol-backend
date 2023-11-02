@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
-import static com.mamotec.energycontrolbackend.domain.device.EnergyDistributionEvent.RENEWABLE_ENERGY;
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -57,8 +55,19 @@ public class ChargingStationEnergyDistributionService {
                 log.error("Error while sending RemoteStartTransactionRequest", e);
             }
         }
+    }
 
+    public void managedEnergyDistribution(ChargingStationDevice device) {
+        if (device.isTransactionActive()) {
+            SetChargingProfileRequest req = createChargingProfileRequest((double) device.getManagedStrength(), device);
 
+            try {
+                log.info("Sending SetChargingProfileRequest {} to {}", req, device.getUuid());
+                getServer().send(device.getUuid(), req);
+            } catch (Exception e) {
+                log.error("Error while sending SetChargingProfileRequest", e);
+            }
+        }
 
     }
 

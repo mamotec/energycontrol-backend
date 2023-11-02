@@ -95,6 +95,7 @@ CREATE TABLE charging_station_device
     uuid uuid,
     charge_point_status TEXT,
     transaction_id INTEGER,
+    managed_strength INTEGER,
     transaction_active BOOLEAN NOT NULL DEFAULT false
 );
 

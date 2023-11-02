@@ -29,6 +29,11 @@ public interface DeviceMapper {
         if (!Objects.isNull(request.getEnergyDistributionEvent())) {
             device.setEnergyDistributionEvent(request.getEnergyDistributionEvent());
         }
+
+        if (device instanceof ChargingStationDevice chargingStationDevice) {
+            chargingStationDevice.setManagedStrength(request.getManagedStrength());
+        }
+
     }
 
 }

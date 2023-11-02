@@ -24,4 +24,6 @@ public class DeviceUpdateRequest {
     private DeviceType deviceType;
     private EnergyDistributionEvent energyDistributionEvent;
 
+    private int managedStrength;
+
 }

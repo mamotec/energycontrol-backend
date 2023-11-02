@@ -9,10 +9,13 @@ import java.util.List;
 public enum EnergyDistributionEvent {
 
     RENEWABLE_ENERGY("Erneuerbare Energie", "Verbraucher wird nur mit erneuerbarer Energie geladen."),
-    UNMANAGED("Immer laden", "Verbraucher wird kontinuierlich geladen, ohne Regulierung durch das Energiemanagementsystem.");
+    UNMANAGED("Immer laden", "Verbraucher wird kontinuierlich geladen, ohne Regulierung durch das Energiemanagementsystem."),
+    MANAGED("Gesteuert", "Verbraucher wird mit der angegebenen Stromstärke geladen.");
+
 
     static {
         RENEWABLE_ENERGY.deviceTypes.addAll(List.of(DeviceType.BATTERY, DeviceType.CHARGING_STATION, DeviceType.HEAT_PUMP));
+        MANAGED.deviceTypes.add(DeviceType.CHARGING_STATION);
         UNMANAGED.deviceTypes.addAll(List.of(DeviceType.BATTERY, DeviceType.CHARGING_STATION, DeviceType.HEAT_PUMP));
     }
 

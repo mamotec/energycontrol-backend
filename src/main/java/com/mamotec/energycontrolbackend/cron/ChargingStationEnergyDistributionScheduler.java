@@ -28,6 +28,7 @@ public class ChargingStationEnergyDistributionScheduler {
         for (ChargingStationDevice chargingStationDevice : stationDeviceList) {
             switch (chargingStationDevice.getEnergyDistributionEvent()) {
                 case RENEWABLE_ENERGY -> distributionService.renewableEnergyDistribution(chargingStationDevice);
+                case MANAGED -> distributionService.managedEnergyDistribution(chargingStationDevice);
                 case UNMANAGED -> distributionService.unmanagedEnergyDistribution(chargingStationDevice);
             }
         }
