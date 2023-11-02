@@ -8,7 +8,6 @@ import com.influxdb.query.FluxRecord;
 import com.influxdb.query.FluxTable;
 import com.mamotec.energycontrolbackend.client.InfluxClient;
 import com.mamotec.energycontrolbackend.domain.device.Device;
-import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.RegisterMapping;
 import com.mamotec.energycontrolbackend.repository.DeviceRepository;
 import com.mamotec.energycontrolbackend.utils.StringUtils;
 import jakarta.transaction.Transactional;
@@ -24,45 +23,9 @@ import static java.lang.String.format;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class DeviceDataService {
+public class DeviceDataReadService {
 
     private final InfluxClient influxClient;
-    private final DeviceRepository deviceRepository;
-
-    @Transactional
-    public void writeDeviceData(Device device, String body, RegisterMapping mapping) {
-        if (body == null) {
-            return;
-        }
-
-        // InfluxDB
-        log.info("Saving data for device {} and measurement {}.", device.getId(), mapping.getType());
-        WriteApiBlocking writeApiBlocking = influxClient.getWriteApiBlocking();
-
-        Point p = Point.measurement(mapping.getType())
-                .addTag("device", device.getId()
-                        .toString())
-                .addTag("deviceType", device.getDeviceType().toString())
-                .time(Instant.now(), WritePrecision.NS);
-
-        int[] array = StringUtils.toArray(body);
-        int counter = 0;
-        int sum = 0;
-        for (int j : array) {
-            counter++;
-            p.addField(format("value_%s", counter), j);
-            sum += j;
-        }
-
-        p.addField("sum", sum);
-
-        writeApiBlocking.writePoint(p);
-        log.info("Saved data for device {} and measurement {}.", device.getId(), mapping.getType());
-    }
-
-    public void markDeviceAsActive(Device device, boolean active) {
-        deviceRepository.markDeviceAsActive(device.getId(), active);
-    }
 
     public long readLastDeviceData(List<Long> deviceIds, String measurement) {
         QueryApi queryApi = influxClient.getQueryApi();

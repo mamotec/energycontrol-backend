@@ -1,7 +1,7 @@
 package com.mamotec.energycontrolbackend.scheduler;
 
 import com.mamotec.energycontrolbackend.cron.ReadDeviceDataScheduler;
-import com.mamotec.energycontrolbackend.service.device.DeviceDataService;
+import com.mamotec.energycontrolbackend.service.device.DeviceDataReadService;
 import com.mamotec.energycontrolbackend.service.device.plant.PlantDeviceService;
 import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceConfigService;
 import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceService;
@@ -28,7 +28,7 @@ class ReadDeviceDataSchedulerUnitTest {
     @Mock
     private PlantDeviceService deviceService;
     @Mock
-    private DeviceDataService deviceDataService;
+    private DeviceDataReadService deviceDataReadService;
 
     @Test
     void shouldVerifyNoInteractionWhenNoConfigIsFound() {
@@ -41,7 +41,7 @@ class ReadDeviceDataSchedulerUnitTest {
         // then
         verifyNoInteractions(interfaceService);
         verifyNoInteractions(deviceService);
-        verifyNoInteractions(deviceDataService);
+        verifyNoInteractions(deviceDataReadService);
     }
 
 }

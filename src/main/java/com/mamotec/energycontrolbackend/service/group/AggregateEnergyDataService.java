@@ -5,7 +5,7 @@ import com.mamotec.energycontrolbackend.domain.device.DeviceType;
 import com.mamotec.energycontrolbackend.domain.group.DeviceGroup;
 import com.mamotec.energycontrolbackend.domain.group.dao.EnergyDataRepresentation;
 import com.mamotec.energycontrolbackend.domain.group.dao.home.BiDirectionalEnergy;
-import com.mamotec.energycontrolbackend.service.device.DeviceDataService;
+import com.mamotec.energycontrolbackend.service.device.DeviceDataReadService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import static com.mamotec.energycontrolbackend.utils.ConversionUtils.conversionM
 @Slf4j
 public class AggregateEnergyDataService implements AggregateService {
 
-    private final DeviceDataService deviceDataService;
+    private final DeviceDataReadService deviceDataReadService;
 
     @Override
     public EnergyDataRepresentation aggregate(DeviceGroup group) {
@@ -36,7 +36,7 @@ public class AggregateEnergyDataService implements AggregateService {
     }
 
     public long aggregateMeasurement(List<Long> deviceIds, String measurement, Function<Long, Long> conversionMethod) {
-        long data = deviceDataService.readLastDeviceData(deviceIds, measurement);
+        long data = deviceDataReadService.readLastDeviceData(deviceIds, measurement);
         if (conversionMethod != null) {
             data = conversionMethod.apply(data);
         }
@@ -44,7 +44,7 @@ public class AggregateEnergyDataService implements AggregateService {
     }
 
     public BiDirectionalEnergy aggregateBiMeasurement(List<Long> deviceIds, String measurement, Function<Long, Long> conversionMethod) {
-        Long data = deviceDataService.readLastDeviceData(deviceIds, measurement);
+        Long data = deviceDataReadService.readLastDeviceData(deviceIds, measurement);
         BiDirectionalEnergy.BiDirectionalEnergyBuilder builder = BiDirectionalEnergy.builder();
 
 

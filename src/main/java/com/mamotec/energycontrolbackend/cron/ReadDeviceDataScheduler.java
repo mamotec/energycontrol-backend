@@ -24,7 +24,6 @@ public class ReadDeviceDataScheduler {
     @Transactional
     public void fetchDeviceData() {
         List<InterfaceConfig> configs = interfaceConfigService.findAll();
-        log.info("READ - Found {} interfaces in repository.", configs.size());
 
         for (InterfaceConfig config : configs) {
             if (config.getType()

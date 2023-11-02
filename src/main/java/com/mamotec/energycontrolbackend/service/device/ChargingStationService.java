@@ -1,18 +1,17 @@
 package com.mamotec.energycontrolbackend.service.device;
 
-import com.mamotec.energycontrolbackend.domain.device.EnergyDistributionEvent;
 import com.mamotec.energycontrolbackend.domain.device.chargingstation.ChargingStationDevice;
 import com.mamotec.energycontrolbackend.domain.device.dao.ChargingStationCreateRequest;
 import com.mamotec.energycontrolbackend.repository.ChargingStationRepository;
 import eu.chargetime.ocpp.model.core.ChargePointStatus;
+import eu.chargetime.ocpp.model.core.MeterValue;
+import eu.chargetime.ocpp.model.core.SampledValue;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +20,7 @@ public class ChargingStationService {
 
     private final ChargingStationRepository repository;
     private final DeviceServiceFactory factory;
+    private final DeviceDataWriteService writeService;
 
     @Transactional
     public void updateChargingStationUUID(String identifier, UUID uuid) {
@@ -83,23 +83,7 @@ public class ChargingStationService {
         repository.save(chargingStationDevice);
     }
 
-    private ChargingStationDevice getByUUID(UUID uuid) throws RuntimeException {
-        Optional<ChargingStationDevice> deviceToUpdate = repository.findFirstByUuid(uuid);
-
-        if (deviceToUpdate.isEmpty()) {
-            log.error("Charging Station with uuid: " + uuid + " not found");
-            return null;
-        }
-
-        return deviceToUpdate.get();
-    }
-
-    public boolean isChargingStationUnmanaged(UUID uuid) {
-        ChargingStationDevice chargingStationDevice = getByUUID(uuid);
-        return chargingStationDevice.getEnergyDistributionEvent()
-                .equals(EnergyDistributionEvent.UNMANAGED);
-    }
-
+    @Transactional
     public int startTransaction(UUID uuid) {
         ChargingStationDevice cs = getByUUID(uuid);
 
@@ -115,6 +99,7 @@ public class ChargingStationService {
         return cs.getTransactionId();
     }
 
+    @Transactional
     public boolean stopTransaction(UUID uuid, int transactionId) {
         ChargingStationDevice cs = getByUUID(uuid);
 
@@ -130,6 +115,30 @@ public class ChargingStationService {
             log.error("Charging Station with uuid: " + uuid + " has no active transaction");
             return false;
         }
+    }
 
+    public void saveMeterValue(UUID uuid, MeterValue[] meterValue) {
+        ChargingStationDevice cs = getByUUID(uuid);
+
+        if (Objects.isNull(cs)) {
+            return;
+        }
+
+       /* for (MeterValue value : meterValue) {
+            for (SampledValue sampledValue : value.getSampledValue()) {
+                writeService.writeDeviceData(cs, sampledValue.getValue().toString(), sampledValue.getContext().toString());
+            }
+        }*/
+    }
+
+    private ChargingStationDevice getByUUID(UUID uuid) throws RuntimeException {
+        Optional<ChargingStationDevice> deviceToUpdate = repository.findFirstByUuid(uuid);
+
+        if (deviceToUpdate.isEmpty()) {
+            log.error("Charging Station with uuid: " + uuid + " not found");
+            return null;
+        }
+
+        return deviceToUpdate.get();
     }
 }
