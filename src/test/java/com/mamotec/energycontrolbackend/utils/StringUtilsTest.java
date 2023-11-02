@@ -11,9 +11,9 @@ class StringUtilsTest {
     @Test
     void toArray() {
         String s = "[982,6478]";
-        int[] expected = {982, 6478};
+        double[] expected = {982, 6478};
 
-        int[] actual = StringUtils.toArray(s);
+        double[] actual = StringUtils.toArray(s);
 
         assertArrayEquals(expected, actual);
     }
