@@ -67,10 +67,7 @@ public class HomeAggregateDeviceGroupDataService {
                 .activePower(rep.getActivePower())
                 .peakKilowatt(homeDeviceGroup.getPeakKilowatt())
                 .heatPumpActive(true)
-                .chargingStation(BiDirectionalEnergy.builder()
-                        .consumption(false)
-                        .value(0)
-                        .build())
+                .chargingStation(energyDataService.aggregateBiMeasurement(deviceIds, "currentImport", null))
                 .grid(energyDataService.aggregateBiMeasurement(deviceIds, "gridPower", conversionMethodBatteryPower()))
                 .batterySoc(energyDataService.aggregateMeasurement(deviceIds, "batterySoc", null))
                 .batteryPower(energyDataService.aggregateBiMeasurement(deviceIds, "batteryPower", conversionMethodBatteryPower()));

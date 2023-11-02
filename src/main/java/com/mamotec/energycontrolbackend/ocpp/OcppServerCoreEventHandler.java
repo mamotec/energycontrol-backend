@@ -52,8 +52,8 @@ public class OcppServerCoreEventHandler implements ServerCoreEventHandler {
                 log.info("SampledValue: {}", sampledValue);
             }
 
-            }
-        //service.saveMeterValue(uuid, meterValuesRequest.getMeterValue());
+        }
+        service.saveMeterValue(uuid, meterValuesRequest.getMeterValue());
         return new MeterValuesConfirmation();
     }
 

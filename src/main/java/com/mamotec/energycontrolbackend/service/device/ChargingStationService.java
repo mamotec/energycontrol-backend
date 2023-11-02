@@ -2,6 +2,7 @@ package com.mamotec.energycontrolbackend.service.device;
 
 import com.mamotec.energycontrolbackend.domain.device.chargingstation.ChargingStationDevice;
 import com.mamotec.energycontrolbackend.domain.device.dao.ChargingStationCreateRequest;
+import com.mamotec.energycontrolbackend.domain.interfaceconfig.yaml.Unit;
 import com.mamotec.energycontrolbackend.repository.ChargingStationRepository;
 import eu.chargetime.ocpp.model.core.ChargePointStatus;
 import eu.chargetime.ocpp.model.core.MeterValue;
@@ -11,7 +12,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -124,11 +128,19 @@ public class ChargingStationService {
             return;
         }
 
-       /* for (MeterValue value : meterValue) {
-            for (SampledValue sampledValue : value.getSampledValue()) {
-                writeService.writeDeviceData(cs, sampledValue.getValue().toString(), sampledValue.getContext().toString());
-            }
-        }*/
+        for (MeterValue value : meterValue) {
+            Optional<String> none = Arrays.stream(value.getSampledValue())
+                    .filter(sv -> sv.getPhase()
+                            .equals("none"))
+                    .filter(sv -> sv.getMeasurand()
+                            .equals("Current.Import"))
+                    .filter(sv -> sv.getUnit().equals(Unit.W.toString()))
+                    .map(SampledValue::getValue)
+                    .findFirst();
+
+            none.ifPresent(s -> writeService.writeDeviceData(cs, "[" + s + "]", "currentImport"));
+
+        }
     }
 
     private ChargingStationDevice getByUUID(UUID uuid) throws RuntimeException {

@@ -47,11 +47,11 @@ public class AggregateEnergyDataService implements AggregateService {
         Long data = deviceDataReadService.readLastDeviceData(deviceIds, measurement);
         BiDirectionalEnergy.BiDirectionalEnergyBuilder builder = BiDirectionalEnergy.builder();
 
-
         if (conversionMethod != null) {
             data = conversionMethod.apply(data);
             builder.value(data);
         }
+
         builder.consumption(data < 0);
 
         return builder.value(data).build();
