@@ -64,12 +64,11 @@ public class HomeAggregateDeviceGroupDataService {
         if (chargingStation.isPresent()) {
             ChargingStationDeviceGroup cs = chargingStation.get();
 
-            cs.getDevicesByType(DeviceType.CHARGING_STATION)
+            csIds = cs.getDevicesByType(DeviceType.CHARGING_STATION)
                     .stream()
                     .map(Device::getId)
                     .toList();
         }
-
 
         EnergyDataRepresentation rep = energyDataService.aggregate(homeDeviceGroup);
 
@@ -82,7 +81,7 @@ public class HomeAggregateDeviceGroupDataService {
         HomeDataRepresentation.HomeDataRepresentationBuilder homeDataRepresentationBuilder = HomeDataRepresentation.builder()
                 .activePower(rep.getActivePower())
                 .peakKilowatt(homeDeviceGroup.getPeakKilowatt())
-                .heatPumpActive(true)
+                .heatPumpActive(false)
                 .chargingStation(csIds.isEmpty() ? BiDirectionalEnergy.builder().value(0).consumption(false).build() : energyDataService.aggregateBiMeasurement(csIds, "currentImport", null))
                 .grid(energyDataService.aggregateBiMeasurement(hybridInverter, "gridPower", conversionMethodBatteryPower()))
                 .batterySoc(energyDataService.aggregateMeasurement(hybridInverter, "batterySoc", null))
