@@ -131,18 +131,19 @@ public class ChargingStationService {
 
         for (MeterValue value : meterValue) {
             String collect = Arrays.stream(value.getSampledValue())
-                    .filter(Objects::nonNull) // Vermeiden Sie NPE
+                    .filter(Objects::nonNull)
                     .filter(sv -> {
                         String phase = sv.getPhase();
                         return "L1".equals(phase) || "L2".equals(phase) || "L3".equals(phase);
                     })
-                    .filter(sv -> "Current.Import".equals(sv.getMeasurand()))
+                    .filter(sv -> "Power.Active.Import".equals(sv.getMeasurand()))
                     .filter(sv -> Unit.W.toString().equals(sv.getUnit()))
                     .map(SampledValue::getValue)
                     .collect(Collectors.joining(","));
 
             Optional<String> result = Optional.of(collect);
 
+            log.info("result: " + result);
             result.ifPresent(s -> writeService.writeDeviceData(cs, "[" + s + "]", "currentImport"));
         }
     }
