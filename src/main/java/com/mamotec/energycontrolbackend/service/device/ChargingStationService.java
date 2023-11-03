@@ -131,16 +131,13 @@ public class ChargingStationService {
 
         for (MeterValue value : meterValue) {
             String collect = Arrays.stream(value.getSampledValue())
-                    .filter(sv -> sv.getPhase()
-                            .equals("L1"))
-                    .filter(sv -> sv.getPhase()
-                            .equals("L2"))
-                    .filter(sv -> sv.getPhase()
-                            .equals("L3"))
-                    .filter(sv -> sv.getMeasurand()
-                            .equals("Current.Import"))
-                    .filter(sv -> sv.getUnit()
-                            .equals(Unit.W.toString()))
+                    .filter(Objects::nonNull) // Vermeiden Sie NPE
+                    .filter(sv -> {
+                        String phase = sv.getPhase();
+                        return "L1".equals(phase) || "L2".equals(phase) || "L3".equals(phase);
+                    })
+                    .filter(sv -> "Current.Import".equals(sv.getMeasurand()))
+                    .filter(sv -> Unit.W.toString().equals(sv.getUnit()))
                     .map(SampledValue::getValue)
                     .collect(Collectors.joining(","));
 
