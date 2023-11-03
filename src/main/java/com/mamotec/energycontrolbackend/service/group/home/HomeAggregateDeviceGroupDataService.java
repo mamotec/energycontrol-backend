@@ -58,7 +58,12 @@ public class HomeAggregateDeviceGroupDataService {
 
         EnergyDataRepresentation rep = energyDataService.aggregate(homeDeviceGroup);
 
-        List<Long> deviceIds = homeDeviceGroup.getDevicesByType(DeviceType.HYBRID_INVERTER)
+        List<Long> hybridInverter = homeDeviceGroup.getDevicesByType(DeviceType.HYBRID_INVERTER)
+                .stream()
+                .map(Device::getId)
+                .toList();
+
+        List<Long> chargingStation = homeDeviceGroup.getDevicesByType(DeviceType.CHARGING_STATION)
                 .stream()
                 .map(Device::getId)
                 .toList();
@@ -67,10 +72,10 @@ public class HomeAggregateDeviceGroupDataService {
                 .activePower(rep.getActivePower())
                 .peakKilowatt(homeDeviceGroup.getPeakKilowatt())
                 .heatPumpActive(true)
-                .chargingStation(energyDataService.aggregateBiMeasurement(deviceIds, "currentImport", null))
-                .grid(energyDataService.aggregateBiMeasurement(deviceIds, "gridPower", conversionMethodBatteryPower()))
-                .batterySoc(energyDataService.aggregateMeasurement(deviceIds, "batterySoc", null))
-                .batteryPower(energyDataService.aggregateBiMeasurement(deviceIds, "batteryPower", conversionMethodBatteryPower()));
+                .chargingStation(energyDataService.aggregateBiMeasurement(chargingStation, "currentImport", null))
+                .grid(energyDataService.aggregateBiMeasurement(hybridInverter, "gridPower", conversionMethodBatteryPower()))
+                .batterySoc(energyDataService.aggregateMeasurement(hybridInverter, "batterySoc", null))
+                .batteryPower(energyDataService.aggregateBiMeasurement(hybridInverter, "batteryPower", conversionMethodBatteryPower()));
 
         homeDataRepresentationBuilder.houseHoldPower((homeDataRepresentationBuilder.build().getActivePower()
                 + homeDataRepresentationBuilder.build().getBatteryPower().getValue()
