@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -129,17 +130,23 @@ public class ChargingStationService {
         }
 
         for (MeterValue value : meterValue) {
-            Optional<String> none = Arrays.stream(value.getSampledValue())
+            String collect = Arrays.stream(value.getSampledValue())
                     .filter(sv -> sv.getPhase()
-                            .equals("none"))
+                            .equals("L1"))
+                    .filter(sv -> sv.getPhase()
+                            .equals("L2"))
+                    .filter(sv -> sv.getPhase()
+                            .equals("L3"))
                     .filter(sv -> sv.getMeasurand()
                             .equals("Current.Import"))
-                    .filter(sv -> sv.getUnit().equals(Unit.W.toString()))
+                    .filter(sv -> sv.getUnit()
+                            .equals(Unit.W.toString()))
                     .map(SampledValue::getValue)
-                    .findFirst();
+                    .collect(Collectors.joining(","));
 
-            none.ifPresent(s -> writeService.writeDeviceData(cs, "[" + s + "]", "currentImport"));
+            Optional<String> result = Optional.of(collect);
 
+            result.ifPresent(s -> writeService.writeDeviceData(cs, "[" + s + "]", "currentImport"));
         }
     }
 
