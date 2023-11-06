@@ -87,9 +87,30 @@ public class HomeAggregateDeviceGroupDataService {
                 .batterySoc(energyDataService.aggregateMeasurement(hybridInverter, "batterySoc", null))
                 .batteryPower(energyDataService.aggregateBiMeasurement(hybridInverter, "batteryPower", conversionMethodBatteryPower()));
 
-        homeDataRepresentationBuilder.houseHoldPower((homeDataRepresentationBuilder.build().getActivePower()
-                + homeDataRepresentationBuilder.build().getBatteryPower().getValue()
-                + homeDataRepresentationBuilder.build().getGrid().getValue()) - homeDataRepresentationBuilder.build().getChargingStation().getValue());
+        long householdPower = (homeDataRepresentationBuilder.build()
+                .getActivePower()
+                + homeDataRepresentationBuilder.build()
+                .getBatteryPower()
+                .getValue()
+                + homeDataRepresentationBuilder.build()
+                .getGrid()
+                .getValue()) - homeDataRepresentationBuilder.build()
+                .getChargingStation()
+                .getValue();
+
+        if (householdPower < 0) {
+            homeDataRepresentationBuilder.houseHoldPower(0);
+            homeDataRepresentationBuilder.chargingStation(BiDirectionalEnergy.builder()
+                    .consumption(true)
+                    .value(homeDataRepresentationBuilder.build()
+                            .getChargingStation()
+                            .getValue() + Math.abs(householdPower))
+                    .build());
+
+        } else {
+            homeDataRepresentationBuilder.houseHoldPower(householdPower);
+        }
+
         return homeDataRepresentationBuilder.build();
     }
 }
