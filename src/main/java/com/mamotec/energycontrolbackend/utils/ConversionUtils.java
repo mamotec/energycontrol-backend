@@ -12,4 +12,8 @@ public final class ConversionUtils {
             return x;
         };
     }
+
+    public static Double convertWattsToAmps(Long watts, Long voltage) {
+        return watts / (voltage * 1.0) / 3;
+    }
 }

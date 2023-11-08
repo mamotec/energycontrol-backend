@@ -1,7 +1,7 @@
 package com.mamotec.energycontrolbackend.ocpp;
 
 import com.mamotec.energycontrolbackend.ocpp.service.OcppServerEvents;
-import com.mamotec.energycontrolbackend.service.device.ChargingStationService;
+import com.mamotec.energycontrolbackend.service.device.chargingStation.ChargingStationService;
 import eu.chargetime.ocpp.JSONServer;
 import eu.chargetime.ocpp.NotConnectedException;
 import eu.chargetime.ocpp.OccurenceConstraintException;

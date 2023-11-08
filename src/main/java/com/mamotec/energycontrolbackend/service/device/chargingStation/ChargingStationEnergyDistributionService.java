@@ -1,8 +1,11 @@
-package com.mamotec.energycontrolbackend.service.device;
+package com.mamotec.energycontrolbackend.service.device.chargingStation;
 
 import com.mamotec.energycontrolbackend.domain.device.chargingstation.ChargingStationDevice;
+import com.mamotec.energycontrolbackend.domain.group.dao.home.HomeDataRepresentation;
 import com.mamotec.energycontrolbackend.ocpp.OcppServer;
 import com.mamotec.energycontrolbackend.repository.ChargingStationRepository;
+import com.mamotec.energycontrolbackend.service.group.home.HomeAggregateDeviceGroupDataService;
+import com.mamotec.energycontrolbackend.utils.ConversionUtils;
 import eu.chargetime.ocpp.JSONServer;
 import eu.chargetime.ocpp.model.core.*;
 import eu.chargetime.ocpp.model.smartcharging.SetChargingProfileRequest;
@@ -10,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Random;
+import static com.mamotec.energycontrolbackend.utils.ConversionUtils.convertWattsToAmps;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +22,7 @@ public class ChargingStationEnergyDistributionService {
 
     private final ChargingStationService chargingStationService;
     private final ChargingStationRepository repository;
+    private final HomeAggregateDeviceGroupDataService homeAggregateDeviceGroupDataService;
 
     public void unmanagedEnergyDistribution(ChargingStationDevice device) {
         if (device.isTransactionActive()) {
@@ -34,20 +38,20 @@ public class ChargingStationEnergyDistributionService {
 
     }
 
-    public void renewableEnergyDistribution(ChargingStationDevice device) {
-        Random rand = new Random();
+    public void renewableEnergyDistribution(ChargingStationDevice device, boolean higherPriorityThanBattery) {
+        Double energyOverflow = getEnergyOverflow(higherPriorityThanBattery);
         if (!device.isTransactionActive()) {
             // Create a new transaction to start loading
             device.setTransactionId(device.getTransactionId() + 1);
             device.setTransactionActive(true);
             repository.save(device);
 
-            SetChargingProfileRequest req = createChargingProfileRequest(rand.nextInt((8 - 4) + 1) + 4d, device);
+            SetChargingProfileRequest req = createChargingProfileRequest(energyOverflow, device);
 
             sendRequest(device, req);
         } else {
             // When transaction is already ongoing then just update the charging profile
-            SetChargingProfileRequest req = createChargingProfileRequest(rand.nextInt((8 - 4) + 1) + 4d, device);
+            SetChargingProfileRequest req = createChargingProfileRequest(energyOverflow, device);
             try {
                 log.info("Sending RemoteStartTransactionRequest {} to {}", req, device.getUuid());
                 getServer().send(device.getUuid(), req);
@@ -69,6 +73,27 @@ public class ChargingStationEnergyDistributionService {
             }
         }
 
+    }
+
+    private Double getEnergyOverflow(boolean higherPriorityThanBattery) {
+        HomeDataRepresentation aggregate = homeAggregateDeviceGroupDataService.aggregate();
+        if (higherPriorityThanBattery) {
+            Double overflow = (double) -(aggregate.getGrid()
+                    .getValue() + aggregate.getBatteryPower()
+                    .getValue());
+            log.info("HigherPriorityThanBattery: {}, Overflow: {}", true, overflow);
+            Double v = convertWattsToAmps(overflow.longValue(), 230L);
+            log.info("HigherPriorityThanBattery: {}, Overflow (A): {}", true, v);
+            return v;
+
+        } else {
+            Double overflow = (double) -(aggregate.getGrid()
+                    .getValue());
+            log.info("HigherPriorityThanBattery: {}, Overflow: {}", false, overflow);
+            Double v = convertWattsToAmps(overflow.longValue(), 230L);
+            log.info("HigherPriorityThanBattery: {}, Overflow (A): {}", true, v);
+            return v;
+        }
     }
 
     private JSONServer getServer() {

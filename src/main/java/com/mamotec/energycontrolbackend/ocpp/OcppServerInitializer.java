@@ -1,8 +1,6 @@
 package com.mamotec.energycontrolbackend.ocpp;
 
-import com.mamotec.energycontrolbackend.service.device.ChargingStationService;
-import eu.chargetime.ocpp.FeatureRepository;
-import eu.chargetime.ocpp.feature.profile.ClientSmartChargingProfile;
+import com.mamotec.energycontrolbackend.service.device.chargingStation.ChargingStationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;

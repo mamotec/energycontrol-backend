@@ -1,6 +1,6 @@
 package com.mamotec.energycontrolbackend.ocpp.service;
 
-import com.mamotec.energycontrolbackend.service.device.ChargingStationService;
+import com.mamotec.energycontrolbackend.service.device.chargingStation.ChargingStationService;
 import eu.chargetime.ocpp.ServerEvents;
 import eu.chargetime.ocpp.model.SessionInformation;
 import lombok.RequiredArgsConstructor;

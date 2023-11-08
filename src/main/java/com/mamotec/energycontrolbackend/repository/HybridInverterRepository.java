@@ -10,15 +10,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface ChargingStationRepository extends JpaRepository<ChargingStationDevice, Long> {
+public interface HybridInverterRepository extends JpaRepository<HybridInverterDevice, Long> {
 
-    Optional<ChargingStationDevice> findFirstByDeviceIdCharger(String deviceIdCharger);
-
-    Optional<ChargingStationDevice> findFirstByUuid(UUID uuid);
-
-    List<ChargingStationDevice> findAllByActiveIsTrue();
-
-    Optional<ChargingStationDevice> findFirstByActiveIsTrue();
-
-
+    Optional<HybridInverterDevice> findFirstByActiveIsTrue();
 }
