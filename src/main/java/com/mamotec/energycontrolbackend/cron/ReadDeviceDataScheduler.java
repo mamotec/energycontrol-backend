@@ -2,7 +2,7 @@ package com.mamotec.energycontrolbackend.cron;
 
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceConfig;
 import com.mamotec.energycontrolbackend.domain.interfaceconfig.InterfaceType;
-import com.mamotec.energycontrolbackend.reader.TcpDeviceDataReader;
+import com.mamotec.energycontrolbackend.reader.TcpDeviceDataReaderHome;
 import com.mamotec.energycontrolbackend.service.interfaceconfig.InterfaceConfigService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import java.util.List;
 public class ReadDeviceDataScheduler {
 
     private final InterfaceConfigService interfaceConfigService;
-    private final TcpDeviceDataReader tcpDeviceDataReader;
+    private final TcpDeviceDataReaderHome tcpDeviceDataReaderHome;
 
     @Scheduled(cron = "*/1 * * * * *")
     @Transactional
@@ -28,7 +28,7 @@ public class ReadDeviceDataScheduler {
         for (InterfaceConfig config : configs) {
             if (config.getType()
                     .equals(InterfaceType.TCP)) {
-                tcpDeviceDataReader.fetchDeviceData(config);
+                tcpDeviceDataReaderHome.fetchDeviceData(config);
             }
         }
     }
