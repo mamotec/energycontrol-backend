@@ -5,7 +5,6 @@ import com.mamotec.energycontrolbackend.domain.group.dao.home.HomeDataRepresenta
 import com.mamotec.energycontrolbackend.ocpp.OcppServer;
 import com.mamotec.energycontrolbackend.repository.ChargingStationRepository;
 import com.mamotec.energycontrolbackend.service.group.home.HomeAggregateDeviceGroupDataService;
-import com.mamotec.energycontrolbackend.utils.ConversionUtils;
 import eu.chargetime.ocpp.JSONServer;
 import eu.chargetime.ocpp.model.core.*;
 import eu.chargetime.ocpp.model.smartcharging.SetChargingProfileRequest;
@@ -40,6 +39,7 @@ public class ChargingStationEnergyDistributionService {
 
     public void renewableEnergyDistribution(ChargingStationDevice device, boolean higherPriorityThanBattery) {
         Double energyOverflow = getEnergyOverflow(higherPriorityThanBattery);
+
         if (!device.isTransactionActive()) {
             // Create a new transaction to start loading
             device.setTransactionId(device.getTransactionId() + 1);
@@ -78,16 +78,22 @@ public class ChargingStationEnergyDistributionService {
     private Double getEnergyOverflow(boolean higherPriorityThanBattery) {
         HomeDataRepresentation aggregate = homeAggregateDeviceGroupDataService.aggregate();
         if (higherPriorityThanBattery) {
-            Double overflow = (double) -(aggregate.getGrid()
-                    .getValue() + aggregate.getBatteryPower()
+            // Charging station first
+            Double overflow = (double) (aggregate.getChargingStation()
+                    .getValue() - aggregate.getBatteryPower()
+                    .getValue() - aggregate.getGrid()
                     .getValue());
+
             log.info("HigherPriorityThanBattery: {}, Overflow: {}", true, overflow);
             Double v = convertWattsToAmps(overflow.longValue(), 230L);
             log.info("HigherPriorityThanBattery: {}, Overflow (A): {}", true, v);
             return v;
 
         } else {
-            Double overflow = (double) -(aggregate.getGrid()
+            // Battery first
+            Double overflow = (double) (aggregate.getChargingStation()
+                    .getValue() + aggregate.getBatteryPower()
+                    .getValue() - aggregate.getGrid()
                     .getValue());
             log.info("HigherPriorityThanBattery: {}, Overflow: {}", false, overflow);
             Double v = convertWattsToAmps(overflow.longValue(), 230L);
