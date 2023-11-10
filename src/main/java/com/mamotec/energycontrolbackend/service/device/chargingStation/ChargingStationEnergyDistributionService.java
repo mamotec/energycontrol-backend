@@ -79,7 +79,7 @@ public class ChargingStationEnergyDistributionService {
         HomeDataRepresentation aggregate = homeAggregateDeviceGroupDataService.aggregate();
         if (higherPriorityThanBattery) {
             // Charging station first
-            Double overflow = (double) (aggregate.getChargingStation()
+            Double overflow = (double) -(aggregate.getChargingStation()
                     .getValue() - aggregate.getBatteryPower()
                     .getValue() - aggregate.getGrid()
                     .getValue());
@@ -91,7 +91,7 @@ public class ChargingStationEnergyDistributionService {
 
         } else {
             // Battery first
-            Double overflow = (double) (aggregate.getChargingStation()
+            Double overflow = (double) -(aggregate.getChargingStation()
                     .getValue() + aggregate.getBatteryPower()
                     .getValue() - aggregate.getGrid()
                     .getValue());
