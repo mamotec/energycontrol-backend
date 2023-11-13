@@ -117,6 +117,7 @@ public class ChargingStationService {
 
         if (cs.isTransactionActive() && cs.getTransactionId() == transactionId) {
             cs.setTransactionActive(false);
+            writeService.writeDeviceData(cs, "0", "currentImport");
             repository.save(cs);
             return true;
         } else {
