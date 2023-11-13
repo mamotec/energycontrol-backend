@@ -97,7 +97,7 @@ public class ChargingStationEnergyDistributionService {
                     .getValue());
             log.info("HigherPriorityThanBattery: {}, Overflow: {}", false, overflow);
             Double v = convertWattsToAmps(overflow.longValue(), 230L);
-            log.info("HigherPriorityThanBattery: {}, Overflow (A): {}", true, v);
+            log.info("HigherPriorityThanBattery: {}, Overflow (A): {}", false, v);
             return v;
         }
     }

@@ -24,7 +24,7 @@ public class EnergyDistributionScheduler {
     private final ChargingStationRepository chargingStationRepository;
     private final HybridInverterRepository hybridInverterRepository;
 
-    @Scheduled(cron = "*/1 * * * * *")
+    @Scheduled(cron = "*/3 * * * * *")
     public void run() {
         Optional<ChargingStationDevice> chargingDevice = chargingStationRepository.findFirstByActiveIsTrue();
         Optional<HybridInverterDevice> inverterDevice = hybridInverterRepository.findFirstByActiveIsTrue();
@@ -35,7 +35,7 @@ public class EnergyDistributionScheduler {
 
             Comparator<Device> priorityComparator = Comparator.comparing(Device::getPriority);
 
-            distributeEnergy(chargingStationDevice, priorityComparator.compare(chargingStationDevice, hybridInverterDevice) > 0);
+            distributeEnergy(chargingStationDevice, priorityComparator.compare(chargingStationDevice, hybridInverterDevice) < 0);
         }
     }
 
