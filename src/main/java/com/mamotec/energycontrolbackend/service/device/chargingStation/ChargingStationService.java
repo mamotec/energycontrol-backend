@@ -122,7 +122,7 @@ public class ChargingStationService {
             return true;
         } else {
             log.error("Charging Station with uuid: " + uuid + " has no active transaction");
-            return false;
+            return true;
         }
     }
 
